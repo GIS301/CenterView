@@ -24,5 +24,42 @@ namespace CenterView
         {
             InitializeComponent();
         }
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void menu_Click(object sender, RoutedEventArgs e)
+        {
+            menu1.IsOpen = true;
+        }
+
+        private void x_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        // 下载于www.mycodes.net
+        private void ___Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void ksl_Click(object sender, RoutedEventArgs e)
+        {
+            //if (list1.Items.Count > 2)
+            //{
+            //    return;
+            //}
+            //list1.Items.Add("扫描c盘中...");
+            //list1.Items.Add("扫描d盘中...");
+            //list1.Items.Add("扫描e盘中...");
+            //list1.Items.Add("扫描d盘中...");
+            //list1.Items.Add("扫描g盘中...");
+            //list1.Items.Add("扫描l盘中...");
+            //list1.Items.Add("扫描i盘中...");
+            //list1.Items.Add("扫描j盘中...");
+            //list1.Items.Add("扫描k盘中...");
+            //list1.Items.Add("扫描完毕");
+        }
     }
 }

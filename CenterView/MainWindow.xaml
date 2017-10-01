@@ -1,8 +1,206 @@
 ﻿<Window x:Class="CenterView.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Name="window" mc:Ignorable="d" 
+        Title="MainWindow" Height="720" Width="900" Style="{DynamicResource NoResize_window}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Window.Background>
+        <ImageBrush ImageSource="logoIMG/bg1.png" />
+    </Window.Background>
     <Grid>
-       
+
+        <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}">
+            <TabItem Header="硬件检测" Margin="10,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid Margin="0,40,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="540"/>
+                        <ColumnDefinition Width="300"/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,148.301,-20.2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="45" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image  Source="logoIMG/Lenovo_logo.jpg"  Width="110"></Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="联想 小新V400 Bigger版 联想笔记本"  FontFamily="宋体"  FontWeight="Bold" FontSize="20"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"    />
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="操作系统"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="Windows 10 旗舰版 64位" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="CPU"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="Intel第五代智能酷睿i7-5500UCPU 2.4GHz双核" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+
+                        </Grid>
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="内存"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="8GB DDR3L 2×SO-DIM" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="硬盘"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="1T 5400转/分钟 SATA 串行" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="显卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="AMD Radeon R9-M375 2G(集成/独立)" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="主板"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="技嘉(GIGABYTE)Z270-Phoenix Gaming" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="网卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="TP-LINK TG-3269C" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="无线网卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="Intel 3160 1*1 AC无线局域网" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="180"/>
+                            <RowDefinition Height="180"/>
+                            <RowDefinition Height="180"/>
+                        </Grid.RowDefinitions>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="温度监测" Margin="100,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_function_exam.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid/>
+            </TabItem>
+            <TabItem Header="垃圾清理" Margin="190,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_desk_clear.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid/>
+            </TabItem>
+            <TabItem Header="查杀木马" Margin="280,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_real_protect.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid/>
+            </TabItem>
+            <TabItem Header="系统优化" Margin="370,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_strap_accelerate.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid/>
+            </TabItem>
+            <TabItem Header="高级工具" Margin="460,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+                <TabItem.Background>
+                    <ImageBrush ImageSource="logoIMG/fullbox_reg_clean.png" Stretch="Uniform"/>
+                </TabItem.Background>
+                <Grid/>
+            </TabItem>
+        </TabControl>
+        <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,0,0" Click="x_Click"/>
+        <Button x:Name="__" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource -ButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,39.75,0" Click="___Click"/>
+        <Button x:Name="menu"  HorizontalAlignment="Right" Height="24" VerticalAlignment="Top" Width="39.75" Margin="0,1,79.8,0" Click="menu_Click" Style="{DynamicResource meButtonStyle}"/>
+        <Popup x:Name="menu1" StaysOpen="False" Margin="0" PlacementTarget="{Binding ElementName=menu}" AllowsTransparency="True">
+            <Grid Height="78" Width="100" HorizontalAlignment="Left">
+                <Border BorderThickness="0" CornerRadius="3" Background="White" Margin="3">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" Color="#FFB6B6B6"/>
+                    </Border.Effect>
+                    <StackPanel Margin="0">
+                        <MenuItem Header="设置" FontSize="12" Style="{DynamicResource MenuItemStyle}" Height="23.5" FontFamily="Microsoft YaHei"/>
+                        <MenuItem Header="关于" FontSize="12" Style="{DynamicResource MenuItemStyle}" Height="23.5" FontFamily="Microsoft YaHei"/>
+                        <MenuItem Header="退出" FontSize="12" Style="{DynamicResource MenuItemStyle}" Height="23.5" FontFamily="Microsoft YaHei" Background="#00000000"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Popup>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="CenterView监控" VerticalAlignment="Top" Height="19" Margin="14,2,0,0" Width="107" FontSize="13.333" Foreground="White" FontFamily="Microsoft YaHei"/>
+
     </Grid>
 </Window>
