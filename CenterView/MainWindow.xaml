@@ -148,7 +148,95 @@
                             <RowDefinition Height="180"/>
                             <RowDefinition Height="180"/>
                         </Grid.RowDefinitions>
-                        
+                        <Grid Grid.Row="0" Margin="2,-17,-2.2,16.8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="logoIMG/networkSettings.png" Width="54" VerticalAlignment="Top" Margin="0,10,1,1"></Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="网络配置" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <TextBlock Text="网关:192.0.0.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <TextBlock Text="IP:192.00.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Text="DNS：192.0.0.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                            
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="logoIMG/NetworkStation.png" Width="58" VerticalAlignment="Top"  />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="授信站点" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="logoIMG/CitrixStatus.png" Width="62" VerticalAlignment="Top" Margin="0,1,1,1"></Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="Citrix组件" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
 
                     </Grid>
                 </Grid>

@@ -137,6 +137,15 @@
     <Resource Include="logoIMG\fullbox_time_protect.png" />
     <Resource Include="logoIMG\Lenovo_logo.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\NetworkStation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\networkSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\CitrixStatus.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
