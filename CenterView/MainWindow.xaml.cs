@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ComputerInfo;
+using System.Xml;
 
 namespace CenterView
 {
@@ -60,6 +62,34 @@ namespace CenterView
             //list1.Items.Add("扫描j盘中...");
             //list1.Items.Add("扫描k盘中...");
             //list1.Items.Add("扫描完毕");
+        }
+
+        private void window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComputerInfo.BaseInfo  info = new ComputerInfo.BaseInfo();
+            this.txt1.Text = info.GetHostModel();
+        }
+        /// <summary>
+        /// 获取config.xml文件的信任站点列表
+        /// </summary>
+        /// <returns></returns>
+        private string[] TrustWebsite()
+        {
+            string[] temp = null;
+            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "TrustWebsite")
+                    {
+                        string sumValue = reader.ReadElementContentAsString().Trim();
+                        temp = sumValue.Split(',');
+                    }
+                }
+            }
+            return temp;
+
         }
     }
 }

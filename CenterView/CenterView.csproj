@@ -121,7 +121,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\20120513055821795_easyicon_cn_48.ico" />
@@ -145,6 +147,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\CitrixStatus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComputerInfo\ComputerInfo.csproj">
+      <Project>{d332eb63-6400-4039-b2fa-1cdeda3fa52e}</Project>
+      <Name>ComputerInfo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
