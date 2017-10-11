@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using Microsoft.Win32;
 
 namespace CenterView
 {
@@ -61,5 +63,23 @@ namespace CenterView
             //list1.Items.Add("扫描k盘中...");
             //list1.Items.Add("扫描完毕");
         }
+
+      
+        private void window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //显示citrix插件是否安装
+            {
+                var isExistCkCitrix = CkCitrix.CheckCitrix();
+                if (isExistCkCitrix)
+                {
+                    citrix.Text = "Ctrix已安装";
+                }
+                else
+                {
+                    citrix.Text = "Citrix未安装";
+                }
+            }
+        }
+
     }
 }
