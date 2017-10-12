@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace CenterView
 {
@@ -72,7 +73,7 @@ namespace CenterView
                 var isExistCkCitrix = CkCitrix.CheckCitrix();
                 if (isExistCkCitrix)
                 {
-                    citrix.Text = "Ctrix已安装";
+                    citrix.Text = "Ctrix已安装";                  
                 }
                 else
                 {
