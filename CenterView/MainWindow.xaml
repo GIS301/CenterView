@@ -9,10 +9,11 @@
     <Grid>
 
         <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}">
-            <TabItem Header="硬件检测" Margin="10,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+            <TabItem Header="电脑信息" Margin="60,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
                 <TabItem.Background>
-                    <ImageBrush ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
+                    <ImageBrush  ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
                 </TabItem.Background>
+                
                 <Grid Margin="0,40,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="540"/>
@@ -176,7 +177,7 @@
                                     <TextBlock Text="DNS：192.0.0.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                             </Grid>
-                            
+
                         </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -226,7 +227,7 @@
                                     <TextBlock Text="Citrix组件" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="1">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock  Name="citrix" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
@@ -241,19 +242,19 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="温度监测" Margin="100,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+            <TabItem Header="环境检测" Margin="340,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White">
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_function_exam.png" Stretch="Uniform"/>
                 </TabItem.Background>
                 <Grid/>
             </TabItem>
-            <TabItem Header="垃圾清理" Margin="190,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+            <TabItem Header="历史案例" Margin="620,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White">
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_desk_clear.png" Stretch="Uniform"/>
                 </TabItem.Background>
                 <Grid/>
             </TabItem>
-            <TabItem Header="查杀木马" Margin="280,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
+            <!--<TabItem Header="查杀木马" Margin="280,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_real_protect.png" Stretch="Uniform"/>
                 </TabItem.Background>
@@ -270,7 +271,7 @@
                     <ImageBrush ImageSource="logoIMG/fullbox_reg_clean.png" Stretch="Uniform"/>
                 </TabItem.Background>
                 <Grid/>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
         <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,0,0" Click="x_Click"/>
         <Button x:Name="__" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource -ButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,39.75,0" Click="___Click"/>
