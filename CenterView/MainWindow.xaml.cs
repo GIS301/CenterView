@@ -55,7 +55,6 @@ namespace CenterView
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
             BaseInfo  info = new BaseInfo();
-           
             //显示citrix插件是否安装
             {
                 var isExistCkCitrix = CkCitrix.CheckCitrix();
