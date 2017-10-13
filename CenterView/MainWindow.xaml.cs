@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ComputerInfo;
 using System.Xml;
 
 namespace CenterView
@@ -55,8 +54,8 @@ namespace CenterView
 
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            ComputerInfo.BaseInfo  info = new ComputerInfo.BaseInfo();
-            this.txt1.Text = info.GetHostModel();
+          BaseInfo  info = new BaseInfo();
+           
             //显示citrix插件是否安装
             {
                 var isExistCkCitrix = CkCitrix.CheckCitrix();
