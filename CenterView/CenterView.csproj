@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TrustyStation.cs" />
     <Page Include="Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -71,6 +72,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseInfo.cs" />
     <Compile Include="CKCitrix.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -149,12 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\CitrixStatus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ComputerInfo\ComputerInfo.csproj">
-      <Project>{d332eb63-6400-4039-b2fa-1cdeda3fa52e}</Project>
-      <Name>ComputerInfo</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="config.xml" />
