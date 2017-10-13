@@ -40,7 +40,6 @@ namespace CenterView
         {
             this.Close();
         }
-        // 下载于www.mycodes.net
         private void ___Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -52,16 +51,46 @@ namespace CenterView
             //{
             //    return;
             //}
-            //list1.Items.Add("扫描c盘中...");
-            //list1.Items.Add("扫描d盘中...");
-            //list1.Items.Add("扫描e盘中...");
-            //list1.Items.Add("扫描d盘中...");
-            //list1.Items.Add("扫描g盘中...");
-            //list1.Items.Add("扫描l盘中...");
-            //list1.Items.Add("扫描i盘中...");
-            //list1.Items.Add("扫描j盘中...");
-            //list1.Items.Add("扫描k盘中...");
-            //list1.Items.Add("扫描完毕");
+        }
+
+        private void window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComputerInfo.BaseInfo  info = new ComputerInfo.BaseInfo();
+            this.txt1.Text = info.GetHostModel();
+            //显示citrix插件是否安装
+            {
+                var isExistCkCitrix = CkCitrix.CheckCitrix();
+                if (isExistCkCitrix)
+                {
+                    citrix.Text = "Ctrix已安装";
+                }
+                else
+                {
+                    citrix.Text = "Citrix未安装";
+                }
+            }
+        }
+        /// <summary>
+        /// 获取config.xml文件的信任站点列表
+        /// </summary>
+        /// <returns></returns>
+        private string[] TrustWebsite()
+        {
+            string[] temp = null;
+            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "TrustWebsite")
+                    {
+                        string sumValue = reader.ReadElementContentAsString().Trim();
+                        temp = sumValue.Split(',');
+                    }
+                }
+            }
+            return temp;
+
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e)
