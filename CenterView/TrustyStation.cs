@@ -2,33 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ComputerInfo
+namespace CenterView
 {
-    public class BaseInfo
+    class TrustyStation
     {
-        /// <summary>
-        /// 获取主机型号
-        /// </summary>
-        /// <returns></returns>
-        public string GetHostModel()
-        {
-            string hostModel = "";
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_computersystem");
-            foreach (ManagementObject mo in searcher.Get())
-            {
-                try
-                {
-                hostModel=  mo["Model"].ToString().Trim();
-                    break;
-                }
-                catch { }
-            }
-            return hostModel;   
-        }
         /// <summary>
         /// 获取授信站点列表
         /// </summary>
@@ -53,7 +32,5 @@ namespace ComputerInfo
             hkml.Close();
             return subkeyNames;
         }
-
-
     }
 }
