@@ -91,33 +91,7 @@ namespace CenterView
             }
             return temp;
 
-        }
 
-        private void window_Loaded(object sender, RoutedEventArgs e)
-        {
-            ComputerInfo.BaseInfo  info = new ComputerInfo.BaseInfo();
-            this.txt1.Text = info.GetHostModel();
-        }
-        /// <summary>
-        /// 获取config.xml文件的信任站点列表
-        /// </summary>
-        /// <returns></returns>
-        private string[] TrustWebsite()
-        {
-            string[] temp = null;
-            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Element)
-                {
-                    if (reader.Name == "TrustWebsite")
-                    {
-                        string sumValue = reader.ReadElementContentAsString().Trim();
-                        temp = sumValue.Split(',');
-                    }
-                }
-            }
-            return temp;
 
         }
     }
