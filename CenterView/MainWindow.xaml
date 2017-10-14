@@ -1,7 +1,9 @@
 ﻿<Window x:Class="CenterView.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Name="window" mc:Ignorable="d" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+          xmlns:gifLib="clr-namespace:CenterView.GifloadClass"
+        x:Name="window" mc:Ignorable="d" 
         Title="MainWindow" Height="720" Width="900" Style="{DynamicResource NoResize_window}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="logoIMG/bg1.png" />
@@ -13,7 +15,7 @@
                 <TabItem.Background>
                     <ImageBrush  ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
                 </TabItem.Background>
-                
+
                 <Grid Margin="0,40,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="540"/>
@@ -246,7 +248,44 @@
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_function_exam.png" Stretch="Uniform"/>
                 </TabItem.Background>
-                <Grid/>
+                <Grid Margin="0,40,1,1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.55*"/>
+                        <RowDefinition Height="0.45*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Image Source="logoIMG/logo1.png" Width="180" Height="180" Margin="100,-98,1,1"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <TextBlock Margin="10,50,0,0" Text="立即检测，检测电脑的网络环境" FontFamily="微软雅黑" Foreground="Black" FontSize="38"/>
+                            <TextBlock Text="定期检测能有效防止计算机中毒，让计算机处在一个安全环境上网" FontFamily="楷体" Foreground="Black" FontSize="20" Margin="0,130,0,0"/>
+                            <Button Content="开始扫描" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle_Arc}" Margin="164,181,0,54" Width="178"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <CheckBox Panel.ZIndex="11" Name="TrustCheckBox"  Content="" Height="20" Width="20" Margin="189,118,83.8,106.8"  Checked="TrustCheckBox_Checked" Unchecked="TrustCheckBox_Unchecked" />
+                            <Image Name="TrustBGimg" Source="logoIMG/SCheckNO1.png" Height="120" Margin="0,29,-0.2,95.8" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <!--扫描动图-->
+                <!--<StackPanel Margin="0,40,1,1">
+                    <gifLib:GifImage Source="logoIMG/B4.gif"   Height="140" Width="180" HorizontalAlignment="Left" Margin="80,1"/>
+                </StackPanel>-->
+
+
             </TabItem>
             <TabItem Header="历史案例" Margin="620,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White">
                 <TabItem.Background>
@@ -254,24 +293,7 @@
                 </TabItem.Background>
                 <Grid/>
             </TabItem>
-            <!--<TabItem Header="查杀木马" Margin="280,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
-                <TabItem.Background>
-                    <ImageBrush ImageSource="logoIMG/fullbox_real_protect.png" Stretch="Uniform"/>
-                </TabItem.Background>
-                <Grid/>
-            </TabItem>
-            <TabItem Header="系统优化" Margin="370,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
-                <TabItem.Background>
-                    <ImageBrush ImageSource="logoIMG/fullbox_strap_accelerate.png" Stretch="Uniform"/>
-                </TabItem.Background>
-                <Grid/>
-            </TabItem>
-            <TabItem Header="高级工具" Margin="460,22,0,0" Height="76.933" Width="69.044" Style="{DynamicResource TabItemStyle}" Foreground="White">
-                <TabItem.Background>
-                    <ImageBrush ImageSource="logoIMG/fullbox_reg_clean.png" Stretch="Uniform"/>
-                </TabItem.Background>
-                <Grid/>
-            </TabItem>-->
+
         </TabControl>
         <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,0,0" Click="x_Click"/>
         <Button x:Name="__" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource -ButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,39.75,0" Click="___Click"/>

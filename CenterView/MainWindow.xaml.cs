@@ -24,6 +24,7 @@ namespace CenterView
         public MainWindow()
         {
             InitializeComponent();
+          
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -44,13 +45,7 @@ namespace CenterView
             this.WindowState = WindowState.Minimized;
         }
 
-        private void ksl_Click(object sender, RoutedEventArgs e)
-        {
-            //if (list1.Items.Count > 2)
-            //{
-            //    return;
-            //}
-        }
+       
 
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -92,6 +87,18 @@ namespace CenterView
 
 
 
+        }
+
+       
+
+        private void TrustCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckYes1.png",UriKind.Relative));
+        }
+
+        private void TrustCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckNO1.png", UriKind.Relative));
         }
     }
 }
