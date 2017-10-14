@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
 
 namespace CenterView
 {
@@ -65,7 +67,7 @@ namespace CenterView
             //list1.Items.Add("扫描完毕");
         }
 
-      
+
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
             //显示citrix插件是否安装
@@ -73,14 +75,39 @@ namespace CenterView
                 var isExistCkCitrix = CkCitrix.CheckCitrix();
                 if (isExistCkCitrix)
                 {
-                    citrix.Text = "Ctrix已安装";                  
+                    citrix1.Text = "Ctrix Receiver已安装";
                 }
                 else
                 {
-                    citrix.Text = "Citrix未安装";
+                    citrix1.Text = "Citrix Receiver未安装，请安装";
+                }
+            }
+            //显示citrix插件工作状态
+            {
+                try
+                {
+                    var isWorkCitrix = CkCitrix.IsProcessStarted();
+                    if (isWorkCitrix)
+                    {
+                        citrix2.Text = "Citrix Receiver正在运行";
+                    }
+                    else
+                    {
+                        citrix2.Text = "为您启动Citrix Receiver";
+                        System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
+                    }
+                }
+                catch
+                {
+                    citrix2.Text = "Citrix Receiver未安装，请安装";
                 }
             }
         }
-
     }
 }
+
+
+       
+        
+    
+

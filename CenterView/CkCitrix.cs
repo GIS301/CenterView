@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace CenterView
-{
+{   
    public class CkCitrix
     {
         //检测citrix是否存在
@@ -42,5 +43,15 @@ namespace CenterView
                 return false;
             }
         }
+
+       //检查cx是否在运行
+        public static bool IsProcessStarted()
+        {
+            Process[] temp = Process.GetProcessesByName("wfcrun32");
+            if (temp.Length > 0) return true;
+            else
+                return false;
+        }
+        }
     }
-}
+

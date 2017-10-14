@@ -226,9 +226,14 @@
                                     <TextBlock Text="Citrix组件" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="1">
-                                    <TextBlock Name="citrix" Text="" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock Name="citrix1" Text="" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
-                                
+                                <Grid Grid.Row="2">
+                                    <TextBlock Name="citrix2" Text="" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Name="citrix3" Text="" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                </Grid>
                             </Grid>
 
                         </Grid>
