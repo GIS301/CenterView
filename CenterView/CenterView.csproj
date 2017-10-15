@@ -173,12 +173,27 @@
     <Resource Include="logoIMG\logo1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logoIMG\SCheckNO.png" />
-    <Resource Include="logoIMG\SCheckYes.png" />
+    <Resource Include="logoIMG\NetworkChecked.png" />
+    <Resource Include="logoIMG\NetworkUnChecked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\CitrixChecked.png" />
+    <Resource Include="logoIMG\CitrixUnChecked.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\SCheckNO1.png" />
     <Resource Include="logoIMG\SCheckYes1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\B3.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\littleCitrix.png" />
+    <Resource Include="logoIMG\littleNetwork.png" />
+    <Resource Include="logoIMG\littleTrusty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\Complete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

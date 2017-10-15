@@ -100,5 +100,40 @@ namespace CenterView
         {
             this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckNO1.png", UriKind.Relative));
         }
+
+        private void NetworkCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            this.NetworkBGimg.Source = new BitmapImage(new Uri("logoIMG/NetworkChecked.png", UriKind.Relative));
+        }
+
+        private void NetworkCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.NetworkBGimg.Source = new BitmapImage(new Uri("logoIMG/NetworkUnChecked.png", UriKind.Relative));
+        }
+
+        private void CitrixCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            this.CitrixBGimg.Source = new BitmapImage(new Uri("logoIMG/CitrixChecked.png",UriKind.Relative));
+        }
+
+        private void CitrixCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.CitrixBGimg.Source = new BitmapImage(new Uri("logoIMG/CitrixUnChecked.png", UriKind.Relative));
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void cheshiBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.CheckingTab.IsSelected = true;
+        }
+
+       
+
+        
     }
 }

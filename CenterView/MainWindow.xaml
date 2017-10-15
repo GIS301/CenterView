@@ -9,8 +9,13 @@
         <ImageBrush ImageSource="logoIMG/bg1.png" />
     </Window.Background>
     <Grid>
-
-        <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="359*"/>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="324*"/>
+        </Grid.RowDefinitions>
+        <Button Height="30" Width="100" Content="正在检测" Name="cheshiBtn" Click="cheshiBtn_Click" Margin="-700,-60,0,0"  />
+        <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}" Grid.RowSpan="3" >
             <TabItem Header="电脑信息" Margin="60,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
                 <TabItem.Background>
                     <ImageBrush  ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
@@ -264,7 +269,7 @@
                         <Grid Grid.Column="1">
                             <TextBlock Margin="10,50,0,0" Text="立即检测，检测电脑的网络环境" FontFamily="微软雅黑" Foreground="Black" FontSize="38"/>
                             <TextBlock Text="定期检测能有效防止计算机中毒，让计算机处在一个安全环境上网" FontFamily="楷体" Foreground="Black" FontSize="20" Margin="0,130,0,0"/>
-                            <Button Content="开始扫描" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle_Arc}" Margin="164,181,0,54" Width="178"/>
+                            <Button Content="开始扫描" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle_Arc}" Margin="164,181,0,54" Width="178" Click="Button_Click"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -272,11 +277,22 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
-                            
+
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <CheckBox Panel.ZIndex="11" Name="TrustCheckBox"  Content="" Height="20" Width="20" Margin="189,118,83.8,106.8"  Checked="TrustCheckBox_Checked" Unchecked="TrustCheckBox_Unchecked" />
                             <Image Name="TrustBGimg" Source="logoIMG/SCheckNO1.png" Height="120" Margin="0,29,-0.2,95.8" />
+                            <TextBlock Text="授信站点检测" Foreground="Black" FontWeight="Normal" FontSize="20" Margin="80,120,0,0" Height="40" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <CheckBox Panel.ZIndex="11" Name="NetworkCheckBox"  Content="" Height="20" Width="20" Margin="189,118,83.8,106.8"  Checked="NetworkCheckBox_Checked"  Unchecked="NetworkCheckBox_Unchecked" />
+                            <Image Name="NetworkBGimg" Source="logoIMG/NetworkUnChecked.png" Height="119" Margin="0,32,-0.2,95.8" />
+                            <TextBlock Text="网络连通检测" Foreground="Black" FontWeight="Normal" FontSize="20" Margin="86,120,0,0" Height="40" />
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <CheckBox Panel.ZIndex="11" Name="CitrixCheckBox"  Content="" Height="20" Width="20" Margin="189,118,83.8,106.8"  Checked="CitrixCheckBox_Checked"  Unchecked="CitrixCheckBox_Unchecked" />
+                            <Image Name="CitrixBGimg" Source="logoIMG/CitrixUnChecked.png" Height="119" Margin="0,32,-0.2,95.8" />
+                            <TextBlock Text="Citrix组件检测" Foreground="Black" FontWeight="Normal" FontSize="20" Margin="86,120,0,0" Height="40" />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -293,12 +309,299 @@
                 </TabItem.Background>
                 <Grid/>
             </TabItem>
+            <TabItem Name="CheckingTab"   Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
+                <Grid Margin="0,30,0,2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.25*"/>
+                        <RowDefinition Height="0.25*"/>
+                        <RowDefinition Height="0.2*"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.2*"/>
+                                <ColumnDefinition Width="0.6*"/>
+                                <ColumnDefinition Width="0.2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <StackPanel Margin="0,0,1,1">
+                                    <gifLib:GifImage Source="logoIMG/B3.gif"   Height="140" Width="150" HorizontalAlignment="Left"  VerticalAlignment="Center" Margin="15,5,0,9"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.6*"/>
+                                    <RowDefinition Height="0.4*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="  正在扫描，请耐心等待" FontFamily="微软雅黑" FontWeight="Normal" Foreground="Black" FontSize="40" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.3*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                     <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="2">
+                                        <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="3">
+                                        <TextBlock Text="7个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="4">
+                                        <TextBlock Text="问题:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="5">
+                                        <TextBlock Text="1个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
 
+
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Button Style="{DynamicResource ButtonStyle_escCheck}" Height="60" Width="140" />
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="1" Margin="10,0,70,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.65*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Image Source="logoIMG/littleTrusty.png" Height="50"  Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20,2"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.3*"/>
+
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.25*"/>
+                                <RowDefinition Height="0.25*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
+                                <TextBlock Text="授信站点" FontSize="24" FontFamily="宋体" Foreground="Black" VerticalAlignment="Bottom"/>
+
+                            </Border>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black"  VerticalAlignment="Bottom" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="10,0,70,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.65*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Image Source="logoIMG/littleNetwork.png" Height="50"  Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20,10"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.45*"/>
+
+                                <RowDefinition Height="0.35*"/>
+                                <RowDefinition Height="0.25*"/>
+
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
+                                <TextBlock Text="网络连通检测" FontSize="24" FontFamily="宋体" Foreground="Black" VerticalAlignment="Bottom"/>
+
+                            </Border>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="内网访问地址：clound.mountec.net(192.168.168.5)" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="网络不通" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" >
+                                    <TextBlock Text="外网访问地址:clound.mountec.net(117.6.23.6)" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                   
+                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+                              <Grid Grid.Row="3" Margin="10,0,70,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="0.65*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Image Source="logoIMG/littleCitrix.png" Height="50"  Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20,10"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.45*"/>
+
+                            <RowDefinition Height="0.35*"/>
+                            <RowDefinition Height="0.25*"/>
+
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
+                            <TextBlock Text="Citrix组件" FontSize="24" FontFamily="宋体" Foreground="Black" VerticalAlignment="Bottom"/>
+
+                        </Border>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <TextBlock Text="Citrix联机插件" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" >
+                                <TextBlock Text="Citrix联机插件2" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
+                            </Grid>
+                            <Grid Grid.Column="1">
+
+                                <TextBlock Text="正在检测..." FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </Grid>
+    </Grid>
+            </TabItem>
+            <TabItem Name="CheckOverTab" Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
+                <Grid Margin="0,30,0,2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.4*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.15*"/>
+                            <ColumnDefinition Width="0.15*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Image Source="logoIMG/Complete.png" Margin="40,20,20,10"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.6*"/>
+                                <RowDefinition Height="0.4*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <TextBlock Text="  扫描完成！" FontWeight="Normal" Foreground="Black" FontSize="40" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="0.3*"/>
+                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="0.2*"/>
+                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="0.2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Column="2">
+                                    <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Column="3">
+                                    <TextBlock Text="7个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Column="4">
+                                    <TextBlock Text="问题:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Column="5">
+                                    <TextBlock Text="1个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <!--<Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>-->
+                    </Grid>
+                </Grid>
+            </TabItem> 
         </TabControl>
-        <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,0,0" Click="x_Click"/>
-        <Button x:Name="__" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource -ButtonStyle}" VerticalAlignment="Top" Width="39.75" Margin="0,1,39.75,0" Click="___Click"/>
-        <Button x:Name="menu"  HorizontalAlignment="Right" Height="24" VerticalAlignment="Top" Width="39.75" Margin="0,1,79.8,0" Click="menu_Click" Style="{DynamicResource meButtonStyle}"/>
-        <Popup x:Name="menu1" StaysOpen="False" Margin="0" PlacementTarget="{Binding ElementName=menu}" AllowsTransparency="True">
+
+        <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="40" Margin="0,1,0,0" Click="x_Click"/>
+        <Button x:Name="__" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource -ButtonStyle}" VerticalAlignment="Top" Width="40" Margin="0,1,40,0" Click="___Click"/>
+        <Button x:Name="menu"  HorizontalAlignment="Right" Height="24" VerticalAlignment="Top" Width="40" Margin="0,1,80,0" Click="menu_Click" Style="{DynamicResource meButtonStyle}"/>
+        <Popup x:Name="menu1" StaysOpen="False" Margin="0" PlacementTarget="{Binding ElementName=menu}" AllowsTransparency="True" Grid.RowSpan="3">
             <Grid Height="78" Width="100" HorizontalAlignment="Left">
                 <Border BorderThickness="0" CornerRadius="3" Background="White" Margin="3">
                     <Border.Effect>
