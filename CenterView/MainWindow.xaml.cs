@@ -23,9 +23,9 @@ namespace CenterView
         public MainWindow()
         {
             InitializeComponent();
-          
+
         }
- 
+
         /// <summary>
         /// Load事件
         /// </summary>
@@ -54,8 +54,11 @@ namespace CenterView
             catch (Exception ex)
             {
                 //错误提示MessageBox，四个参数
-                MessageBox.Show(ex.Message,"错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            //测试授信站点获取IP或者域名
+            //TrustyStation TS = new TrustyStation();
+            //TS.GetTrustyStations();
         }
 
         #region 界面信息绑定
@@ -97,7 +100,7 @@ namespace CenterView
         #region 主界面button操作
         private void TrustCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckYes1.png",UriKind.Relative));
+            this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckYes1.png", UriKind.Relative));
         }
 
         private void TrustCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -117,7 +120,7 @@ namespace CenterView
 
         private void CitrixCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            this.CitrixBGimg.Source = new BitmapImage(new Uri("logoIMG/CitrixChecked.png",UriKind.Relative));
+            this.CitrixBGimg.Source = new BitmapImage(new Uri("logoIMG/CitrixChecked.png", UriKind.Relative));
         }
 
         private void CitrixCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -126,16 +129,15 @@ namespace CenterView
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
+       
 
-        private void cheshiBtn_Click(object sender, RoutedEventArgs e)
+      
+        #endregion
+
+        private void StartScanBtn_Click(object sender, RoutedEventArgs e)
         {
             this.CheckingTab.IsSelected = true;
         }
-        #endregion
 
     }
 }

@@ -14,7 +14,7 @@
             <RowDefinition Height="17*"/>
             <RowDefinition Height="324*"/>
         </Grid.RowDefinitions>
-        <Button Height="30" Width="100" Content="正在检测" Name="cheshiBtn" Click="cheshiBtn_Click" Margin="-700,-60,0,0"  />
+       
         <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}" Grid.RowSpan="3" >
             <TabItem Header="电脑信息" Margin="60,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
                 <TabItem.Background>
@@ -269,7 +269,7 @@
                         <Grid Grid.Column="1">
                             <TextBlock Margin="10,50,0,0" Text="立即检测，检测电脑的网络环境" FontFamily="微软雅黑" Foreground="Black" FontSize="38"/>
                             <TextBlock Text="定期检测能有效防止计算机中毒，让计算机处在一个安全环境上网" FontFamily="楷体" Foreground="Black" FontSize="20" Margin="0,130,0,0"/>
-                            <Button Content="开始扫描" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle_Arc}" Margin="164,181,0,54" Width="178" Click="Button_Click"/>
+                            <Button Name="StartScanBtn"  Content="开始扫描" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle_Arc}" Margin="164,181,0,54" Width="178"  Click="StartScanBtn_Click"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">

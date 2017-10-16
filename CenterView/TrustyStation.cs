@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace CenterView
 {
-    class TrustyStation
+   public class TrustyStation
     {
         /// <summary>
         /// 获取config.xml文件的信任站点列表
@@ -35,25 +35,38 @@ namespace CenterView
         /// 获取授信站点列表
         /// </summary>
         /// <returns></returns>
-        public string[] GetTrustyStations()
+        public List<string> GetTrustyStations()
         {
-            string[] subkeyNames;
+            List<string> subkeyNames=new List<string>();
             RegistryKey hkml = Registry.CurrentUser;
             RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
             RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
-            subkeyNames = aimdir.GetSubKeyNames();
+         string[]domains = aimdir.GetSubKeyNames();
             //判断有没有域名前缀例如“www”
-            for (int i = 0; i < subkeyNames.Length; i++)
+            for (int i = 0; i < domains.Length; i++)
             {
-                RegistryKey temp = aimdir.OpenSubKey(subkeyNames[i], false);
+                RegistryKey temp = aimdir.OpenSubKey(domains[i], false);
                 if (temp.GetSubKeyNames().Length == 1)
                 {
-                    subkeyNames[i] = temp.GetSubKeyNames()[0] + "." + subkeyNames[i];
+                    domains[i] = temp.GetSubKeyNames()[0] + "." + domains[i];
                 }
 
             }
-            hkml.Close();
+            subkeyNames.AddRange(domains);
+            //判断可信任站点为ip地址时
+            RegistryKey  range = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Ranges", true);
+            //判断是否有IP地址
+
+            string[] ranges = range.GetSubKeyNames();
+            for (int i = 0; i < ranges.Length; i++)
+            {
+                RegistryKey rangeTemp = range.OpenSubKey(ranges[i], false);
+                ranges[i] = rangeTemp.GetValue(":Range").ToString();
+            }
+                subkeyNames.AddRange(ranges);
             return subkeyNames;
+          
+            
         }
     }
 }
