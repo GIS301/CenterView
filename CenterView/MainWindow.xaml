@@ -61,7 +61,7 @@
                                 <TextBlock Text="操作系统"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="Windows 10 旗舰版 64位" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Name ="TxtOSystem" Text="Windows 10 旗舰版 64位" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="2">
@@ -234,7 +234,7 @@
                                     <TextBlock Text="Citrix组件" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="1">
-                                    <TextBlock  Name="citrix" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock  Name="TxtCitrix" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />

@@ -3,11 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace CenterView
 {
     class TrustyStation
     {
+        /// <summary>
+        /// 获取config.xml文件的信任站点列表
+        /// </summary>
+        /// <returns></returns>
+        private string[] TrustWebsite()
+        {
+            string[] temp = null;
+            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "TrustWebsite")
+                    {
+                        string sumValue = reader.ReadElementContentAsString().Trim();
+                        temp = sumValue.Split(',');
+                    }
+                }
+            }
+            return temp;
+        }
+
         /// <summary>
         /// 获取授信站点列表
         /// </summary>

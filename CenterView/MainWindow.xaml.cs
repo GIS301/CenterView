@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Xml;
 
 namespace CenterView
 {
@@ -26,6 +25,55 @@ namespace CenterView
             InitializeComponent();
           
         }
+ 
+        /// <summary>
+        /// Load事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //获取所有主机信息并显示
+                SetBaseinfos();
+
+                //显示citrix插件是否安装
+                {
+                    var isExistCkCitrix = CkCitrix.CheckCitrix();
+                    if (isExistCkCitrix)
+                    {
+                        this.TxtCitrix.Text = "Ctrix已安装";
+                    }
+                    else
+                    {
+                        this.TxtCitrix.Text = "Citrix未安装";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //错误提示MessageBox，四个参数
+                MessageBox.Show(ex.Message,"错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #region 界面信息绑定
+        /// <summary>
+        /// 显示所有信息到主界面
+        /// </summary>
+        private void SetBaseinfos()
+        {
+            BaseInfo info = new BaseInfo();
+            info.GetAllBaseInfos();
+            //操作系统类型
+            this.TxtOSystem.Text = info.hinfos.OSystem;
+            //请补充所有其他信息CPU...
+        }
+        #endregion
+
+
+        #region 菜单响应
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -44,53 +92,9 @@ namespace CenterView
         {
             this.WindowState = WindowState.Minimized;
         }
+        #endregion
 
-       
-
-        private void window_Loaded(object sender, RoutedEventArgs e)
-        {
-          BaseInfo  info = new BaseInfo();
-           
-            //显示citrix插件是否安装
-            {
-                var isExistCkCitrix = CkCitrix.CheckCitrix();
-                if (isExistCkCitrix)
-                {
-                    citrix.Text = "Ctrix已安装";
-                }
-                else
-                {
-                    citrix.Text = "Citrix未安装";
-                }
-            }
-        }
-        /// <summary>
-        /// 获取config.xml文件的信任站点列表
-        /// </summary>
-        /// <returns></returns>
-        private string[] TrustWebsite()
-        {
-            string[] temp = null;
-            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Element)
-                {
-                    if (reader.Name == "TrustWebsite")
-                    {
-                        string sumValue = reader.ReadElementContentAsString().Trim();
-                        temp = sumValue.Split(',');
-                    }
-                }
-            }
-            return temp;
-
-
-
-        }
-
-       
-
+        #region 主界面button操作
         private void TrustCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             this.TrustBGimg.Source = new BitmapImage(new Uri(@"logoIMG/SCheckYes1.png",UriKind.Relative));
@@ -131,9 +135,7 @@ namespace CenterView
         {
             this.CheckingTab.IsSelected = true;
         }
+        #endregion
 
-       
-
-        
     }
 }

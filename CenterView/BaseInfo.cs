@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CenterView.Model;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,14 @@ namespace CenterView
 {
     class BaseInfo
     {
+        public HardWareInfo hinfos = new HardWareInfo();
         public enum WMIPath
         {
             #region MyRegion
 
             // 硬件
             Win32_Processor,     // CPU 处理器
-            Win32_PhysicalMemory,  // 物理内存条
+            Win32_PhysicalMemory,  //物理内存条
             Win32_Keyboard,     // 键盘
             Win32_PointingDevice,  // 点输入设备，包括鼠标。
             Win32_FloppyDrive,    // 软盘驱动器
@@ -66,6 +68,20 @@ namespace CenterView
             Win32_NetworkProtocol, // 已安装的网络协议
             #endregion
         }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public BaseInfo()
+        {
+        }
+        /// <summary>
+        /// 获取所有硬件信息
+        /// </summary>
+        public void GetAllBaseInfos()
+        {
+            hinfos.OSystem = GetOSystemType();
+        }
         /// <summary>
         /// 检测操作系统信息
         /// </summary>
@@ -82,6 +98,15 @@ namespace CenterView
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 获取操作系统类型
+        /// </summary>
+        /// <returns></returns>
+        public string GetOSystemType()
+        {
+            return Environment.OSVersion.ToString();
         }
         /// <summary>
         /// 获取系统类型
