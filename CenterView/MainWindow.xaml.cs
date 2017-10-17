@@ -76,16 +76,7 @@ namespace CenterView
                 if (isExistCkCitrix)
                 {
                     citrix1.Text = "Ctrix Receiver已安装";
-                }
-                else
-                {
-                    citrix1.Text = "Citrix Receiver未安装，请安装";
-                }
-            }
-            //显示citrix插件工作状态
-            {
-                try
-                {
+                    //判断citrix是否运行
                     var isWorkCitrix = CkCitrix.IsProcessStarted();
                     if (isWorkCitrix)
                     {
@@ -94,14 +85,22 @@ namespace CenterView
                     else
                     {
                         citrix2.Text = "为您启动Citrix Receiver";
-                        System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
+                        try
+                        {
+                            System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
+                        }
+                        catch
+                        {
+                            citrix2.Text = "Citrix Receiver启动失败";
+                        }
                     }
                 }
-                catch
+                else
                 {
-                    citrix2.Text = "Citrix Receiver未安装，请安装";
+                    citrix1.Text = "Citrix Receiver未安装";
+                    citrix2.Text = "Citrix Receiver未启动";
                 }
-            }
+            }           
         }
     }
 }
