@@ -43,7 +43,25 @@ namespace CenterView
                     var isExistCkCitrix = CkCitrix.CheckCitrix();
                     if (isExistCkCitrix)
                     {
-                        this.TxtCitrix.Text = "Ctrix已安装";
+                        this.TxtCitrix.Text = "Ctrix Receiver已安装";
+                        //判断citrix是否运行
+                        var isWorkCitrix = CkCitrix.IsProcessStarted();
+                        if (isWorkCitrix)
+                        {
+                            TxtCitrix2.Text = "Citrix Receiver正在运行";
+                        }
+                        else
+                        {
+                            TxtCitrix2.Text = "为您启动Citrix Receiver";
+                            try
+                            {
+                                System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
+                            }
+                            catch
+                            {
+                                TxtCitrix2.Text = "Citrix Receiver启动失败";
+                            }
+                        }
                     }
                     else
                     {

@@ -237,7 +237,7 @@
                                     <TextBlock  Name="TxtCitrix" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock Name="TxtCitrix2" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -40,6 +41,16 @@ namespace CenterView
                 LocalMachinehkml.Close();
                 return false;
             }
+        }
+
+        //检查cx是否在运行
+        public static bool IsProcessStarted()
+        {
+            Process[] temp = Process.GetProcessesByName("wfcrun32");
+            if (temp.Length > 0) 
+                return true;
+            else
+                return false;
         }
     }
 }
