@@ -69,7 +69,14 @@ namespace CenterView
             #endregion
         }
 
-
+        /// <summary>
+        /// 获取所有硬件信息
+        /// </summary>
+        public void GetAllBaseInfos()
+        {
+            hinfos.OSystem = GetOsInfo();
+            //...补充其他的硬件
+        }
 
         /// <summary>
         /// 电脑型号
