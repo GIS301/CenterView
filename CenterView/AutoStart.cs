@@ -77,7 +77,7 @@ namespace CenterView
             return false;
         }
 
-        public static bool Delete(string directory, string shortcutName)
+        public  static bool Delete(string directory, string shortcutName)
         {
             try
             {
