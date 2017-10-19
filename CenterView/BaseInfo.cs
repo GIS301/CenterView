@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 
 namespace CenterView
@@ -69,42 +71,73 @@ namespace CenterView
             #endregion
         }
 
-        /// <summary>
-        /// 获取所有硬件信息
-        /// </summary>
         public void GetAllBaseInfos()
         {
-            hinfos.OSystem = GetOsInfo();
-           
-            //...补充其他的硬件
+
+            hinfos.LogoPath = "无";
+            hinfos.Trademark = GetTrademarkInfo(); //主机  制造商名称+名称+版本名称+类型（笔记本、台式机）（无版本）
+            hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数
+            hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数（无核心数）
+            hinfos.Memory = GetMemoryInfo();//内存   制造商+名字+版本+容量大小+转速+串口类型（无制造商 转速 串口类型 ）
+            hinfos.HardDisk = GetDiskDriveInfo();//硬盘  制造商+名字+版本+容量大小+转速+串口类型（无制造商 名字 版本 转速）
+            hinfos.GraphicsCard = GetGraphicsCardInfo();// 显卡  制造商+名字+版本+显存大小 (无厂商)
+            hinfos.MainBoard = GetMainBoardInfo();// 主板 制造商+名字+版本
+            hinfos.NetworkCard = ShowNetworkInterfaceMessage();//网卡  制造商+名字+版本+芯片名字
+            hinfos.WIFI = "无";//无线网卡  制造商+名字+版本+芯片名字
+            hinfos.Gateway = "无";
+            hinfos.IP = "无";
+            hinfos.DNS = "无";
+
+
+
+
         }
+
+
+        /// <summary>
+        /// 电脑厂商商标
+        /// </summary>
+        /// <returns></returns>
+        public string GetTrademarkInfo()
+        {
+
+            var result = GetManufacturerInfo() + " ";
+            result += GetMachineName() + " ";
+            result += GetChassisTypes() + " ";
+            return result;
+
+        }
+
 
         /// <summary>
         /// 电脑型号
         /// </summary>
-        /*  public string GetVersions()
-          {
-              var result = "";
-              try
-              {
-
-                  ManagementClass hardDisk = new ManagementClass("Win32_ComputerSystemProduct");
-                  ManagementObjectCollection hardDiskC = hardDisk.GetInstances();
-                  foreach (ManagementObject m in hardDiskC)
-                  {
-
-                      result += m["ComputerSystemProduct"].ToString();
-                      break;
-                  }
-              }
-              catch
-              {
-
-              }
-              return result;
-          }*/
-        ///获取电脑制造商信息
         public string GetVersions()
+        {
+            var result = "";
+            try
+            {
+
+                ManagementClass hardDisk = new ManagementClass("Win32_ComputerSystemProduct");
+                ManagementObjectCollection hardDiskC = hardDisk.GetInstances();
+                foreach (ManagementObject m in hardDiskC)
+                {
+
+                    result += m["ComputerSystemProduct"].ToString();
+                    break;
+                }
+            }
+            catch
+            {
+
+            }
+            return result;
+        }
+
+
+
+        ///获取电脑制造商信息
+        public string GetManufacturerInfo()
         {
             var result = "";
             // create management class object
@@ -123,6 +156,8 @@ namespace CenterView
             //wait for user action
             return result;
         }
+
+
         /// <summary>
         /// 获取计算机类型
         /// </summary>
@@ -153,10 +188,9 @@ namespace CenterView
             RackMountChassis,
             SealedCasePC
         }
-
         public string GetChassisTypes()
         {
-            var result = "";
+
             ManagementClass systemEnclosures = new ManagementClass("Win32_SystemEnclosure");
             foreach (ManagementObject obj in systemEnclosures.GetInstances())
             {
@@ -170,6 +204,8 @@ namespace CenterView
             }
             return ChassisTypes.Unknown.ToString();
         }
+
+
         /// <summary>
         /// 获取计算机名
         /// </summary>
@@ -186,8 +222,9 @@ namespace CenterView
             }
         }
 
+
         /// <summary>
-        /// 检测操作系统信息
+        /// 检测操作系统信息与位数（x32/64）
         /// </summary>
         public string GetOsInfo()
         {
@@ -204,17 +241,13 @@ namespace CenterView
                     result += text.Split('|')[0];
 
                 }
-                return result;
+                return result + " " + GetOSBit() + " 位";
             }
             catch
             {
                 return null;
             }
         }
-        /// <summary> 
-        /// 获取操作系统位数（x32/64） 
-        /// </summary> 
-        /// <returns>int</returns> 
         public string GetOSBit()
         {
             string result = "";
@@ -227,7 +260,7 @@ namespace CenterView
                 ManagementObjectCollection mObjectCollection = mSearcher.Get();
                 foreach (ManagementObject mObject in mObjectCollection)
                 {
-                    result += mObject["AddressWidth"].ToString() + "位" + "\r\n";
+                    result += mObject["AddressWidth"].ToString();
                 }
                 return result;
             }
@@ -237,6 +270,8 @@ namespace CenterView
                 return null;
             }
         }
+
+
 
         /// <summary>
         /// 检测Cpu信息
@@ -262,8 +297,9 @@ namespace CenterView
             }
 
         }
-        ///检测内存
 
+
+        ///检测内存
         public string GetMemoryInfo()
         {
             var result = "";
@@ -271,7 +307,6 @@ namespace CenterView
             searcher.Query = new SelectQuery("Win32_PhysicalMemory ", "", new string[] { "Capacity" });//设置查询条件 
             ManagementObjectCollection collection = searcher.Get();   //获取内存容量 
             ManagementObjectCollection.ManagementObjectEnumerator em = collection.GetEnumerator();
-
             long capacity = 0;
             while (em.MoveNext())
             {
@@ -292,11 +327,63 @@ namespace CenterView
             result = theresult.ToString();
             return result;
         }
+        /// <summary>    
+        /// 物理内存    
+        /// </summary>    
+        //public string GetPhysicalMemory()
+        //{
+        //    string result = "";
+        //    ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
+        //    ManagementObjectCollection thePhysicalMemory = mc.GetInstances();
+        //    foreach (var item in thePhysicalMemory)
+        //    {
+        //        result = item["TotalPhysicalMemory"].ToString();                
+        //    }
+        //    return result;
+        //}  
+        /// <summary>
+        /// 获取内存信息
+        /// </summary>
+        /// <returns></returns>
+        //public string GetMemoryInfo()
+        //{
+        //    StringBuilder sr = new StringBuilder();
+        //    try
+        //    {
+        //        long capacity = 0;
+        //        var query = WmiDict[WmiType.Win32_PhysicalMemory.ToString()];
+        //        int index = 1;
+        //        foreach (var obj in query)
+        //        {
+        //            sr.Append("内存" + index + "频率:" + obj["ConfiguredClockSpeed"] + ";");
+        //            capacity += Convert.ToInt64(obj["Capacity"]);
+        //            index++;
+        //        }
+        //        sr.Append("总物理内存:");
+        //        sr.Append(capacity / 1024 / 1024 + "MB;");
+
+        //        query = WmiDict[WmiType.Win32_PerfFormattedData_PerfOS_Memory.ToString()];
+        //        sr.Append("总可用内存:");
+        //        long available = 0;
+        //        foreach (var obj in query)
+        //        {
+        //            available += Convert.ToInt64(obj.Properties["AvailableMBytes"].Value);
+        //        }
+        //        sr.Append(available + "MB;");
+        //        sr.AppendFormat("{0:F2}%可用; ", (double)available / (capacity / 1024 / 1024) * 100);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        sr.Append("异常信息:" + ex.Message);
+        //    }
+
+        //    return sr.ToString();
+        //}
+
+
         /// <summary>
         /// 检测硬盘信息
         /// </summary>
-
-
         public string GetDiskDriveInfo()
         {
             //string result = "";
@@ -322,9 +409,6 @@ namespace CenterView
             //}
             //return result;
 
-
-
-
             var result = "";
             double Size = 0;
             try
@@ -333,7 +417,6 @@ namespace CenterView
                 ManagementObjectCollection theDiskDriveInfo = mc.GetInstances();
                 foreach (var item in theDiskDriveInfo)
                 {
-
 
                     Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);
                 }
@@ -356,13 +439,15 @@ namespace CenterView
 
 
         }
+
+
+
         /// <summary>
         /// 显卡 芯片,显存大小
         /// </summary>
-        public string GetVideoController()
+        public string GetGraphicsCardInfo()
         {
             var result = "";
-
             try
             {
 
@@ -372,16 +457,31 @@ namespace CenterView
                 {
                     result += (m["VideoProcessor"].ToString().Replace("Family", "") + ToGB(Convert.ToInt64(m["AdapterRAM"].ToString()), 1024.0).ToString());
                     break;
+
                 }
             }
             catch
             {
-
             }
             return result;
         }
 
 
+
+        /// <summary>
+        /// 获取显卡类型
+        /// </summary>
+        /// <returns></returns>
+        public string GetVideoPNPID()
+        {
+            string st = "";
+            ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * from Win32_VideoController");
+            foreach (ManagementObject mo in mos.Get())
+            {
+                st = mo["PNPDeviceID"].ToString();
+            }
+            return st;
+        }
 
 
         /// 检测主板信息
@@ -417,8 +517,11 @@ namespace CenterView
 
         }
 
+
+
+
         /// <summary>
-        /// 检测网络连接信息
+        /// 检测网络配置
         /// </summary>
         public string GetNetworkInfo()
         {
@@ -429,7 +532,6 @@ namespace CenterView
                 ManagementObjectCollection moc = mc.GetInstances();
                 foreach (var item in moc)
                 {
-
                     result += "IP地址：" + item.Properties["IPAddress"].Value + "\r\n";
                     //result += "默认网关：" + item.Properties[DefaultIPGateway"].Value + "\r\n";
                 }
@@ -441,16 +543,19 @@ namespace CenterView
             }
 
         }
-        /*/// <summary></summary>   
-        /// 显示本机各网卡的详细信息   
+
+
         /// <summary></summary>   
-        public string[] GetNetworkInterfaceMessage()
+        /// 检测本地网卡
+        /// <summary></summary>   
+        public string GetNetworkInterfaceInfo()
         {
-            //var result = "";
-            string[] result=new string[2];
+
+            string result = "";
+            string second = "";
             NetworkInterface[] fNetworkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface adapter in fNetworkInterfaces)
-            {   
+            {
                 #region " 网卡类型 "
                 string fCardType = "未知网卡";
                 string fRegistryKey = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" + adapter.Id + "\\Connection";
@@ -478,15 +583,118 @@ namespace CenterView
                 foreach (UnicastIPAddressInformation UnicastIPAddressInformation in UnicastIPAddressInformationCollection)
                 {
                     if (UnicastIPAddressInformation.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)//AddressFamily.InterNetwork)
-                       result[1]=UnicastIPAddressInformation.Address.ToString();// Ip 地址   
+                        second = UnicastIPAddressInformation.Address.ToString();// Ip 地址   
                 }
-                result[0]= adapter.Name;
-                    
+                result = adapter.Name;
+                result += second;
+
                 #endregion
-                   
+
             }
             return result;
-        }   */
+        }
+        private List<string> ShowAdapterInfo()
+        {
+            List<string> lst_NetworkAdapter = new List<string>();
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            lst_NetworkAdapter.Add("适配器个数：" + adapters.Length);
+            int index = 0;
+
+            foreach (NetworkInterface adapter in adapters)
+            {
+                index++;
+                //显示网络适配器描述信息、名称、类型、速度、MAC 地址   
+                lst_NetworkAdapter.Add("---------------------第" + index + "个适配器信息---------------------");
+                lst_NetworkAdapter.Add("描述信息：" + adapter.Name);
+                lst_NetworkAdapter.Add("类型：" + adapter.NetworkInterfaceType);
+                lst_NetworkAdapter.Add("速度：" + adapter.Speed / 1000 / 1000 + "MB");
+                lst_NetworkAdapter.Add("MAC 地址：" + adapter.GetPhysicalAddress());
+
+                //获取IPInterfaceProperties实例 
+
+                IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
+
+                //获取并显示DNS服务器IP地址信息   
+                IPAddressCollection dnsServers = adapterProperties.DnsAddresses;
+                if (dnsServers.Count > 0)
+                {
+                    foreach (var dns in dnsServers)
+                    {
+                        lst_NetworkAdapter.Add("DNS 服务器IP地址：" + dns + "\n");
+                    }
+                }
+                else
+                {
+                    lst_NetworkAdapter.Add("DNS 服务器IP地址：" + "\n");
+                }
+            }
+            return lst_NetworkAdapter;
+
+        }
+
+        /// <summary>
+        /// 检测有线网卡
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string ShowNetworkInterfaceMessage()
+        {
+
+            string result = "";
+            NetworkInterface[] fNetworkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface adapter in fNetworkInterfaces)
+            {
+                #region " 网卡类型 "
+                string fCardType = "未知网卡";
+                string fRegistryKey = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" + adapter.Id + "\\Connection";
+                RegistryKey rk = Registry.LocalMachine.OpenSubKey(fRegistryKey, false);
+                if (rk != null)
+                {
+                    // 区分 PnpInstanceID    
+                    // 如果前面有 PCI 就是本机的真实网卡   
+                    // MediaSubType 为 01 则是常见网卡，02为无线网卡。   
+                    string fPnpInstanceID = rk.GetValue("PnpInstanceID", "").ToString();
+                    int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
+                    if (fPnpInstanceID.Length > 3 &&
+                        fPnpInstanceID.Substring(0, 3) == "PCI")
+                        fCardType = "物理网卡";
+                    else if (fMediaSubType == 1)
+                        fCardType = "虚拟网卡";
+                    else if (fMediaSubType == 2)
+                        fCardType = "无线网卡";
+                }
+                #endregion
+                #region " 网卡信息 "
+                if (adapter.Name == "以太网")
+                {
+                    //result.Add("-----------------------------------------------------------");
+                    //result.Add("-- " + fCardType);
+                    //result.Add("-----------------------------------------------------------");
+                    //result.Add(string.Format("Id .................. : {0}", adapter.Id)); // 获取网络适配器的标识符   
+                    //result.Add(string.Format("Name ................ : {0}", adapter.Name)); // 获取网络适配器的名称               
+                    result += (adapter.Description) + "\r\n"; // 获取接口的描述   
+                    //result.Add(string.Format("Interface type ...... : {0}", adapter.NetworkInterfaceType)); // 获取接口类型   
+                    //result.Add(string.Format("Is receive only...... : {0}", adapter.IsReceiveOnly)); // 获取 Boolean 值，该值指示网络接口是否设置为仅接收数据包。   
+                    //result.Add(string.Format("Multicast............ : {0}", adapter.SupportsMulticast)); // 获取 Boolean 值，该值指示是否启用网络接口以接收多路广播数据包。   
+                    //result.Add(string.Format("Speed ............... : {0}", adapter.Speed)); // 网络接口的速度   
+                    //result.Add(string.Format("Physical Address .... : {0}", adapter.GetPhysicalAddress().ToString())); // MAC 地址   
+                    //IPInterfaceProperties fIPInterfaceProperties = adapter.GetIPProperties();
+                    //UnicastIPAddressInformationCollection UnicastIPAddressInformationCollection = fIPInterfaceProperties.UnicastAddresses;
+                    //foreach (UnicastIPAddressInformation UnicastIPAddressInformation in UnicastIPAddressInformationCollection)
+                    //{
+                    //    if (UnicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
+                    //        result.Add(string.Format("Ip Address .......... : {0}", UnicastIPAddressInformation.Address)); // Ip 地址   
+                    //}
+                }
+
+
+                #endregion
+            }
+            return result;
+        }
+
+
+
         /// <summary>
         /// 获取授信站点列表
         /// </summary>
@@ -523,6 +731,6 @@ namespace CenterView
             }
             return Math.Round(size) + units[i];
         }
-     
+
     }
 }
