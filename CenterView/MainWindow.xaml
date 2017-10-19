@@ -14,7 +14,7 @@
             <RowDefinition Height="17*"/>
             <RowDefinition Height="324*"/>
         </Grid.RowDefinitions>
-       
+
         <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}" Grid.RowSpan="3" >
             <TabItem Header="电脑信息" Margin="60,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
                 <TabItem.Background>
@@ -296,10 +296,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <!--扫描动图-->
-                <!--<StackPanel Margin="0,40,1,1">
-                    <gifLib:GifImage Source="logoIMG/B4.gif"   Height="140" Width="180" HorizontalAlignment="Left" Margin="80,1"/>
-                </StackPanel>-->
+
 
 
             </TabItem>
@@ -309,7 +306,7 @@
                 </TabItem.Background>
                 <Grid/>
             </TabItem>
-            <TabItem Name="CheckingTab"   Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
+            <TabItem Name="CheckingTab"  GotFocus="CheckingTab_GotFocus"  Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
                 <Grid Margin="0,30,0,2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.3*"/>
@@ -347,7 +344,7 @@
                                         <ColumnDefinition Width="0.2*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0">
-                                     <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                        <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
                                     </Grid>
                                     <Grid Grid.Column="1">
                                         <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -402,10 +399,10 @@
                                     <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom" Name="checkingTrusty_Txt1"  />
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom" Name="checkingTrustyResult_Txt1"/>
                                 </Grid>
                             </Grid>
                             <Grid Grid.Row="2">
@@ -414,10 +411,10 @@
                                     <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black"  VerticalAlignment="Bottom" />
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="18" Foreground="Black"  VerticalAlignment="Bottom" Name="checkingTrusty_Txt2" />
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom" Name="checkingTrustyResult_Txt2"/>
                                 </Grid>
                             </Grid>
                             <Grid Grid.Row="3">
@@ -426,15 +423,20 @@
                                     <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TextBlock Text="https://swmaster.mountec.net" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  Name="checkingTrusty_Txt3" />
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20*"/>
+                                        <ColumnDefinition Width="21*"/>
+                                        <ColumnDefinition Width="55*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock  FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom" Name="checkingTrustyResult_Txt3" Grid.ColumnSpan="3" Margin="0,0,0,-0.6"/>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="2" Margin="10,0,70,0">
+                    <Grid Grid.Row="2" Margin="10,0,70,0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.25*"/>
                             <ColumnDefinition Width="0.65*"/>
@@ -476,63 +478,63 @@
                                     <TextBlock Text="外网访问地址:clound.mountec.net(117.6.23.6)" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                   
+
                                     <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
                                 </Grid>
                             </Grid>
 
                         </Grid>
                     </Grid>
-                              <Grid Grid.Row="3" Margin="10,0,70,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.25*"/>
-                        <ColumnDefinition Width="0.65*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Image Source="logoIMG/littleCitrix.png" Height="50"  Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20,10"/>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.45*"/>
-
-                            <RowDefinition Height="0.35*"/>
-                            <RowDefinition Height="0.25*"/>
-
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
-                            <TextBlock Text="Citrix组件" FontSize="24" FontFamily="宋体" Foreground="Black" VerticalAlignment="Bottom"/>
-
-                        </Border>
-
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <TextBlock Text="Citrix联机插件" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
-                            </Grid>
-                            <Grid Grid.Column="1">
-                                <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"/>
-                            </Grid>
+                    <Grid Grid.Row="3" Margin="10,0,70,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.65*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Image Source="logoIMG/littleCitrix.png" Height="50"  Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20,10"/>
                         </Grid>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" >
-                                <TextBlock Text="Citrix联机插件2" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
-                            </Grid>
-                            <Grid Grid.Column="1">
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.45*"/>
 
-                                <TextBlock Text="正在检测..." FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
+                                <RowDefinition Height="0.35*"/>
+                                <RowDefinition Height="0.25*"/>
+
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
+                                <TextBlock Text="Citrix组件" FontSize="24" FontFamily="宋体" Foreground="Black" VerticalAlignment="Bottom"/>
+
+                            </Border>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom" Name="checkingCitrix_Txt1" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom" Name="checkingCitrixResult_Txt1"/>
+                                </Grid>
                             </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" >
+                                    <TextBlock Text="" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+
+                                    <TextBlock Text="" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
+                                </Grid>
+                            </Grid>
+
                         </Grid>
-
                     </Grid>
                 </Grid>
-    </Grid>
             </TabItem>
             <TabItem Name="CheckOverTab" Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
                 <Grid Margin="0,30,0,2">
@@ -595,7 +597,7 @@
                         </Grid.ColumnDefinitions>-->
                     </Grid>
                 </Grid>
-            </TabItem> 
+            </TabItem>
         </TabControl>
 
         <Button x:Name="x" Content="Button" HorizontalAlignment="Right" Height="24" Style="{DynamicResource xButtonStyle}" VerticalAlignment="Top" Width="40" Margin="0,1,0,0" Click="x_Click"/>

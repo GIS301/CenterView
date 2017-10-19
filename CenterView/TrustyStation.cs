@@ -13,7 +13,7 @@ namespace CenterView
         /// 获取config.xml文件的信任站点列表
         /// </summary>
         /// <returns></returns>
-        private string[] TrustWebsite()
+        public string[] TrustWebsite()
         {
             string[] temp = null;
             XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
@@ -35,13 +35,13 @@ namespace CenterView
         /// 获取授信站点列表
         /// </summary>
         /// <returns></returns>
-        public List<string> GetTrustyStations()
+        public string[] GetTrustyStations()
         {
             List<string> subkeyNames=new List<string>();
             RegistryKey hkml = Registry.CurrentUser;
             RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
             RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
-         string[]domains = aimdir.GetSubKeyNames();
+            string[]domains = aimdir.GetSubKeyNames();
             //判断有没有域名前缀例如“www”
             for (int i = 0; i < domains.Length; i++)
             {
@@ -50,6 +50,11 @@ namespace CenterView
                 {
                     domains[i] = temp.GetSubKeyNames()[0] + "." + domains[i];
                 }
+                else
+                {
+                    domains[i] = "*." + domains[i];
+                }
+               
 
             }
             subkeyNames.AddRange(domains);
@@ -64,9 +69,46 @@ namespace CenterView
                 ranges[i] = rangeTemp.GetValue(":Range").ToString();
             }
                 subkeyNames.AddRange(ranges);
-            return subkeyNames;
+              return subkeyNames.ToArray();
           
             
+        }
+       /// <summary>
+       /// 判定输入值Input是否在本机的授信站点内
+       /// </summary>
+       /// <param name="input"></param>
+       /// <returns></returns>
+       public bool IdentifyTrusty(string input)
+        {
+            string[] localTrusty = GetTrustyStations();
+            for (int i = 0; i < localTrusty.Length;i++ )
+            {
+                if (localTrusty[i].Substring(0, 2) == "*.")
+                {
+                    string[] localCut = localTrusty[i].Split('.');
+                    string[] trustyCut = input.Split('.');
+                    if (trustyCut[trustyCut.Length - 1] == localCut[localCut.Length - 1] && trustyCut[trustyCut.Length - 2] == localCut[localCut.Length - 2])
+                    {
+                        return true;
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+                
+            int a = Array.IndexOf(localTrusty, input);
+           if(a==-1)
+           {
+               return false;
+           }
+           else
+           {
+               return true;
+           }
+           
         }
     }
 }

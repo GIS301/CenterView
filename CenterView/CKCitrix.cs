@@ -10,7 +10,7 @@ namespace CenterView
     public class CkCitrix
     {
         //检测citrix是否存在
-        public static bool CheckCitrix()
+        public  bool CheckCitrix()
         {
             List<string> subkeyNames = new List<string>();
             //当前用户 

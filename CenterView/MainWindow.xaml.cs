@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace CenterView
 {
@@ -20,11 +21,129 @@ namespace CenterView
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer timer_checkingTrusty = new DispatcherTimer();
+        DispatcherTimer timer_checkingNetwork = new DispatcherTimer();
+        DispatcherTimer timer_checkingCitrix = new DispatcherTimer();
+        int a = 0;//定义正在检测过程序号
+        int checkingTrustyCount = 0;//定义正在检测授信站点项目数
+        string[] trustyStations;
+
         public MainWindow()
         {
             InitializeComponent();
+            timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
+            timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
+          //  timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
+            trustyStations = new TrustyStation().TrustWebsite();
+            checkingTrustyCount = trustyStations.Length;
+        }
+        /// <summary>
+        /// 正在检测Citrix组件Timer处理事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Tick_checkingCitrix(object sender, EventArgs e)
+        {
+            bool result = new CkCitrix().CheckCitrix();
+            if(result)
+            {
+                this.checkingCitrix_Txt1.Text = "Citrix组件";
+                this.checkingCitrixResult_Txt1.Text = "已安装";
+                this.checkingCitrixResult_Txt1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Green"));
+            }
+            else
+            {
+                this.checkingCitrix_Txt1.Text = "Citrix组件";
+                this.checkingCitrixResult_Txt1.Text = "未安装";
+                this.checkingCitrixResult_Txt1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Red"));
+
+            }
+           
+        }
+        /// <summary>
+        /// 正在检测网络连通Timer处理事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Tick_checkingNetwork(object sender, EventArgs e)
+        { 
 
         }
+        /// <summary>
+        /// 正在检测授信站点Timer事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Tick_checkingTrusty(object sender, EventArgs e)
+        {
+          if(this.a>checkingTrustyCount-2)
+          {
+              timer_checkingTrusty.Stop();
+          }
+           switch(this.a)
+           {
+               case 0: this.checkingTrusty_Txt1.Text = trustyStations[a];
+                        this.checkingTrustyResult_Txt1.Text=IdentifyResult(trustyStations[a]);
+                        this.checkingTrustyResult_Txt1.Foreground = IdentifyColor(trustyStations[a]);
+                        this.a++;
+                        break;
+               case 1: this.checkingTrusty_Txt1.Text = trustyStations[a - 1];
+                        this.checkingTrustyResult_Txt1.Text = IdentifyResult(trustyStations[a-1]);
+                        this.checkingTrustyResult_Txt1.Foreground = IdentifyColor(trustyStations[a - 1]);
+                       this.checkingTrusty_Txt2.Text = trustyStations[a];
+                       this.checkingTrustyResult_Txt2.Text = IdentifyResult(trustyStations[a ]);
+                       this.checkingTrustyResult_Txt2.Foreground = IdentifyColor(trustyStations[a]);
+                       this.a++; break;
+               default: this.checkingTrusty_Txt1.Text = trustyStations[a - 2];
+
+                   this.checkingTrustyResult_Txt1.Text = IdentifyResult(trustyStations[a-2]);
+                   this.checkingTrustyResult_Txt1.Foreground = IdentifyColor(trustyStations[a-2]);
+                   this.checkingTrusty_Txt2.Text = trustyStations[a - 1];
+                   this.checkingTrustyResult_Txt2.Text = IdentifyResult(trustyStations[a - 1]);
+                   this.checkingTrustyResult_Txt2.Foreground = IdentifyColor(trustyStations[a-1]);
+                   this.checkingTrusty_Txt3.Text = trustyStations[a];
+                   this.checkingTrustyResult_Txt3.Text = IdentifyResult(trustyStations[a ]);
+                   this.checkingTrustyResult_Txt3.Foreground = IdentifyColor(trustyStations[a]);
+                   this.a++; break;
+
+           }
+
+        }
+        /// <summary>
+        /// 判断XML内的元素是否在本机授信站列表中存在
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string IdentifyResult( string input)
+        {
+            string result = "";
+            if(new TrustyStation().IdentifyTrusty(input))
+            {
+                return "OK";
+            }
+            else
+            {
+                return "未授信";
+            }
+
+        }
+        /// <summary>
+        /// 判断字体颜色
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private SolidColorBrush IdentifyColor(string input)
+        {
+            if(new TrustyStation().IdentifyTrusty(input))
+            {
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString("Green"));
+            }
+            else
+            {
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString("Red"));
+            }
+        }
+       
 
         /// <summary>
         /// Load事件
@@ -33,50 +152,50 @@ namespace CenterView
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //获取所有主机信息并显示
-                SetBaseinfos();
+            //try
+            //{
+            //    //获取所有主机信息并显示
+            //    SetBaseinfos();
 
-                //显示citrix插件是否安装
-                {
-                    var isExistCkCitrix = CkCitrix.CheckCitrix();
-                    if (isExistCkCitrix)
-                    {
-                        this.TxtCitrix.Text = "Ctrix Receiver已安装";
-                        //判断citrix是否运行
-                        var isWorkCitrix = CkCitrix.IsProcessStarted();
-                        if (isWorkCitrix)
-                        {
-                            TxtCitrix2.Text = "Citrix Receiver正在运行";
-                        }
-                        else
-                        {
-                            TxtCitrix2.Text = "为您启动Citrix Receiver";
-                            try
-                            {
-                                System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
-                            }
-                            catch
-                            {
-                                TxtCitrix2.Text = "Citrix Receiver启动失败";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        this.TxtCitrix.Text = "Citrix未安装";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //错误提示MessageBox，四个参数
-                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            //测试授信站点获取IP或者域名
-            //TrustyStation TS = new TrustyStation();
-            //TS.GetTrustyStations();
+            //    //显示citrix插件是否安装
+            //    {
+            //        var isExistCkCitrix = new CkCitrix.CheckCitrix();
+            //        if (isExistCkCitrix)
+            //        {
+            //            this.TxtCitrix.Text = "Ctrix Receiver已安装";
+            //            //判断citrix是否运行
+            //            var isWorkCitrix = CkCitrix.IsProcessStarted();
+            //            if (isWorkCitrix)
+            //            {
+            //                TxtCitrix2.Text = "Citrix Receiver正在运行";
+            //            }
+            //            else
+            //            {
+            //                TxtCitrix2.Text = "为您启动Citrix Receiver";
+            //                try
+            //                {
+            //                    System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
+            //                }
+            //                catch
+            //                {
+            //                    TxtCitrix2.Text = "Citrix Receiver启动失败";
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+            //            this.TxtCitrix.Text = "Citrix未安装";
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //错误提示MessageBox，四个参数
+            //    MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+            ////测试授信站点获取IP或者域名
+            ////TrustyStation TS = new TrustyStation();
+            ////TS.GetTrustyStations();
         }
 
         #region 界面信息绑定
@@ -155,6 +274,19 @@ namespace CenterView
         private void StartScanBtn_Click(object sender, RoutedEventArgs e)
         {
             this.CheckingTab.IsSelected = true;
+        }
+
+        private void CheckingTab_GotFocus(object sender, RoutedEventArgs e)
+        {   //授信站点检测时间间隔Timer
+            timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
+            timer_checkingTrusty.Interval = TimeSpan.FromSeconds(2.0);
+            timer_checkingTrusty.Start();
+            //Citrix组件检测时间间隔Timer
+            timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
+            timer_checkingCitrix.Interval = TimeSpan.FromSeconds(2.5);
+            timer_checkingCitrix.Start();
+
+           
         }
 
     }

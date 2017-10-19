@@ -75,6 +75,7 @@ namespace CenterView
         public void GetAllBaseInfos()
         {
             hinfos.OSystem = GetOsInfo();
+           
             //...补充其他的硬件
         }
 
