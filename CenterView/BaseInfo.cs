@@ -7,6 +7,7 @@ using System.Management;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Net;
 
 namespace CenterView
 {
@@ -77,18 +78,18 @@ namespace CenterView
             hinfos.LogoPath = "无";
             hinfos.Trademark = GetTrademarkInfo(); //主机  制造商名称+名称+版本名称+类型（笔记本、台式机）（无版本）
             hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数
-            hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数（无核心数）
+            hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数
             hinfos.Memory = GetMemoryInfo();//内存   制造商+名字+版本+容量大小+转速+串口类型（无制造商 转速 串口类型 ）
             hinfos.HardDisk = GetDiskDriveInfo();//硬盘  制造商+名字+版本+容量大小+转速+串口类型（无制造商 名字 版本 转速）
             hinfos.GraphicsCard = GetGraphicsCardInfo();// 显卡  制造商+名字+版本+显存大小 (无厂商)
             hinfos.MainBoard = GetMainBoardInfo();// 主板 制造商+名字+版本
-            hinfos.NetworkCard = ShowNetworkInterfaceMessage();//网卡  制造商+名字+版本+芯片名字
+            hinfos.NetworkCard = GetNetworkInterfaceMessage();//网卡  制造商+名字+版本+芯片名字
             hinfos.WIFI = "无";//无线网卡  制造商+名字+版本+芯片名字
-            hinfos.Gateway = "无";
-            hinfos.IP = "无";
-            hinfos.DNS = "无";
-
-
+            hinfos.Gateway = GetGateway();//获取默认网关
+            hinfos.IP = GetIpInfo();//获取默认IP
+            hinfos.DNS = GetDNSInfo();//获取所有DNS
+            
+           
 
 
         }
@@ -107,8 +108,26 @@ namespace CenterView
             return result;
 
         }
-
-
+        ///获取电脑制造商信息
+        public string GetManufacturerInfo()
+        {
+            var result = "";
+            // create management class object
+            ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
+            //collection to store all management objects
+            ManagementObjectCollection moc = mc.GetInstances();
+            if (moc.Count != 0)
+            {
+                foreach (ManagementObject mo in mc.GetInstances())
+                {
+                    // display general system information
+                    result += string.Format("\n {0}",
+                                      mo["Manufacturer"].ToString());
+                }
+            }
+            //wait for user action
+            return result;
+        }
         /// <summary>
         /// 电脑型号
         /// </summary>
@@ -136,30 +155,11 @@ namespace CenterView
 
 
 
-        ///获取电脑制造商信息
-        public string GetManufacturerInfo()
-        {
-            var result = "";
-            // create management class object
-            ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-            //collection to store all management objects
-            ManagementObjectCollection moc = mc.GetInstances();
-            if (moc.Count != 0)
-            {
-                foreach (ManagementObject mo in mc.GetInstances())
-                {
-                    // display general system information
-                    result += string.Format("\n {0}",
-                                      mo["Manufacturer"].ToString());
-                }
-            }
-            //wait for user action
-            return result;
-        }
+        
 
 
         /// <summary>
-        /// 获取计算机类型
+        /// 获取计算机类型与计算机名
         /// </summary>
         public enum ChassisTypes
         {
@@ -204,12 +204,6 @@ namespace CenterView
             }
             return ChassisTypes.Unknown.ToString();
         }
-
-
-        /// <summary>
-        /// 获取计算机名
-        /// </summary>
-        /// <returns></returns>
         public string GetMachineName()
         {
             try
@@ -221,6 +215,7 @@ namespace CenterView
                 return "uMnNk";
             }
         }
+          
 
 
         /// <summary>
@@ -235,8 +230,6 @@ namespace CenterView
                 ManagementObjectCollection moc = mc.GetInstances();
                 foreach (var item in moc)
                 {
-
-
                     var text = item.Properties["Name"].Value + "\r\n";
                     result += text.Split('|')[0];
 
@@ -286,9 +279,38 @@ namespace CenterView
                 ManagementObjectCollection moc = mc.GetInstances();
                 foreach (var item in moc)
                 {
-                    result += item.Properties["Name"].Value + "\r\n";
+                    result += item.Properties["Name"].Value + " ";
+                    int a=Convert.ToInt32( item.Properties["NumberOfCores"].Value);
+                    string data;
+                    switch (a)
+                    {
+                        case 1:
+                            data = "单";
+                            break;
+                        case 2:
+                            data = "双";
+                            break;
+                        case 4:
+                            data="四";
+                            break;
+                        case 8:
+                            data="八";
+                            break;
+                        case 16:
+                            data="十六";
+                            break;
+                        default:
+                            data=a.ToString();
+                            break;
+
+                    }
+
+                     result += data+"核";
+                    
+                  
 
                 }
+               
                 return result;
             }
             catch
@@ -299,7 +321,7 @@ namespace CenterView
         }
 
 
-        ///检测内存
+        ///检测物理内存
         public string GetMemoryInfo()
         {
             var result = "";
@@ -308,6 +330,7 @@ namespace CenterView
             ManagementObjectCollection collection = searcher.Get();   //获取内存容量 
             ManagementObjectCollection.ManagementObjectEnumerator em = collection.GetEnumerator();
             long capacity = 0;
+            string manufacturer = "";
             while (em.MoveNext())
             {
                 ManagementBaseObject baseObj = em.Current;
@@ -316,6 +339,7 @@ namespace CenterView
                     try
                     {
                         capacity += long.Parse(baseObj.Properties["Capacity"].Value.ToString());
+                      //  manufacturer = baseObj.Properties["Manufacturer"].Value.ToString();
                     }
                     catch
                     {
@@ -323,8 +347,9 @@ namespace CenterView
                     }
                 }
             }
+           
             var theresult = (int)(capacity / 1024 / 1024);
-            result = theresult.ToString();
+            result = manufacturer+" "+theresult.ToString();
             return result;
         }
         /// <summary>    
@@ -418,7 +443,8 @@ namespace CenterView
                 foreach (var item in theDiskDriveInfo)
                 {
 
-                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);
+                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024) ;
+
                 }
                 if (Size > 1024)
                 {
@@ -465,9 +491,6 @@ namespace CenterView
             }
             return result;
         }
-
-
-
         /// <summary>
         /// 获取显卡类型
         /// </summary>
@@ -478,7 +501,10 @@ namespace CenterView
             ManagementObjectSearcher mos = new ManagementObjectSearcher("Select * from Win32_VideoController");
             foreach (ManagementObject mo in mos.Get())
             {
-                st = mo["PNPDeviceID"].ToString();
+                st += mo["PNPDeviceID"].ToString()+" ";
+                st += mo["（AdapterCompatibility"].ToString()+" ";
+                st += mo["Name"];
+                st += mo["AdapterRAM"];
             }
             return st;
         }
@@ -517,127 +543,9 @@ namespace CenterView
 
         }
 
-
-
-
-        /// <summary>
-        /// 检测网络配置
-        /// </summary>
-        public string GetNetworkInfo()
-        {
-            var result = "";
-            try
-            {
-                ManagementClass mc = new ManagementClass(WMIPath.Win32_NetworkAdapterConfiguration.ToString());
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (var item in moc)
-                {
-                    result += "IP地址：" + item.Properties["IPAddress"].Value + "\r\n";
-                    //result += "默认网关：" + item.Properties[DefaultIPGateway"].Value + "\r\n";
-                }
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
-
-        }
-
-
-        /// <summary></summary>   
-        /// 检测本地网卡
-        /// <summary></summary>   
-        public string GetNetworkInterfaceInfo()
-        {
-
-            string result = "";
-            string second = "";
-            NetworkInterface[] fNetworkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface adapter in fNetworkInterfaces)
-            {
-                #region " 网卡类型 "
-                string fCardType = "未知网卡";
-                string fRegistryKey = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" + adapter.Id + "\\Connection";
-                RegistryKey rk = Registry.LocalMachine.OpenSubKey(fRegistryKey, false);
-                if (rk != null)
-                {
-                    // 区分 PnpInstanceID    
-                    // 如果前面有 PCI 就是本机的真实网卡   
-                    // MediaSubType 为 01 则是常见网卡，02为无线网卡。   
-                    string fPnpInstanceID = rk.GetValue("PnpInstanceID", "").ToString();
-                    int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
-                    if (fPnpInstanceID.Length > 3 &&
-                        fPnpInstanceID.Substring(0, 3) == "PCI")
-                        fCardType = "物理网卡";
-                    else if (fMediaSubType == 1)
-                        fCardType = "虚拟网卡";
-                    else if (fMediaSubType == 2)
-                        fCardType = "无线网卡";
-                }
-                #endregion
-                #region " 网卡信息 "
-
-                IPInterfaceProperties fIPInterfaceProperties = adapter.GetIPProperties();
-                UnicastIPAddressInformationCollection UnicastIPAddressInformationCollection = fIPInterfaceProperties.UnicastAddresses;
-                foreach (UnicastIPAddressInformation UnicastIPAddressInformation in UnicastIPAddressInformationCollection)
-                {
-                    if (UnicastIPAddressInformation.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)//AddressFamily.InterNetwork)
-                        second = UnicastIPAddressInformation.Address.ToString();// Ip 地址   
-                }
-                result = adapter.Name;
-                result += second;
-
-                #endregion
-
-            }
-            return result;
-        }
-        private List<string> ShowAdapterInfo()
-        {
-            List<string> lst_NetworkAdapter = new List<string>();
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            lst_NetworkAdapter.Add("适配器个数：" + adapters.Length);
-            int index = 0;
-
-            foreach (NetworkInterface adapter in adapters)
-            {
-                index++;
-                //显示网络适配器描述信息、名称、类型、速度、MAC 地址   
-                lst_NetworkAdapter.Add("---------------------第" + index + "个适配器信息---------------------");
-                lst_NetworkAdapter.Add("描述信息：" + adapter.Name);
-                lst_NetworkAdapter.Add("类型：" + adapter.NetworkInterfaceType);
-                lst_NetworkAdapter.Add("速度：" + adapter.Speed / 1000 / 1000 + "MB");
-                lst_NetworkAdapter.Add("MAC 地址：" + adapter.GetPhysicalAddress());
-
-                //获取IPInterfaceProperties实例 
-
-                IPInterfaceProperties adapterProperties = adapter.GetIPProperties();
-
-                //获取并显示DNS服务器IP地址信息   
-                IPAddressCollection dnsServers = adapterProperties.DnsAddresses;
-                if (dnsServers.Count > 0)
-                {
-                    foreach (var dns in dnsServers)
-                    {
-                        lst_NetworkAdapter.Add("DNS 服务器IP地址：" + dns + "\n");
-                    }
-                }
-                else
-                {
-                    lst_NetworkAdapter.Add("DNS 服务器IP地址：" + "\n");
-                }
-            }
-            return lst_NetworkAdapter;
-
-        }
-
-        /// <summary>
+       
         /// 检测有线网卡
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static string ShowNetworkInterfaceMessage()
+        public static string GetNetworkInterfaceMessage()
         {
 
             string result = "";
@@ -667,7 +575,7 @@ namespace CenterView
                 #region " 网卡信息 "
                 if (adapter.Name == "以太网")
                 {
-                    //result.Add("-----------------------------------------------------------");
+                   //result.Add("-----------------------------------------------------------");
                     //result.Add("-- " + fCardType);
                     //result.Add("-----------------------------------------------------------");
                     //result.Add(string.Format("Id .................. : {0}", adapter.Id)); // 获取网络适配器的标识符   
@@ -692,9 +600,245 @@ namespace CenterView
             }
             return result;
         }
+        
+
+        /// 获取无线网卡
+      
+        /// <summary>
+        /// 获取默认网关地址
+        /// </summary>
+        /// <returns></returns>
+        public string GetGateway()
+        {
+            string result = "";
+            CIpInformation aa = new CIpInformation();
+
+            var dd = aa._m_CurrentAdapterInformationList;
+            var ff = dd.m_AdapterInformation;
+            result += (ff.m_Gateway);
+            return result;
+
+        }
+        /// <summary>
+        /// 获取IP
+        /// </summary>
+        /// <returns></returns>
+        private string GetIpInfo()
+        {
+            string hostName = Dns.GetHostName();   //获取本机名
+            IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
+            //IPHostEntry localhost = Dns.GetHostEntry(hostName);   //获取IPv6地址
+            IPAddress localaddr = localhost.AddressList[0];
+            return localaddr.ToString();
+        }
+        /// <summary>
+        /// 获取DNS地址
+        /// </summary>
+        /// <returns></returns>
+        public string GetDNSInfo()
+        {
+            string result = "";
+            CIpInformation aa = new CIpInformation();
+
+            var dd = aa._m_CurrentAdapterInformationList;
+            var ff = dd.m_AdapterInformation;
+            result += (ff.m_Dns1) + "   ";
+            result += (ff.m_Dns2);
+            return result;
+
+        }
+        public struct ADAPTERINFORM
+        {
+            public string m_Name;
+            public string m_IP;
+            public string m_Mask;
+            public string m_Gateway;
+            public string m_Dns1;
+            public string m_Dns2;
+            public string m_Physical;
+        }
+
+        //网络适配器基本信息链表
+        public class CAdapterInformationList
+        {
+            //public CAdapterInformationList	m_LastAdapter;
+            public CAdapterInformationList m_NextAdapter;
+            public ADAPTERINFORM m_AdapterInformation;
+            public static int count;
+        }
+        #region CIpInformation类
+        public class CIpInformation
+        {
+            private CAdapterInformationList _m_AdapterInformationList;
+            public CAdapterInformationList _m_CurrentAdapterInformationList;
+
+            public CAdapterInformationList m_AdapterInformationList
+            {
+                get
+                {
+                    return _m_AdapterInformationList;
+                }
+            }
 
 
+            public CIpInformation()
+            {
+                _m_AdapterInformationList = null;
+                _m_CurrentAdapterInformationList = null;
+                LoadIpConfigInformation();
 
+            }
+
+            public void LoadIpConfigInformation()
+            {
+                _m_AdapterInformationList = null;
+                _m_CurrentAdapterInformationList = null;
+                CAdapterInformationList.count = 0;
+
+                //清理链表
+                /*
+                while(_m_AdapterInformationList != null)
+                {
+                    _m_CurrentAdapterInformationList = m_AdapterInformationList;
+                    _m_AdapterInformationList = _m_AdapterInformationList.m_NextAdapter;
+
+                }*/
+                //获取所有网络接口放在adapters中。
+                System.Net.NetworkInformation.NetworkInterface[] adapters = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+                foreach (System.Net.NetworkInformation.NetworkInterface adapter in adapters)
+                {
+                    //未启用的网络接口不要
+                    if (adapter.OperationalStatus != System.Net.NetworkInformation.OperationalStatus.Up)
+                    {
+                        continue;
+                    }
+
+                    //不是以太网和无线网的网络接口不要
+                    if (adapter.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Ethernet &&
+                        adapter.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211 &&
+                        adapter.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Ppp)
+                    {
+                        continue;
+                    }
+
+                    //虚拟机的网络接口不要
+                    if (adapter.Name.IndexOf("VMware") != -1 || adapter.Name.IndexOf("Virtual") != -1)
+                    {
+                        continue;
+                    }
+
+                    CAdapterInformationList currentAdapter = new CAdapterInformationList();
+                    //获取适配器名称
+                    currentAdapter.m_AdapterInformation.m_Name = adapter.Name;
+                    //获取物理地址字节
+                    byte[] physicalAddress = adapter.GetPhysicalAddress().GetAddressBytes();
+                    if (physicalAddress.Length == 0 || physicalAddress.Length != 6)
+                    {
+                        currentAdapter.m_AdapterInformation.m_Physical = "";
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            currentAdapter.m_AdapterInformation.m_Physical = String.Format("{0:x2}:{1:x2}:{2:x2}:{3:x2}:{4:x2}:{5:x2}",
+                                                                                    physicalAddress[0],
+                                                                                    physicalAddress[1],
+                                                                                    physicalAddress[2],
+                                                                                    physicalAddress[3],
+                                                                                    physicalAddress[4],
+                                                                                    physicalAddress[5]).ToUpper();
+                        }
+                        catch (System.Exception)
+                        {
+                        }
+                    }
+                    //获取IP地址和Mask地址
+                    System.Net.NetworkInformation.IPInterfaceProperties ipif = adapter.GetIPProperties();
+                    System.Net.NetworkInformation.UnicastIPAddressInformationCollection ipifCollection = ipif.UnicastAddresses;
+
+                    foreach (System.Net.NetworkInformation.UnicastIPAddressInformation ipInformation in ipifCollection)
+                    {
+                        if (ipInformation.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            currentAdapter.m_AdapterInformation.m_IP = ipInformation.Address.ToString();
+                            currentAdapter.m_AdapterInformation.m_Mask = ipInformation.IPv4Mask.ToString();
+                        }
+                    }
+
+                    //获取网关地址，网关一般只有一个
+                    if (ipif.GatewayAddresses != null && ipif.GatewayAddresses.Count != 0)
+                    {
+                        currentAdapter.m_AdapterInformation.m_Gateway = ((System.Net.NetworkInformation.GatewayIPAddressInformation)(ipif.GatewayAddresses[0])).Address.ToString();
+                    }
+
+                    /*
+                    foreach (System.Net.NetworkInformation.GatewayIPAddressInformation gwInformation in ipif.GatewayAddresses)
+                    {
+                        _m_Gateway = gwInformation.Address.ToString();
+                    }
+                    */
+
+                    //获取DNS地址，DNS地址一般是两个，有可能没有或一个，或超过两个的情况
+                    //如果超过两个只取前两个
+                    StringBuilder dnsStr = new StringBuilder(30);
+                    foreach (System.Net.IPAddress dnsInformation in ipif.DnsAddresses)
+                    {
+                        dnsStr.Append(dnsInformation.ToString());
+                        dnsStr.Append(',');
+                    }
+                    dnsStr.Remove(dnsStr.Length - 1, 1);
+                    string[] dnsArr = dnsStr.ToString().Split(',');
+                    #region switch折叠
+                    switch (dnsArr.Length)
+                    {
+                        case 0:
+                            {
+                                currentAdapter.m_AdapterInformation.m_Dns1 = "";
+                                currentAdapter.m_AdapterInformation.m_Dns2 = "";
+                                break;
+                            }
+                        case 1:
+                            {
+                                currentAdapter.m_AdapterInformation.m_Dns1 = dnsArr[0];
+                                currentAdapter.m_AdapterInformation.m_Dns2 = "";
+                                break;
+                            }
+                        case 2:
+                            {
+                                currentAdapter.m_AdapterInformation.m_Dns1 = dnsArr[0];
+                                currentAdapter.m_AdapterInformation.m_Dns2 = dnsArr[1];
+                                break;
+                            }
+                        default:
+                            {
+                                currentAdapter.m_AdapterInformation.m_Dns1 = dnsArr[0];
+                                currentAdapter.m_AdapterInformation.m_Dns2 = dnsArr[1];
+                                break;
+                            }
+                    }
+
+                    if (_m_AdapterInformationList == null)
+                    {
+                        _m_AdapterInformationList = currentAdapter;
+                        ++CAdapterInformationList.count;
+                        //_m_AdapterInformationList.CAdapterInformationList = null;
+                        _m_AdapterInformationList.m_NextAdapter = null;
+                        _m_CurrentAdapterInformationList = _m_AdapterInformationList;
+                    }
+                    else
+                    {
+                        _m_CurrentAdapterInformationList.m_NextAdapter = currentAdapter;
+                        ++CAdapterInformationList.count;
+                        _m_CurrentAdapterInformationList = currentAdapter;
+                    }
+
+                    #endregion
+                }
+            }
+
+        }
+        #endregion
         /// <summary>
         /// 获取授信站点列表
         /// </summary>
@@ -720,6 +864,8 @@ namespace CenterView
             return subkeyNames;
         }
 
+       
+    
         public string ToGB(double size, double mod)
         {
             String[] units = new String[] { "B", "KB", "MB", "GB", "TB", "PB" };
