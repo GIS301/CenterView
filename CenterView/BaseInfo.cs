@@ -89,8 +89,7 @@ namespace CenterView
             hinfos.IP = GetIpInfo();//获取默认IP
             hinfos.DNS = GetDNSInfo();//获取所有DNS
             
-           
-
+            //aaaaa
 
         }
 
@@ -863,12 +862,12 @@ namespace CenterView
             hkml.Close();
             return subkeyNames;
         }
-
+             
        
     
         public string ToGB(double size, double mod)
         {
-            String[] units = new String[] { "B", "KB", "MB", "GB", "TB", "PB" };
+            String[] units = new  String[] { "B", "KB", "MB", "GB", "TB", "PB" };
             int i = 0;
             while (size >= mod)
             {
