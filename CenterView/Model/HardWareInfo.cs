@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace CenterView.Model
 {
-   public partial class HardWareInfo
+    public partial class HardWareInfo : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public HardWareInfo()
 		{}
 		#region Model
@@ -23,6 +25,8 @@ namespace CenterView.Model
 		private string _gateway;
 		private string _ip;
 		private string _dns;
+        private int _checkingcount;
+        private int _checkingerrorcount;
 		/// <summary>
 		/// 品牌logo路径
 		/// </summary>
@@ -127,6 +131,42 @@ namespace CenterView.Model
 			set{ _dns=value;}
 			get{return _dns;}
 		}
+       /// <summary>
+       /// 正在检测项目数
+       /// </summary>
+       public int CheckingCount
+        {
+            get { return _checkingcount; }
+             set{
+               if(value!=_checkingcount)
+               {
+                   _checkingcount = value;
+                   //改变时通知
+                   prochanged("CheckingCount");
+               }
+           }
+        }
+        public int CheckingErrorCount
+       {
+           get { return _checkingerrorcount; }
+           set
+           {
+               if(value!=_checkingerrorcount)
+               {
+                   _checkingerrorcount = value;
+                   //改变时通知
+                   prochanged("CheckingErrorCount");
+               }
+           }
+       }
+
+       private void prochanged(string p)
+       {
+           if(PropertyChanged!=null)
+           {
+               PropertyChanged(this, new PropertyChangedEventArgs(p));
+           }
+       }
 		#endregion Model
     }
 }

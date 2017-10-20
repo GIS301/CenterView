@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CenterView.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,18 +25,40 @@ namespace CenterView
         DispatcherTimer timer_checkingTrusty = new DispatcherTimer();
         DispatcherTimer timer_checkingNetwork = new DispatcherTimer();
         DispatcherTimer timer_checkingCitrix = new DispatcherTimer();
+        DispatcherTimer timer_identifyTime = new DispatcherTimer();
+        DateTime Last;
         int a = 0;//定义正在检测过程序号
         int checkingTrustyCount = 0;//定义正在检测授信站点项目数
         string[] trustyStations;
+        int checkboxCount = 0;//定义选择checkbox的数量；
+        int SuccessedCount = 0;//定义完成检测模块的数量；
+        HardWareInfo hardwareInfo = new HardWareInfo();
+        bool checkingStatus ;//定义是在检测过程还是在开始检测准备阶段；
+      
 
         public MainWindow()
         {
             InitializeComponent();
-            timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
+          
+            hardwareInfo = new BaseInfo().GetAllBaseInfos();
+            this.DataContext = hardwareInfo;
+            timer_identifyTime.Tick += new EventHandler(Tick_identifyTimer);
+            timer_identifyTime.Interval = TimeSpan.FromSeconds(1.0);
+            timer_identifyTime.Start();
+
+           // timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
             timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
           //  timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
             trustyStations = new TrustyStation().TrustWebsite();
             checkingTrustyCount = trustyStations.Length;
+            checkingStatus = false;
+          
+           
+        }
+        void Tick_identifyTimer( object sender,EventArgs e)
+        {
+            this.checkingTimeTxt.Text = (DateTime.Now - Last).Minutes.ToString() + ":" + (DateTime.Now - Last).Seconds.ToString();
+               IdentifySuccessed();
         }
         /// <summary>
         /// 正在检测Citrix组件Timer处理事件
@@ -50,16 +73,27 @@ namespace CenterView
                 this.checkingCitrix_Txt1.Text = "Citrix组件";
                 this.checkingCitrixResult_Txt1.Text = "已安装";
                 this.checkingCitrixResult_Txt1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Green"));
+               
+             
+                timer_checkingCitrix.Stop();//Citrix组件检测只有一个，所以检测完后立刻关闭计时器
+                hardwareInfo.CheckingCount++;
+                SuccessedCount++;
             }
             else
             {
                 this.checkingCitrix_Txt1.Text = "Citrix组件";
                 this.checkingCitrixResult_Txt1.Text = "未安装";
                 this.checkingCitrixResult_Txt1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Red"));
+                hardwareInfo.CheckingCount++;
+                hardwareInfo.CheckingErrorCount++;
+                timer_checkingCitrix.Stop();
+         
+                SuccessedCount++;
 
             }
            
         }
+       
         /// <summary>
         /// 正在检测网络连通Timer处理事件
         /// </summary>
@@ -78,7 +112,10 @@ namespace CenterView
         {
           if(this.a>checkingTrustyCount-2)
           {
+              hardwareInfo.CheckingErrorCount += new TrustyStation().IdentifyErrorCount();
               timer_checkingTrusty.Stop();
+              SuccessedCount++;
+
           }
            switch(this.a)
            {
@@ -86,6 +123,7 @@ namespace CenterView
                         this.checkingTrustyResult_Txt1.Text=IdentifyResult(trustyStations[a]);
                         this.checkingTrustyResult_Txt1.Foreground = IdentifyColor(trustyStations[a]);
                         this.a++;
+                        hardwareInfo.CheckingCount++;
                         break;
                case 1: this.checkingTrusty_Txt1.Text = trustyStations[a - 1];
                         this.checkingTrustyResult_Txt1.Text = IdentifyResult(trustyStations[a-1]);
@@ -93,6 +131,7 @@ namespace CenterView
                        this.checkingTrusty_Txt2.Text = trustyStations[a];
                        this.checkingTrustyResult_Txt2.Text = IdentifyResult(trustyStations[a ]);
                        this.checkingTrustyResult_Txt2.Foreground = IdentifyColor(trustyStations[a]);
+                       hardwareInfo.CheckingCount++;
                        this.a++; break;
                default: this.checkingTrusty_Txt1.Text = trustyStations[a - 2];
 
@@ -104,6 +143,7 @@ namespace CenterView
                    this.checkingTrusty_Txt3.Text = trustyStations[a];
                    this.checkingTrustyResult_Txt3.Text = IdentifyResult(trustyStations[a ]);
                    this.checkingTrustyResult_Txt3.Foreground = IdentifyColor(trustyStations[a]);
+                   hardwareInfo.CheckingCount++;
                    this.a++; break;
 
            }
@@ -123,7 +163,9 @@ namespace CenterView
             }
             else
             {
+                
                 return "未授信";
+                
             }
 
         }
@@ -140,6 +182,7 @@ namespace CenterView
             }
             else
             {
+               
                 return new SolidColorBrush((Color)ColorConverter.ConvertFromString("Red"));
             }
         }
@@ -152,6 +195,7 @@ namespace CenterView
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             //try
             //{
             //    //获取所有主机信息并显示
@@ -197,6 +241,21 @@ namespace CenterView
             ////TrustyStation TS = new TrustyStation();
             ////TS.GetTrustyStations();
         }
+        /// <summary>
+        /// 判断选择的检测项目数是否和完成的检测项目数相同
+        /// </summary>
+        private void IdentifySuccessed()
+        {
+            if(SuccessedCount>0||checkboxCount>0)
+            {
+               if(checkboxCount==SuccessedCount)
+               {
+                   this.timer_identifyTime.Stop();
+                   
+               }
+
+            }
+        }
 
         #region 界面信息绑定
         /// <summary>
@@ -207,7 +266,7 @@ namespace CenterView
             BaseInfo info = new BaseInfo();
             info.GetAllBaseInfos();
             //操作系统类型
-            this.TxtOSystem.Text = info.hinfos.OSystem;
+            //this.TxtOSystem.Text = info.hinfos.OSystem;
             //请补充所有其他信息CPU...
         }
         #endregion
@@ -273,21 +332,75 @@ namespace CenterView
 
         private void StartScanBtn_Click(object sender, RoutedEventArgs e)
         {
+            Last = DateTime.Now;
+            checkingStatus = true;
             this.CheckingTab.IsSelected = true;
+            if(this.TrustCheckBox.IsChecked==false)
+            {
+                this.CheckingTrustyGrid.Visibility = Visibility.Collapsed;
+            }
+            if(this.TrustCheckBox.IsChecked==true)
+            {
+                this.CheckingTrustyGrid.Visibility = Visibility.Visible;
+                checkboxCount++;
+                //授信站点检测时间间隔Timer
+                timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
+                timer_checkingTrusty.Interval = TimeSpan.FromSeconds(2.0);
+                timer_checkingTrusty.Start();
+
+            }
+           if(this.NetworkCheckBox.IsChecked==false)
+            {
+                this.CheckingNetworkGrid.Visibility = Visibility.Collapsed;
+            }
+          if(this.NetworkCheckBox.IsChecked==true)
+            {
+              
+                this.CheckingNetworkGrid.Visibility = Visibility.Visible;
+                checkboxCount++;
+               
+            }
+            if(this.CitrixCheckBox.IsChecked==false)
+            {
+                this.CheckingCitrixGrid.Visibility = Visibility.Collapsed;
+            }
+           if(this.CitrixCheckBox.IsChecked==true)
+            {
+                this.CheckingCitrixGrid.Visibility = Visibility.Visible;
+                checkboxCount++;
+                //Citrix组件检测时间间隔Timer
+                timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
+                timer_checkingCitrix.Interval = TimeSpan.FromSeconds(2.5);
+                timer_checkingCitrix.Start();
+            }
         }
 
         private void CheckingTab_GotFocus(object sender, RoutedEventArgs e)
-        {   //授信站点检测时间间隔Timer
-            timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
-            timer_checkingTrusty.Interval = TimeSpan.FromSeconds(2.0);
-            timer_checkingTrusty.Start();
-            //Citrix组件检测时间间隔Timer
-            timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
-            timer_checkingCitrix.Interval = TimeSpan.FromSeconds(2.5);
-            timer_checkingCitrix.Start();
+        {
+            checkingStatus = true;
 
            
         }
+        /// <summary>
+        /// 正在检测界面失去焦点
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckingTab_LostFocus(object sender, RoutedEventArgs e)
+        {
+         
+        }
+
+        private void ReadyCheckGrid_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (checkingStatus)
+            {
+                this.CheckingTab.Focus();
+            }
+           
+        }
+
+        
 
     }
 }

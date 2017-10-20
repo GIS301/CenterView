@@ -215,9 +215,6 @@
     <Resource Include="logoIMG\Complete.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\Interop.IWshRuntimeLibrary.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
       <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
       <VersionMajor>1</VersionMajor>

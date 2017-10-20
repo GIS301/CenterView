@@ -74,6 +74,23 @@ namespace CenterView
             
         }
        /// <summary>
+       /// 判断授信站点检测问题数量
+       /// </summary>
+       /// <returns></returns>
+       public int IdentifyErrorCount()
+        {
+            string[] xmlTrust = TrustWebsite();
+           int count=0;
+           for(int i=0;i<xmlTrust.Length;i++)
+           {
+               if(!IdentifyTrusty(xmlTrust[i]))
+               {
+                   count++;
+               }
+           }
+           return count;
+        }
+       /// <summary>
        /// 判定输入值Input是否在本机的授信站点内
        /// </summary>
        /// <param name="input"></param>

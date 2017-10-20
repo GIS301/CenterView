@@ -12,7 +12,7 @@ namespace CenterView
 {
     class BaseInfo
     {
-        public HardWareInfo hinfos = new HardWareInfo();
+
         public enum WMIPath
         {
             #region MyRegion
@@ -71,9 +71,9 @@ namespace CenterView
             #endregion
         }
 
-        public void GetAllBaseInfos()
+        public HardWareInfo GetAllBaseInfos()
         {
-
+            HardWareInfo hinfos = new HardWareInfo();
             hinfos.LogoPath = "无";
             hinfos.Trademark = GetTrademarkInfo(); //主机  制造商名称+名称+版本名称+类型（笔记本、台式机）（无版本）
             hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数
@@ -87,8 +87,8 @@ namespace CenterView
             hinfos.Gateway = "无";
             hinfos.IP = "无";
             hinfos.DNS = "无";
-
-
+            return hinfos;
+ 
 
 
         }
