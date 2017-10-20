@@ -81,6 +81,7 @@
     <Compile Include="AutoStart.cs" />
     <Compile Include="GifloadClass\GifAnimation.cs" />
     <Compile Include="GifloadClass\GifImage.cs" />
+    <Compile Include="RepairCitrix.cs" />
     <Compile Include="TrustyStation.cs" />
     <Page Include="Button.xaml">
       <SubType>Designer</SubType>
