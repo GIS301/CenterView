@@ -44,7 +44,7 @@ namespace CenterView
         }
 
         //检查cx是否在运行
-        public static bool IsProcessStarted()
+        public  bool IsProcessStarted()
         {
             Process[] temp = Process.GetProcessesByName("wfcrun32");
             if (temp.Length > 0) 
