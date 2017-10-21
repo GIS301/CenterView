@@ -27,6 +27,7 @@ namespace CenterView.Model
 		private string _dns;
         private int _checkingcount;
         private int _checkingerrorcount;
+        private int _noproblemcount;
 		/// <summary>
 		/// 品牌logo路径
 		/// </summary>
@@ -146,6 +147,9 @@ namespace CenterView.Model
                }
            }
         }
+        /// <summary>
+        /// 检测到的错误数量
+        /// </summary>
         public int CheckingErrorCount
        {
            get { return _checkingerrorcount; }
@@ -159,6 +163,19 @@ namespace CenterView.Model
                }
            }
        }
+        /// <summary>
+        /// 检测到的没有问题的项目数
+        /// </summary>
+        public int NoProblemCount
+        {
+            get { return _noproblemcount; }
+            set{
+              
+              
+                  _checkingerrorcount = value;
+              
+            }
+        }
 
        private void prochanged(string p)
        {

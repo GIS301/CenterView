@@ -349,7 +349,7 @@
                                         <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
                                     </Grid>
                                     <Grid Grid.Column="1">
-                                        <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Name="checkingTimeTxt"/>
+                                        <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文宋体" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Name="checkingTimeTxt"/>
                                     </Grid>
                                     <Grid Grid.Column="2">
                                         <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="23" FontWeight="ExtraLight" VerticalAlignment="Center"/>
@@ -374,13 +374,13 @@
 
                             </Grid>
                             <Grid Grid.Column="2">
-                                <Button Style="{DynamicResource ButtonStyle_escCheck}" Height="60" Width="140" />
+                                <Button Name="CancelScanBtn"  Style="{DynamicResource ButtonStyle_escCheck}" Height="60" Width="140" Click="CancelScanBtn_Click" />
                             </Grid>
 
                         </Grid>
                     </Border>
 
-                    <Grid Grid.Row="1" Margin="10,0,70,0" Name="CheckingTrustyGrid" Visibility="Collapsed">
+                    <Grid Grid.Row="1" Margin="10,0,70,0" Name="CheckingTrustyGrid" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.25*"/>
                             <ColumnDefinition Width="0.65*"/>
@@ -493,7 +493,7 @@
 
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="3" Margin="10,0,70,0" Name="CheckingCitrixGrid" Visibility="Collapsed">
+                    <Grid Grid.Row="3" Margin="10,0,70,0" Name="CheckingCitrixGrid" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.25*"/>
                             <ColumnDefinition Width="0.65*"/>
@@ -544,76 +544,134 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Name="CheckOverTab" Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
+            <TabItem Name="CheckOverTab" GotFocus="CheckOverTab_GotFocus" Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
                 <Grid Margin="0,30,0,2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.3*"/>
-                        <RowDefinition Height="0.3*"/>
-                        <RowDefinition Height="0.4*"/>
+                        <RowDefinition Height="0.35*"/>
+                        <RowDefinition Height="0.35*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.2*"/>
-                            <ColumnDefinition Width="0.5*"/>
-                            <ColumnDefinition Width="0.15*"/>
-                            <ColumnDefinition Width="0.15*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <Image Source="logoIMG/Complete.png" Margin="40,20,20,10"/>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Grid.Row="0">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.2*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="0.15*"/>
+                                <ColumnDefinition Width="0.15*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="logoIMG/Complete.png" Margin="40,20,20,10"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.6*"/>
+                                    <RowDefinition Height="0.4*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="  扫描完成！" FontWeight="Normal" Foreground="Black" FontSize="40" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.125*"/>
+                                        <ColumnDefinition Width="0.06*"/>
+                                        <ColumnDefinition Width="0.14*"/>
+                                        <ColumnDefinition Width="0.125*"/>
+                                        <ColumnDefinition Width="0.06*"/>
+                                        <ColumnDefinition Width="0.14*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Name="checkedOvertimeTxt"/>
+                                    </Grid>
+                                    <Grid Grid.Column="2">
+                                        <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="3">
+                                        <TextBlock Text="{Binding CheckingCount}"  Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="4">
+                                        <TextBlock Text="个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="5">
+                                        <TextBlock Text=" 问题：" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="6">
+                                        <TextBlock Text="{Binding CheckingErrorCount }" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Grid.Column="7">
+                                        <TextBlock Text="个项目" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Button Style="{DynamicResource ButtonStyle_Rescan}" Height="40" Width="100"/>
+                            </Grid>
+                            <Grid Grid.Column="3">
+                                <Button Style="{DynamicResource ButtonStyle_Repair}" Height="40" Width="100"/>
+                            </Grid>
                         </Grid>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="0.6*"/>
-                                <RowDefinition Height="0.4*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <TextBlock Text="  扫描完成！" FontWeight="Normal" Foreground="Black" FontSize="40" VerticalAlignment="Center"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.1*"/>
-                                    <ColumnDefinition Width="0.25*"/>
-                                    <ColumnDefinition Width="0.125*"/>
-                                    <ColumnDefinition Width="0.06*"/>
-                                    <ColumnDefinition Width="0.14*"/>
-                                    <ColumnDefinition Width="0.125*"/>
-                                    <ColumnDefinition Width="0.06*"/>
-                                    <ColumnDefinition Width="0.14*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0">
-                                    <TextBlock Text="用时:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="1">
-                                    <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="2">
-                                    <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="3">
-                                    <TextBlock Text="7" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="4">
-                                    <TextBlock Text="个项目" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="5">
-                                    <TextBlock Text=" 问题：" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="6">
-                                    <TextBlock Text="1" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                                <Grid Grid.Column="7">
-                                    <TextBlock Text="个项目" FontFamily="华文中宋" Foreground="Orange"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </Grid>
-                            </Grid>
+                    </Border>
+                   
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" >
+                            <Image Source="logoIMG/errorIcon.png" Width="70" Height="70" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,36.2,0"   />
                         </Grid>
                         <Grid Grid.Column="2">
-                           <!--设计重新扫描按钮。。。。继续补充！-->  
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.8*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <Grid >
+                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,556.2,0.4"/>
+                                    <TextBlock Text="{Binding CheckingErrorCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="60,0,528.2,2.4" Width="20"/>
+                                    <TextBlock Text="项存在问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,405.2,1.4" FontSize="24"  Width="121" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Border>
+                            <Grid Grid.Row="1">
+                                <ListBox Background="Transparent" Name="ErrorList" Margin="0,5,0,1" Width="540" Foreground="Red" FontSize="19" FontFamily="华文宋体" SelectionMode="Extended"  />
+                            </Grid>
+                            
                         </Grid>
-                    </Grid>
-                    <Grid Grid.Row="1">
+                       
                         <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>-->
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" >
+                            <Image Source="logoIMG/NormalIcon.png" Width="60" Height="60" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,36.2,0"   />
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.8*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <Grid >
+                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,556.2,0.4"/>
+                                    <TextBlock Text="1" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="68,0,527.2,0.4" Width="20"/>
+                                    <TextBlock Text="项没有问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,407.2,1.4" FontSize="24"  Width="120" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </Border>
+                            <Grid Grid.Row="1">
+                                <ListBox Background="Transparent" Name="NormalList" Margin="0,5,0,1" Width="540" />
+                            </Grid>
+
+                        </Grid>
+
                     </Grid>
                 </Grid>
             </TabItem>
@@ -637,6 +695,13 @@
             </Grid>
         </Popup>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="CenterView监控" VerticalAlignment="Top" Height="19" Margin="14,2,0,0" Width="107" FontSize="13.333" Foreground="White" FontFamily="Microsoft YaHei"/>
+        <ListView HorizontalAlignment="Left" Height="100" Margin="1089,96,-309,0" Grid.Row="2" VerticalAlignment="Top" Width="100">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
     </Grid>
 </Window>

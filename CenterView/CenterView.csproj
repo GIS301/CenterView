@@ -81,6 +81,7 @@
     <Compile Include="AutoStart.cs" />
     <Compile Include="GifloadClass\GifAnimation.cs" />
     <Compile Include="GifloadClass\GifImage.cs" />
+    <Compile Include="Repair.cs" />
     <Compile Include="RepairCitrix.cs" />
     <Compile Include="TrustyStation.cs" />
     <Page Include="Button.xaml">
@@ -225,6 +226,10 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\errorIcon.png" />
+    <Resource Include="logoIMG\NormalIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

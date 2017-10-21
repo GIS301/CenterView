@@ -127,5 +127,43 @@ namespace CenterView
            }
            
         }
+       /// <summary>
+       /// 判定授信站点的问题项目列表
+       /// </summary>
+       /// <param name="error"></param>
+       /// <param name="normal"></param>
+       public List<string> TrustyStationError()
+       {
+           string[] trustyXMLlist = TrustWebsite();
+           List<string> error = new List<string>();
+           for(int i=0;i<trustyXMLlist.Length;i++)
+           {
+               if(!IdentifyTrusty(trustyXMLlist[i]))
+               {
+                   error.Add(trustyXMLlist[i]);
+               }
+               
+           }
+           return error;
+       }
+       /// <summary>
+       /// 判断授信站点正常列表
+       /// </summary>
+       /// <returns></returns>
+       public List<string> TrustyStationNormal()
+       {
+           string[] trustyXMLlist = TrustWebsite();
+           List<string> normal = new List<string>();
+           for (int i = 0; i < trustyXMLlist.Length; i++)
+           {
+               if (IdentifyTrusty(trustyXMLlist[i]))
+               {
+                   normal.Add(trustyXMLlist[i]);
+               }
+
+           }
+           return normal;
+       }
+
     }
 }
