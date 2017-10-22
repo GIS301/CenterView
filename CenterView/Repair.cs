@@ -9,6 +9,7 @@ namespace CenterView
     {
         private List<string> _networkerror;
         private List<string> _citrixerror;
+        private List<string> _citrixnormal;
         private List<string> _trustynormal;
         private List<string> _trustyerror;
         private List<string> errorlist;
@@ -24,15 +25,16 @@ namespace CenterView
             NormalList.AddRange(TrustyNormal);
             TrustyError = trust.TrustyStationError();
             ErrorList = new List<string>();
+            CitrixNormal = new List<string>();
             CitrixError = new List<string>();
             ErrorList.AddRange(TrustyError);
-          if(new CkCitrix().CheckCitrix())
+          if(!new CkCitrix().CheckCitrix())
           {
               CitrixError.Add("Citrix组件未安装");
           }
           else
           {
-              NormalList.Add("Citrix组件已安装");
+              CitrixNormal.Add("Citrix组件已安装");
           }
             
         }
@@ -67,6 +69,11 @@ namespace CenterView
             set { errorlist = value; }
             get { return errorlist; }
 
+        }
+        public List<string>CitrixNormal
+        {
+            set { _citrixnormal = value; }
+            get { return _citrixnormal; }
         }
         public List<string>NormalList
         {

@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <TabControl Margin="0,0,0,10" Background="{x:Null}" Style="{DynamicResource TabControlStyle}" Grid.RowSpan="3" >
-            <TabItem Header="电脑信息" Margin="60,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
+            <TabItem Header="电脑信息" Margin="20,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" >
                 <TabItem.Background>
                     <ImageBrush  ImageSource="logoIMG/fullbox_netspeed.png" Stretch="Uniform"/>
                 </TabItem.Background>
@@ -46,7 +46,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
-                                <Image  Source="logoIMG/Lenovo_logo.jpg"  Width="110"></Image>
+                                <Image  Source="{Binding LogoPath }"  Width="110"></Image>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <TextBlock  Text="{Binding Trademark   }"  FontFamily="宋体"  FontWeight="Bold" FontSize="20"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"    />
@@ -61,7 +61,7 @@
                                 <TextBlock Text="操作系统"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Name ="TxtOSystem" Text="{Binding OSystem}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Name ="TxtOSystem" Text="{Binding OSystem}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="2">
@@ -73,7 +73,7 @@
                                 <TextBlock Text="CPU"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="Intel第五代智能酷睿i7-5500UCPU 2.4GHz双核" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CPU}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
 
                         </Grid>
@@ -86,7 +86,7 @@
                                 <TextBlock Text="内存"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="8GB DDR3L 2×SO-DIM" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Memory}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="4">
@@ -98,7 +98,7 @@
                                 <TextBlock Text="硬盘"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="1T 5400转/分钟 SATA 串行" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding HardDisk}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="5">
@@ -110,7 +110,7 @@
                                 <TextBlock Text="显卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="AMD Radeon R9-M375 2G(集成/独立)" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding GraphicsCard}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="6">
@@ -122,7 +122,7 @@
                                 <TextBlock Text="主板"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="技嘉(GIGABYTE)Z270-Phoenix Gaming" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding MainBoard}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="7">
@@ -134,7 +134,7 @@
                                 <TextBlock Text="网卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="TP-LINK TG-3269C" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding NetworkCard}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="8">
@@ -146,7 +146,7 @@
                                 <TextBlock Text="无线网卡"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock Text="Intel 3160 1*1 AC无线局域网" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding WIFI}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -156,9 +156,9 @@
                             <RowDefinition Height="180"/>
                             <RowDefinition Height="180"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="2,-17,-2.2,16.8">
+                        <Grid Grid.Row="0" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
@@ -175,13 +175,46 @@
                                     <TextBlock Text="网络配置" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="1">
-                                    <TextBlock Text="网关:192.0.0.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="网关:" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Text="{Binding Gateway}" FontFamily="宋体"   FontSize="18"  Foreground="Black" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <TextBlock Text="IP:192.00.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="IP:" FontFamily="宋体"   FontSize="18"  Foreground="Black"  VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Text="{Binding IP}" FontFamily="宋体"   FontSize="18"  Foreground="Black"   VerticalAlignment="Center" />
+                                    </Grid>
+                                    
+                                   
                                 </Grid>
                                 <Grid Grid.Row="3">
-                                    <TextBlock Text="DNS：192.0.0.255" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <TextBlock Text="DNS:" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid Grid.Column="1">
+                                        <TextBlock Text="{Binding DNS}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    </Grid>
+                                    
+                                   
                                 </Grid>
                             </Grid>
 
@@ -205,13 +238,13 @@
                                     <TextBlock Text="授信站点" FontFamily="微软雅黑" FontWeight="Bold" FontSize="24"  Foreground="Black"   VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="1">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock  Name="Txt_trust1" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock Name="Txt_trust2" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Margin="0,0,0,10" />
                                 </Grid>
                                 <Grid Grid.Row="3">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                    <TextBlock  Name="Txt_trust3" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -225,8 +258,8 @@
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="60"/>
-                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition Height="0.5*"/>
                                     <RowDefinition Height="40"/>
                                     <RowDefinition Height="40"/>
                                 </Grid.RowDefinitions>
@@ -236,12 +269,7 @@
                                 <Grid Grid.Row="1">
                                     <TextBlock  Name="TxtCitrix" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                 </Grid>
-                                <Grid Grid.Row="2">
-                                    <TextBlock Name="TxtCitrix2" Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                                </Grid>
-                                <Grid Grid.Row="3">
-                                    <TextBlock Text="方式方法技术开发" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                                </Grid>
+                                
                             </Grid>
 
                         </Grid>
@@ -249,7 +277,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="环境检测" Margin="340,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White" Name="ReadyCheckGrid"  GotFocus="ReadyCheckGrid_GotFocus"  >
+            <TabItem Header="环境检测" Margin="180,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White" Name="ReadyCheckGrid"  GotFocus="ReadyCheckGrid_GotFocus"  >
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_function_exam.png" Stretch="Uniform"  />
                 </TabItem.Background>
@@ -300,7 +328,7 @@
 
 
             </TabItem>
-            <TabItem Header="历史案例" Margin="620,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White">
+            <TabItem Header="历史案例" Margin="360,20,0,0" Height="101" Width="120" Style="{DynamicResource TabItemStyle}" Foreground="White">
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_desk_clear.png" Stretch="Uniform"/>
                 </TabItem.Background>
@@ -588,7 +616,7 @@
                                         <TextBlock Text="00:00:00" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center" Name="checkedOvertimeTxt"/>
                                     </Grid>
                                     <Grid Grid.Column="2">
-                                        <TextBlock Text="扫描:" Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center"/>
+                                        <TextBlock Text="扫描:" Margin="0,20,0,20.4" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Left" Width="55"/>
                                     </Grid>
                                     <Grid Grid.Column="3">
                                         <TextBlock Text="{Binding CheckingCount}"  Margin="0,0,0,0" FontFamily="华文中宋" Foreground="Black"  FontSize="20" FontWeight="ExtraLight" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -608,14 +636,14 @@
                                 </Grid>
                             </Grid>
                             <Grid Grid.Column="2">
-                                <Button Style="{DynamicResource ButtonStyle_Rescan}" Height="40" Width="100"/>
+                                <Button Style="{DynamicResource ButtonStyle_Rescan}" Height="40" Width="100"  Name="RescanBtn" Click="RescanBtn_Click"/>
                             </Grid>
                             <Grid Grid.Column="3">
-                                <Button Style="{DynamicResource ButtonStyle_Repair}" Height="40" Width="100"/>
+                                <Button Style="{DynamicResource ButtonStyle_Repair}" Height="40" Width="100" Name="RepairBtn" Click="RepairBtn_Click" />
                             </Grid>
                         </Grid>
                     </Border>
-                   
+
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*"/>
@@ -637,11 +665,11 @@
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1">
-                                <ListBox Background="Transparent" Name="ErrorList" Margin="0,5,0,1" Width="540" Foreground="Red" FontSize="19" FontFamily="华文宋体" SelectionMode="Extended"  />
+                                <ListBox Name="ErrorList" Background="Transparent"  Margin="0,5,0,1" Width="540" Foreground="Red" FontSize="19" FontFamily="华文宋体"  />
                             </Grid>
-                            
+
                         </Grid>
-                       
+
                         <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>-->
@@ -662,17 +690,110 @@
                             <Border Grid.Row="0">
                                 <Grid >
                                     <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,556.2,0.4"/>
-                                    <TextBlock Text="1" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="68,0,527.2,0.4" Width="20"/>
+                                    <TextBlock Text="{Binding NoProblemCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="68,0,527.2,0.4" Width="20"/>
                                     <TextBlock Text="项没有问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,407.2,1.4" FontSize="24"  Width="120" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1">
-                                <ListBox Background="Transparent" Name="NormalList" Margin="0,5,0,1" Width="540" />
+                                <ListBox Background="Transparent" Name="NormalList" Margin="0,5,0,1" Width="540"  Foreground="Green" FontSize="19" FontFamily="华文宋体"  />
                             </Grid>
 
                         </Grid>
 
                     </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Name="RepairTab" Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}">
+                <Grid Margin="0,20,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
+                       
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.6*"/>
+                                <RowDefinition  Height="0.4*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <ProgressBar Margin="20,0,20,0" Height="30" VerticalAlignment="Bottom" BorderBrush="Gold"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.2*"/>
+                                    <ColumnDefinition Width="0.8*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock Text="正在修复项:" VerticalAlignment="Center" FontFamily="华文宋体" Foreground="Black" FontSize="22" Margin="20,0,0,0" Height="30"/>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Text="问题1" VerticalAlignment="Center" FontFamily="华文宋体" Foreground="Red" FontSize="22" Margin="20,0,0,0" Height="30"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.4*"/>
+                            <RowDefinition Height="0.6*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                             <TextBlock Text="修复完成！" FontFamily="微软雅黑" FontSize="42" Foreground="Blue" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.33*"/>
+                                    <ColumnDefinition Width="0.33*"/>
+                                    <ColumnDefinition Width="0.34*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.7*"/>
+                                        <RowDefinition Height="0.3*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Image Source="logoIMG/repairTrusty.png" Width="140" Height="140" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+
+                                        <TextBlock Text="授信站点修复完成" FontFamily="微软雅黑" Foreground="Black"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.7*"/>
+                                        <RowDefinition Height="0.3*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Image Source="logoIMG/repairNetwork.png" Width="140" Height="140" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+
+                                        <TextBlock Text="网络连通修复完成" FontFamily="微软雅黑" Foreground="Black"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.7*"/>
+                                        <RowDefinition Height="0.3*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Image Source="logoIMG/repairCitrix.png" Width="140" Height="140" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+
+                                        <TextBlock Text="Citrix组件修复完成" FontFamily="微软雅黑" Foreground="Black"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                       
+                    </Grid>
+                  
+                   
+                   
                 </Grid>
             </TabItem>
         </TabControl>
@@ -695,13 +816,6 @@
             </Grid>
         </Popup>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="CenterView监控" VerticalAlignment="Top" Height="19" Margin="14,2,0,0" Width="107" FontSize="13.333" Foreground="White" FontFamily="Microsoft YaHei"/>
-        <ListView HorizontalAlignment="Left" Height="100" Margin="1089,96,-309,0" Grid.Row="2" VerticalAlignment="Top" Width="100">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
 
     </Grid>
 </Window>

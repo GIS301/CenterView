@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Xml;
 
 namespace CenterView
@@ -69,8 +71,9 @@ namespace CenterView
                 ranges[i] = rangeTemp.GetValue(":Range").ToString();
             }
                 subkeyNames.AddRange(ranges);
+                hkml.Close();
               return subkeyNames.ToArray();
-          
+         
             
         }
        /// <summary>
@@ -163,6 +166,54 @@ namespace CenterView
 
            }
            return normal;
+       }
+       //本机添加授信站点
+       public void AddTrustyStation(string input)
+       {
+           try
+           {
+               string[] temp = input.Split('.');
+               string sum = "";
+               RegistryKey hkml = Registry.CurrentUser;
+               foreach (string str in temp)
+               {
+                   sum += str;
+               }
+               if (Regex.IsMatch(sum, @"^\d+$"))
+               {
+                   //是数字，即为IP地址
+                   string address = @"SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\INTERNET SETTINGS\ZONEMAP\RANGES";
+                   RegistryKey key1 = hkml.OpenSubKey(address, true);
+                   RegistryKey name1 = key1.CreateSubKey("CitrixTrusty");
+                   name1.SetValue(":Range", input, RegistryValueKind.String);
+                   name1.SetValue("http", 0x2, RegistryValueKind.DWord);
+               }
+               else if (temp[0] == "www")
+               {
+                   string address = @"SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\INTERNET SETTINGS\ZONEMAP\Domains";
+                   RegistryKey key1 = hkml.OpenSubKey(address, true);
+                   RegistryKey value = key1.CreateSubKey(input);
+                   RegistryKey www = value.CreateSubKey("www");
+                   value.SetValue("https", 0x2, RegistryValueKind.DWord);
+
+               }
+               else
+               {
+                   string address = @"SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\INTERNET SETTINGS\ZONEMAP\Domains";
+                   RegistryKey key1 = hkml.OpenSubKey(address, true);
+                   RegistryKey value = key1.CreateSubKey(input);
+                   value.SetValue("https", 0x2, RegistryValueKind.DWord);
+               }
+               hkml.Close();
+
+           }
+           catch (Exception e)
+           {
+               MessageBox.Show(e.Message);
+               throw e;
+              
+           }
+          
        }
 
     }
