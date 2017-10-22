@@ -77,11 +77,11 @@ namespace CenterView
         {
             HardWareInfo hinfos = new HardWareInfo();
             hinfos.LogoPath = "";
-            hinfos.Trademark = GetTrademarkInfo(); //主机  品牌logo+制造商名称+名称+版本名称+类型（笔记本、台式机）（未完成）
+            hinfos.Trademark = GetTrademarkInfo(); //主机  品牌logo+制造商名称+名称+版本名称+类型（笔记本、台式机）（已完成制造商名称，电脑名称，版本信息，类型）
             hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数（已完成）
             hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数（已完成）
             hinfos.Memory = GetMemoryInfo();//内存   制造商+名字+版本+容量大小+转速+串口类型（已完成制造商，内存大小）
-            hinfos.HardDisk = GetDiskDriveInfo();//硬盘  制造商+名字+版本+容量大小+转速+串口类型（已完成硬盘大小，串口类型）
+            hinfos.HardDisk = GetDiskDriveInfo();//硬盘  制造商+名字+版本+容量大小+转速+串口类型（已完成硬盘大小，名字，版本，串口类型）
             hinfos.GraphicsCard = GetGraphicsCardInfo();// 显卡  制造商+名字+版本+显存大小 (已完成)
             hinfos.MainBoard = GetMainBoardInfo();// 主板 制造商+名字+版本（已完成）
             hinfos.NetworkCard = GetNetworkInterfaceMessage();//网卡  制造商+名字+版本+芯片名字（已完成）
@@ -99,7 +99,7 @@ namespace CenterView
         /// </summary>
         /// <param name="type">RegistryHive/</param>
         /// <returns></returns>
-        private RegistryKey GetCurrenteReg(RegistryHive type)
+        public RegistryKey GetCurrenteReg(RegistryHive type)
         {
             RegistryKey localKey;
             if (Environment.Is64BitOperatingSystem)
@@ -111,7 +111,7 @@ namespace CenterView
         /// <summary>
         /// 获取主机信息
         /// </summary>
-        private string GetLogoPath()
+        public string GetLogoPath()
         {
             //HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
             //Manufacturer、Model以及Logo 
@@ -343,7 +343,7 @@ namespace CenterView
         ///检测物理内存信息
         public string GetMemoryInfo()
         {
-            var result = "";
+            string result = "";
             ManagementObjectSearcher searcher = new ManagementObjectSearcher();   //用于查询一些如系统信息的管理对象 
             searcher.Query = new SelectQuery("Win32_PhysicalMemory ", "", new string[] { "Capacity", "manufacturer" });//查询内存大小 
             ManagementObjectCollection collection = searcher.Get();   //获取内存容量与厂商 
@@ -358,7 +358,7 @@ namespace CenterView
                 {
                     try
                     {
-
+                        
                         manufacturer = baseObj.Properties["Manufacturer"].Value.ToString();
                         capacity += long.Parse(baseObj.Properties["Capacity"].Value.ToString());
                     }
@@ -385,17 +385,17 @@ namespace CenterView
             var result = "";
             double Size = 0;
             var type = " ";
-            var maker = " ";
+            string caption = " ";
             try
             {
                 ManagementClass mc = new ManagementClass(WMIPath.Win32_DiskDrive.ToString());
                 ManagementObjectCollection theDiskDriveInfo = mc.GetInstances();
                 foreach (var item in theDiskDriveInfo)
                 {
-                    maker = item["Manufacturer"].ToString() + " ";//制造商
-                    type = item["InterfaceType"].ToString() + " ";//硬盘接口类型
-                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);
-
+                    caption += item["caption"].ToString() + "   ";//硬盘名称与类型
+                    type = item["InterfaceType"].ToString();//硬盘串口类型
+                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
+                    
                 }
                 if (Size > 1024)
                 {
@@ -405,7 +405,7 @@ namespace CenterView
                 {
                     result = Math.Round(Size, 2) + "G";
                 }
-                result += Size + "  " + type;
+                result += " "+caption + "  "  + "  " + type;
                 return result;
 
             }
@@ -427,8 +427,7 @@ namespace CenterView
         public string GetGraphicsCardInfo()
         {
             var result = "";
-            //string Type="";
-
+            string Caption = "";
             try
             {
 
@@ -436,9 +435,11 @@ namespace CenterView
                 ManagementObjectCollection hardDiskC = hardDisk.GetInstances();
                 foreach (ManagementObject m in hardDiskC)
                 {
-                    result += (m["AdapterCompatibility"].ToString() + "  " + m["VideoProcessor"].ToString().Replace("Family", "") + "  " + ToGB(Convert.ToInt64(m["AdapterRAM"].ToString()), 1024.0).ToString());
-                    //Type += m[" AdapterDACType"].ToString();
-                    break;
+                    Caption += m["Caption"].ToString()+"";
+                    result += (m["Name"].ToString().Replace("Family", "  ") + "(" + ToGB(Convert.ToInt64(m["AdapterRAM"].ToString()), 1024.0).ToString() + ")"+" ");
+                     
+                   
+
 
                 }
             }
@@ -469,7 +470,7 @@ namespace CenterView
 
                 foreach (var item in moc)
                 {
-                    result += item.Properties["Manufacturer"].Value.ToString() + " " + item.Properties["SerialNumber"].Value.ToString() + " " + item.Properties["Product"].Value + "\r\n";
+                    result += item.Properties["Manufacturer"].Value.ToString() + " " + item.Properties["SerialNumber"].Value.ToString() + " " + item.Properties["Product"].Value + "  ";
                 }
                 return result;
             }
@@ -585,7 +586,7 @@ namespace CenterView
 
 
         /// 获取IP地址
-        private string GetIpInfo()
+        public  string GetIpInfo()
         {
             string hostName = Dns.GetHostName();   //获取本机名
             IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
@@ -596,7 +597,7 @@ namespace CenterView
 
 
 
-        /// 获取DNS地址（若有多个只取前两个）
+        /// 获取DNS地址（若有多个只取一个）
         public string GetDNSInfo()
         {
             string result = "";
@@ -604,8 +605,8 @@ namespace CenterView
 
             var dd = aa._m_CurrentAdapterInformationList;
             var ff = dd.m_AdapterInformation;
-            result += (ff.m_Dns1) + "   ";
-            result += (ff.m_Dns2);
+            result = (ff.m_Dns1) ;
+           
             return result;
 
         }
@@ -635,7 +636,7 @@ namespace CenterView
         #region CIpInformation类
         public class CIpInformation
         {
-            private CAdapterInformationList _m_AdapterInformationList;
+            public CAdapterInformationList _m_AdapterInformationList;
             public CAdapterInformationList _m_CurrentAdapterInformationList;
 
             public CAdapterInformationList m_AdapterInformationList
