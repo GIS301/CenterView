@@ -77,7 +77,7 @@ namespace CenterView
         public HardWareInfo GetAllBaseInfos()
         {
             HardWareInfo hinfos = new HardWareInfo();
-            hinfos.LogoPath ="";
+            hinfos.LogoPath =GetLogoPath();
             hinfos.Trademark = GetTrademarkInfo(); //主机  品牌logo+制造商名称+名称+版本名称+类型（笔记本、台式机）（未完成）
             hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数（已完成）
             hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数（已完成）
@@ -130,7 +130,7 @@ namespace CenterView
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                throw e; 
+                return "";
             }
            
         }
