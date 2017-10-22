@@ -39,6 +39,7 @@ namespace CenterView
         bool checkingStatus;//定义是在检测过程还是在开始检测准备阶段；
         bool checkSuccessTrusty, checkSuccessCitrix, checkSuccessNetwork;//定义三种检测的状态是否完成？
         string checkovertime = "";//检测消耗的时间；
+        bool checkedOver=false;//扫描完成
         public MainWindow()
         {
             InitializeComponent();
@@ -47,11 +48,9 @@ namespace CenterView
              timer_checkingCitrix = new DispatcherTimer();
              timer_identifyTime = new DispatcherTimer();
              timer_checkingOver = new DispatcherTimer();
-             timer_checkingOver.Tick += new EventHandler(Tick_checkingOver);
-             timer_checkingOver.Interval = TimeSpan.FromSeconds(0.4);
-             timer_checkingOver.Start();
+            
             checkSuccessTrusty=checkSuccessCitrix=false;
-            checkSuccessNetwork = true;//等网络检测方法代码完成后记得修改false；
+            checkSuccessNetwork = false;//等网络检测方法代码完成后记得修改false；
             hardwareInfo = new BaseInfo().GetAllBaseInfos();
             this.DataContext = hardwareInfo;
            
@@ -68,20 +67,43 @@ namespace CenterView
         void Tick_checkingOver(object sender,EventArgs e)
         {
             if(checkSuccessTrusty&&checkSuccessCitrix&&checkSuccessNetwork)
-            {
+            {  
+                if(TrustCheckBox.IsChecked==true)
+                {
+                    List<string> trustyError = new Repair().TrustyError;
+                    List<string> trustNorml = new Repair().TrustyNormal;
+                    foreach (string str in trustyError)
+                    {
+                        this.ErrorList.Items.Add("授信站点：" + "“" + str + "”" + "有问题");
+
+                    }
+                    foreach(string mal in trustNorml)
+                    {
+                        this.NormalList.Items.Add("授信站点：" + "“" + mal + "”" + "正常");
+                    }
+                }
+                if(CitrixCheckBox.IsChecked==true)
+                {
+                    List<string> citrixError = new Repair().CitrixError;
+                    List<string> citrixNormal = new Repair().CitrixNormal;
+                    foreach (string s in citrixError)
+                    {
+                        this.ErrorList.Items.Add(s);
+                    }
+                    foreach(string mal in citrixNormal)
+                    {
+                        this.NormalList.Items.Add(mal);
+                    }
+                }
+                if(NetworkCheckBox.IsChecked==true)
+                {
+
+                }
+               
                 //当扫描完成，获取问题
-                List<string> trustyError = new Repair().TrustyError;
-                foreach (string str in trustyError)
-                {
-                    this.ErrorList.Items.Add("授信站点：" + "“" + str + "”" + "有问题");
 
-                }
-                List<string> citrixError = new Repair().CitrixError;
-                foreach(string s in citrixError)
-                {
-                    this.ErrorList.Items.Add(s);
-                }
 
+                checkedOver = true;
                 hardwareInfo.NoProblemCount = hardwareInfo.CheckingCount - hardwareInfo.CheckingErrorCount;
                 CheckOverTab.Focus();
                 timer_identifyTime.Stop();
@@ -232,52 +254,38 @@ namespace CenterView
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
-        {
+        {   
+            if(new CkCitrix().CheckCitrix())
+            {
+                this.TxtCitrix.Text = "Citrix已安装";
+            }
+            else
+            {
+                this.TxtCitrix.Text = "Citrix未安装";
+            }
+            string[] trustlist = new TrustyStation().GetTrustyStations();
+            switch(trustlist.Length)
+            {
+                case 0:
+                    this.Txt_trust1.Text = this.Txt_trust2.Text = this.Txt_trust3.Text = "";
+                    break;
+                case 1:
+                    this.Txt_trust1.Text = trustlist[0];
+                    this.Txt_trust2.Text = this.Txt_trust3.Text = "";
+                    break;
+                case 2:
+                    this.Txt_trust1.Text = trustlist[0];
+                    this.Txt_trust2.Text = trustlist[1];
+                    this.Txt_trust3.Text = "";
+                    break;
+                 default:
+                     this.Txt_trust1.Text = trustlist[0];
+                    this.Txt_trust2.Text = trustlist[1];
+                    this.Txt_trust3.Text = trustlist[2];
+                    break;
+            }
 
-            //try
-            //{
-            //    //获取所有主机信息并显示
-            //    SetBaseinfos();
-
-            //    //显示citrix插件是否安装
-            //    {
-            //        var isExistCkCitrix = new CkCitrix.CheckCitrix();
-            //        if (isExistCkCitrix)
-            //        {
-            //            this.TxtCitrix.Text = "Ctrix Receiver已安装";
-            //            //判断citrix是否运行
-            //            var isWorkCitrix = CkCitrix.IsProcessStarted();
-            //            if (isWorkCitrix)
-            //            {
-            //                TxtCitrix2.Text = "Citrix Receiver正在运行";
-            //            }
-            //            else
-            //            {
-            //                TxtCitrix2.Text = "为您启动Citrix Receiver";
-            //                try
-            //                {
-            //                    System.Diagnostics.Process.Start("C:\\Program Files (x86)\\Citrix\\ICA Client\\wfcrun32.exe");//启动cx,软件安装位置用户无法选择
-            //                }
-            //                catch
-            //                {
-            //                    TxtCitrix2.Text = "Citrix Receiver启动失败";
-            //                }
-            //            }
-            //        }
-            //        else
-            //        {
-            //            this.TxtCitrix.Text = "Citrix未安装";
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    //错误提示MessageBox，四个参数
-            //    MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-            ////测试授信站点获取IP或者域名
-            ////TrustyStation TS = new TrustyStation();
-            ////TS.GetTrustyStations();
+            
         }
         /// <summary>
         /// 判断选择的检测项目数是否和完成的检测项目数相同
@@ -295,19 +303,7 @@ namespace CenterView
             }
         }
 
-        #region 界面信息绑定
-        /// <summary>
-        /// 显示所有信息到主界面
-        /// </summary>
-        private void SetBaseinfos()
-        {
-            BaseInfo info = new BaseInfo();
-            info.GetAllBaseInfos();
-            //操作系统类型
-            //this.TxtOSystem.Text = info.hinfos.OSystem;
-            //请补充所有其他信息CPU...
-        }
-        #endregion
+       
 
 
         #region 菜单响应
@@ -370,16 +366,23 @@ namespace CenterView
 
         private void StartScanBtn_Click(object sender, RoutedEventArgs e)
         {
+            InitializedCheckingGrid();
+            hardwareInfo.CheckingCount = hardwareInfo.CheckingErrorCount = 0;
             timer_identifyTime.Tick += new EventHandler(Tick_identifyTimer);
             timer_identifyTime.Interval = TimeSpan.FromSeconds(1.0);
             timer_identifyTime.Start();
+            timer_checkingOver.Tick += new EventHandler(Tick_checkingOver);
+            timer_checkingOver.Interval = TimeSpan.FromSeconds(0.4);
+            timer_checkingOver.Start();
+
             Last = DateTime.Now;
             checkingStatus = true;
             this.CheckingTab.IsSelected = true;
             if (this.TrustCheckBox.IsChecked == false)
-                checkSuccessTrusty = true;
+                
             {
                 this.CheckingTrustyGrid.Visibility = Visibility.Collapsed;
+                checkSuccessTrusty = true;
             }
             if (this.TrustCheckBox.IsChecked == true)
             {
@@ -402,6 +405,10 @@ namespace CenterView
 
                 this.CheckingNetworkGrid.Visibility = Visibility.Visible;
                 checkboxCount++;
+                timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
+                timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
+                timer_checkingNetwork.Start();
+
 
             }
             if (this.CitrixCheckBox.IsChecked == false)
@@ -423,6 +430,10 @@ namespace CenterView
         private void CheckingTab_GotFocus(object sender, RoutedEventArgs e)
         {
             checkingStatus = true;
+            if(checkedOver)
+            {
+                CheckOverTab.Focus();
+            }
 
 
         }
@@ -463,11 +474,12 @@ namespace CenterView
             timer_checkingNetwork.Stop();
             timer_checkingTrusty.Stop();
             timer_identifyTime.Stop();
+            timer_checkingOver.Stop();
              timer_checkingTrusty = new DispatcherTimer();
              timer_checkingNetwork = new DispatcherTimer();
              timer_checkingCitrix = new DispatcherTimer();
              timer_identifyTime = new DispatcherTimer();
-           
+             timer_checkingOver = new DispatcherTimer();
             checkboxCount = 0;//定义选择checkbox的数量；
             SuccessedCount = 0;//定义完成检测模块的数量；
             a = 0;
@@ -476,15 +488,36 @@ namespace CenterView
            = checkingTrustyResult_Txt2.Text = checkingTrusty_Txt3.Text
            = checkingTrustyResult_Txt3.Text = checkingCitrix_Txt1.Text
            = checkingCitrixResult_Txt1.Text =checkingTimeTxt.Text= "";
-            hardwareInfo.CheckingCount = hardwareInfo.CheckingErrorCount = 0;
+            
+            checkSuccessTrusty=checkSuccessCitrix=checkSuccessNetwork=false;
 
 
         }
 
         private void CheckOverTab_GotFocus(object sender, RoutedEventArgs e)
         {
-           
+            InitializedCheckingGrid();
            
         }
+
+        private void RescanBtn_Click(object sender, RoutedEventArgs e)
+        {
+            InitializedCheckingGrid();
+            checkingStatus = false;
+            checkedOver = false;
+            this.ReadyCheckGrid.Focus();
+            this.ErrorList.Items.Clear();
+            this.NormalList.Items.Clear();
+            hardwareInfo.CheckingCount = hardwareInfo.CheckingErrorCount = 0;
+        }
+
+        private void RepairBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        
+
+        
     }
 }

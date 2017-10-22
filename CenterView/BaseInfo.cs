@@ -8,6 +8,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Net;
+using System.Windows;
 
 
 namespace CenterView
@@ -76,7 +77,7 @@ namespace CenterView
         public HardWareInfo GetAllBaseInfos()
         {
             HardWareInfo hinfos = new HardWareInfo();
-            hinfos.LogoPath = "";
+            hinfos.LogoPath ="";
             hinfos.Trademark = GetTrademarkInfo(); //主机  品牌logo+制造商名称+名称+版本名称+类型（笔记本、台式机）（未完成）
             hinfos.OSystem = GetOsInfo();//系统  系统名+版本+位数（已完成）
             hinfos.CPU = GetCpuInfo();//Cpu  制造商+名字+版本+频率+核心数（已完成）
@@ -113,16 +114,25 @@ namespace CenterView
         /// </summary>
         private string GetLogoPath()
         {
-            //HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
-            //Manufacturer、Model以及Logo 
-            RegistryKey lm = GetCurrenteReg(RegistryHive.LocalMachine);
-            RegistryKey software = lm.OpenSubKey("SOFTWARE", true);
-            RegistryKey oem = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
-            hinfos.LogoPath = oem.GetValue("Logo") != null ? oem.GetValue("Logo").ToString() : null;
+            try
+            {
+                //HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
+                //Manufacturer、Model以及Logo 
+                RegistryKey lm = GetCurrenteReg(RegistryHive.LocalMachine);
+                RegistryKey software = lm.OpenSubKey("SOFTWARE", true);
+                RegistryKey oem = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
+                hinfos.LogoPath = oem.GetValue("Logo") != null ? oem.GetValue("Logo").ToString() : null;
 
-            hinfos.Trademark = oem.GetValue("Manufacturer") != null ? oem.GetValue("Manufacturer").ToString() : null;
-            hinfos.Trademark += oem.GetValue("Model") != null ? oem.GetValue("Model").ToString() : null;
-            return hinfos.Trademark;
+                hinfos.Trademark = oem.GetValue("Manufacturer") != null ? oem.GetValue("Manufacturer").ToString() : null;
+                hinfos.Trademark += oem.GetValue("Model") != null ? oem.GetValue("Model").ToString() : null;
+                return hinfos.Trademark;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw e; 
+            }
+           
         }
 
         /// 电脑主机信息
@@ -604,8 +614,8 @@ namespace CenterView
 
             var dd = aa._m_CurrentAdapterInformationList;
             var ff = dd.m_AdapterInformation;
-            result += (ff.m_Dns1) + "   ";
-            result += (ff.m_Dns2);
+            result = (ff.m_Dns1) ;
+           
             return result;
 
         }

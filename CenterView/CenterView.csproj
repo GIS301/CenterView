@@ -186,7 +186,12 @@
     <Resource Include="logoIMG\CitrixStatus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="config.xml" />
+    <Content Include="config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="logoIMG\repairCitrix.png" />
+    <Resource Include="logoIMG\repairNetwork.png" />
+    <Resource Include="logoIMG\repairTrusty.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\B4.gif" />

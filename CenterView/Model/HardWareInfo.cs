@@ -170,9 +170,14 @@ namespace CenterView.Model
         {
             get { return _noproblemcount; }
             set{
-              
-              
-                  _checkingerrorcount = value;
+
+
+                if (value != _noproblemcount)
+                {
+                    _noproblemcount = value;
+                    //改变时通知
+                    prochanged("NoProblemCount");
+                }
               
             }
         }
