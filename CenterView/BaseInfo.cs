@@ -116,21 +116,16 @@ namespace CenterView
         {
             try
             {
-                //HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
-                //Manufacturer、Model以及Logo 
-                RegistryKey lm = GetCurrenteReg(RegistryHive.LocalMachine);
-                RegistryKey software = lm.OpenSubKey("SOFTWARE", true);
-                RegistryKey oem = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
-                hinfos.LogoPath = oem.GetValue("Logo") != null ? oem.GetValue("Logo").ToString() : null;
-
-                hinfos.Trademark = oem.GetValue("Manufacturer") != null ? oem.GetValue("Manufacturer").ToString() : null;
-                hinfos.Trademark += oem.GetValue("Model") != null ? oem.GetValue("Model").ToString() : null;
-                return hinfos.Trademark;
+                RegistryKey hkml = Registry.LocalMachine;
+                RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
+                RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
+                string path = aimdir.GetValue("Logo").ToString();
+                return path;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
-                return "";
+
+                return " ";
             }
 
         }

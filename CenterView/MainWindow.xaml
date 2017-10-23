@@ -46,7 +46,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
-                                <Image  Source="{Binding LogoPath }"  Width="110"></Image>
+                                <Image Name="logoIMG"  Source="{Binding LogoPath }"  Width="110"></Image>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <TextBlock  Text="{Binding Trademark   }"  FontFamily="宋体"  FontWeight="Bold" FontSize="20"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"    />

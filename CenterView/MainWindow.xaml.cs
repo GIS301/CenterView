@@ -254,7 +254,8 @@ namespace CenterView
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
-        {   
+        {
+            this.logoIMG.Source = new BitmapImage(new Uri(hardwareInfo.LogoPath, UriKind.Absolute));
             if(new CkCitrix().CheckCitrix())
             {
                 this.TxtCitrix.Text = "Citrix已安装";
