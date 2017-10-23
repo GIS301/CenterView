@@ -4,47 +4,49 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CenterView
 {
-    class RepairCitrix
-    {
-        //private void button1_Click(object sender, EventArgs e)//修复流程
-        //{
-        //    string URL = "https://downloadplugins.citrix.com/Windows/CitrixReceiver.exe";//需更改为读取配置文件包含的链接
-        //    string path = @"..//CitrixReciver.exe";
-        //    string fullPath = Path.GetFullPath(path);
-        //    bool isExistCitrix = new CkCitrix().CheckCitrix();
-        //    if(!isExistCitrix)
-        //    {
-        //    try
-        //    {
-        //        if (File.Exists(fullPath))
-        //        {
-        //            MessageBox.Show("已下载安装包,即将开始安装");
-        //            System.Diagnostics.Process.Start(fullPath);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("即将开始下载，请耐心等待");
-        //            RepairCitrix downloadCitrix = new RepairCitrix();
-        //            bool flag = downloadCitrix.Download(URL, fullPath);
-        //            if (flag)
-        //            {
-        //                MessageBox.Show("下载完成，即将开始安装");
-        //                System.Diagnostics.Process.Start(fullPath);
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        MessageBox.Show("自动修复失败，请手动下载Citrix Receiver");
-        //    }
-        //   }
-        //}
+    public class RepairCitrix
+    {       
+        /// <summary>
+        /// 修复Citrix
+        /// </summary>
+        /// <param name="url">
+        /// String.Empty或null:citrix.com默认的下载地址；
+        /// 其他值:自己保存的http地址
+        /// </param>
+        public void CitrixRep(string url)
+        {
+            if(url == null ||　url == String.Empty)
+                url = "https://downloadplugins.citrix.com/Windows/CitrixReceiver.exe";
+            //判断Citrix是否已经安装
+            bool isExisted = CkCitrix.CheckCitrix();
+            if (!isExisted)
+            {
+                //保存到目录
+                string fullPath = Application.StartupPath + "//CitrixReciver.exe";
+                if (File.Exists(fullPath))
+                {
+                    MessageBox.Show("已下载安装包,即将开始安装");
+                    System.Diagnostics.Process.Start(fullPath);
+                }
+                else
+                {
+                    MessageBox.Show("即将开始下载，请耐心等待");
+                    RepairCitrix downloadCitrix = new RepairCitrix();
+                    bool flag = downloadCitrix.Download(url, fullPath);
+                    if (flag)
+                    {
+                        MessageBox.Show("下载完成，即将开始安装");
+                        System.Diagnostics.Process.Start(fullPath);
+                    }
+                }
+            }
+        }
 
-
-        public bool Download(string url, string localfile)
+        private bool Download(string url, string localfile)
         {
             bool flag = false;
             long startPosition = 0; // 上次下载的文件起始位置
@@ -102,4 +104,37 @@ namespace CenterView
             return flag;
         }
     }
+    //private void button1_Click(object sender, EventArgs e)//修复流程
+    //{
+    //    string URL = "https://downloadplugins.citrix.com/Windows/CitrixReceiver.exe";//需更改为读取配置文件包含的链接
+    //    string path = @"..//CitrixReciver.exe";
+    //    string fullPath = Path.GetFullPath(path);
+    //    bool isExistCitrix = new CkCitrix().CheckCitrix();
+    //    if(!isExistCitrix)
+    //    {
+    //    try
+    //    {
+    //        if (File.Exists(fullPath))
+    //        {
+    //            MessageBox.Show("已下载安装包,即将开始安装");
+    //            System.Diagnostics.Process.Start(fullPath);
+    //        }
+    //        else
+    //        {
+    //            MessageBox.Show("即将开始下载，请耐心等待");
+    //            RepairCitrix downloadCitrix = new RepairCitrix();
+    //            bool flag = downloadCitrix.Download(URL, fullPath);
+    //            if (flag)
+    //            {
+    //                MessageBox.Show("下载完成，即将开始安装");
+    //                System.Diagnostics.Process.Start(fullPath);
+    //            }
+    //        }
+    //    }
+    //    catch
+    //    {
+    //        MessageBox.Show("自动修复失败，请手动下载Citrix Receiver");
+    //    }
+    //   }
+    //}
 }

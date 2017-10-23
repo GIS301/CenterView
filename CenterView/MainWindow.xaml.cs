@@ -127,7 +127,7 @@ namespace CenterView
         /// <param name="e"></param>
         void Tick_checkingCitrix(object sender, EventArgs e)
         {
-            bool result = new CkCitrix().CheckCitrix();
+            bool result = CkCitrix.CheckCitrix();
             if (result)
             {
                 this.checkingCitrix_Txt1.Text = "Citrix组件";
@@ -256,7 +256,7 @@ namespace CenterView
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
             this.logoIMG.Source = new BitmapImage(new Uri(hardwareInfo.LogoPath, UriKind.Absolute));
-            if(new CkCitrix().CheckCitrix())
+            if (CkCitrix.CheckCitrix())
             {
                 this.TxtCitrix.Text = "Citrix已安装";
             }
