@@ -124,8 +124,7 @@ namespace CenterView
             }
             catch (Exception e)
             {
-
-                return " ";
+                return null;
             }
 
         }
@@ -391,29 +390,26 @@ namespace CenterView
             double Size = 0;
             var type = " ";
             string caption = " ";
-            string RongLiang = "";
             try
             {
                 ManagementClass mc = new ManagementClass(WMIPath.Win32_DiskDrive.ToString());
                 ManagementObjectCollection theDiskDriveInfo = mc.GetInstances();
                 foreach (var item in theDiskDriveInfo)
                 {
-                    caption =item["caption"].ToString() + " ";//硬盘名称与类型
+                    caption += item["caption"].ToString() + "   ";//硬盘名称与类型
                     type = item["InterfaceType"].ToString();//硬盘串口类型
-                    Size = Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
-                    if (Size > 1024)
-                    {
-                        RongLiang = Math.Round((Size / 1024), 2) + "T";
-                    }
-                    else
-                    {
-                        RongLiang = Math.Round(Size, 2) + "G";
-                    }
-                    result = result + " " + caption + " " + "(" + RongLiang + ")" + type + "\n";
-                   
+                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
+                    
                 }
-               
-                
+                if (Size > 1024)
+                {
+                    result = Math.Round((Size / 1024), 2) + "T";
+                }
+                else
+                {
+                    result = Math.Round(Size, 2) + "G";
+                }
+                result += " "+caption + "  " + type;
                 return result;
 
             }
@@ -493,7 +489,7 @@ namespace CenterView
 
 
         ///获取有线网卡
-        public static string GetNetworkInterfaceMessage()
+        public  string GetNetworkInterfaceMessage()
         {
 
             string result = "";
@@ -513,28 +509,24 @@ namespace CenterView
                     int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
                     if (fPnpInstanceID.Length > 3 &&
                         fPnpInstanceID.Substring(0, 3) == "PCI")
+                    {
                         fCardType = "物理网卡";
+                        result += (adapter.Description); // 获取接口的描述 
+                        break;
+                    }
                     else if (fMediaSubType == 1)
                         fCardType = "虚拟网卡";
                     else if (fMediaSubType == 2)
                         fCardType = "无线网卡";
                 }
-                #endregion
-                #region " 网卡信息 "
-                if (adapter.Name == "以太网")
-                {
-
-                    result += (adapter.Description); // 获取接口的描述   
-
-                }
-                #endregion
+                #endregion                
             }
             return result;
         }
 
 
         /// 获取无线网卡
-        public static string GetWIFI()
+        public  string GetWIFI()
         {
 
             string result = "";
@@ -554,22 +546,26 @@ namespace CenterView
                     int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
                     if (fPnpInstanceID.Length > 3 &&
                         fPnpInstanceID.Substring(0, 3) == "PCI")
-                        fCardType = "物理网卡";
+                    {
+                        if (fMediaSubType == 2)
+                        {
+                            fCardType = "无线网卡";
+                            result += (adapter.Description) + ""; // 获取接口的描述  
+                            break;
+                        }
+                        else
+                            fCardType = "物理网卡";
+                    }
                     else if (fMediaSubType == 1)
                         fCardType = "虚拟网卡";
                     else if (fMediaSubType == 2)
+                    {
                         fCardType = "无线网卡";
+                        result += (adapter.Description) + ""; // 获取接口的描述  
+                        break;
+                    }
                 }
-                #endregion
-                #region " 网卡信息 "
-                if (adapter.Name == "WLAN")
-                {
-
-                    result += (adapter.Description) + ""; // 获取接口的描述   
-
-                }
-
-                #endregion
+                #endregion                
             }
             return result;
         }

@@ -13,14 +13,12 @@ namespace CenterView
         BaseInfo baseInfo = new BaseInfo();
 
         public string GetnetconnectingInfo()
-
-    {
+        {
          
            string url = "www.baidu.com;www.sina.com;www.cnblogs.com;www.google.com;www.163.com;www.csdn.com";
             string[] urls = url.Split(new char[] { ';' });
 
             var dd = CheckServeStatus(urls); 
-
 
             return CheckServeStatus(urls); ;
         }
@@ -71,8 +69,6 @@ namespace CenterView
                     return result;
                 }
             }
-
-           
         }
 
         #region 网络检测
