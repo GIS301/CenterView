@@ -35,8 +35,7 @@ namespace CenterView
                 else
                 {
                     MessageBox.Show("即将开始下载，请耐心等待");
-                    RepairCitrix downloadCitrix = new RepairCitrix();
-                    bool flag = downloadCitrix.Download(url, fullPath);
+                    bool flag = Download(url, fullPath);
                     if (flag)
                     {
                         MessageBox.Show("下载完成，即将开始安装");
@@ -46,6 +45,12 @@ namespace CenterView
             }
         }
 
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="localfile"></param>
+        /// <returns></returns>
         private bool Download(string url, string localfile)
         {
             bool flag = false;
