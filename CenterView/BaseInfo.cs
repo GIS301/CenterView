@@ -460,8 +460,6 @@ namespace CenterView
                     result += (m["Name"].ToString().Replace("Family", "  ") + "(" + ToGB(Convert.ToInt64(m["AdapterRAM"].ToString()), 1024.0).ToString() + ")"+" ");
                      
                    
-
-
                 }
             }
             catch
@@ -504,9 +502,8 @@ namespace CenterView
 
 
 
-
         ///获取有线网卡
-        public static string GetNetworkInterfaceMessage()
+        public string GetNetworkInterfaceMessage()
         {
 
             string result = "";
@@ -526,28 +523,24 @@ namespace CenterView
                     int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
                     if (fPnpInstanceID.Length > 3 &&
                         fPnpInstanceID.Substring(0, 3) == "PCI")
+                    {
                         fCardType = "物理网卡";
+                        result += (adapter.Description); // 获取接口的描述 
+                        break;
+                    }
                     else if (fMediaSubType == 1)
                         fCardType = "虚拟网卡";
                     else if (fMediaSubType == 2)
                         fCardType = "无线网卡";
                 }
                 #endregion
-                #region " 网卡信息 "
-                if (adapter.Name == "以太网")
-                {
-
-                    result += (adapter.Description); // 获取接口的描述   
-
-                }
-                #endregion
             }
             return result;
-        }
+        }
 
 
         /// 获取无线网卡
-        public static string GetWIFI()
+        public string GetWIFI()
         {
 
             string result = "";
@@ -567,39 +560,49 @@ namespace CenterView
                     int fMediaSubType = Convert.ToInt32(rk.GetValue("MediaSubType", 0));
                     if (fPnpInstanceID.Length > 3 &&
                         fPnpInstanceID.Substring(0, 3) == "PCI")
-                        fCardType = "物理网卡";
+                    {
+                        if (fMediaSubType == 2)
+                        {
+                            fCardType = "无线网卡";
+                            result += (adapter.Description) + ""; // 获取接口的描述  
+                            break;
+                        }
+                        else
+                            fCardType = "物理网卡";
+                    }
                     else if (fMediaSubType == 1)
                         fCardType = "虚拟网卡";
                     else if (fMediaSubType == 2)
+                    {
                         fCardType = "无线网卡";
+                        result += (adapter.Description) + ""; // 获取接口的描述  
+                        break;
+                    }
                 }
-                #endregion
-                #region " 网卡信息 "
-                if (adapter.Name == "WLAN")
-                {
-
-                    result += (adapter.Description) + ""; // 获取接口的描述   
-
-                }
-
                 #endregion
             }
             return result;
-        }
-
+        }
 
 
 
         /// 获取默认网关地址
         public string GetGateway()
         {
-            string result = "";
-            CIpInformation aa = new CIpInformation();
+            try
+            {
+                string result = "";
+                CIpInformation aa = new CIpInformation();
 
-            var dd = aa._m_CurrentAdapterInformationList;
-            var ff = dd.m_AdapterInformation;
-            result += (ff.m_Gateway);
-            return result;
+                var dd = aa._m_CurrentAdapterInformationList;
+                var ff = dd.m_AdapterInformation;
+                result += (ff.m_Gateway);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
 
@@ -609,11 +612,18 @@ namespace CenterView
         /// 获取IP地址
         public  string GetIpInfo()
         {
-            string hostName = Dns.GetHostName();   //获取本机名
-            IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
-            //IPHostEntry localhost = Dns.GetHostEntry(hostName);   //获取IPv6地址
-            IPAddress localaddr = localhost.AddressList[0];
-            return localaddr.ToString();
+            try
+            {
+                string hostName = Dns.GetHostName();   //获取本机名
+                IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
+                //IPHostEntry localhost = Dns.GetHostEntry(hostName);   //获取IPv6地址
+                IPAddress localaddr = localhost.AddressList[0];
+                return localaddr.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
@@ -621,14 +631,22 @@ namespace CenterView
         /// 获取DNS地址（若有多个只取一个）
         public string GetDNSInfo()
         {
-            string result = "";
-            CIpInformation aa = new CIpInformation();
+            try
+            {
+                string result = "";
+                CIpInformation aa = new CIpInformation();
 
-            var dd = aa._m_CurrentAdapterInformationList;
-            var ff = dd.m_AdapterInformation;
-            result = (ff.m_Dns1) ;
-           
-            return result;
+                var dd = aa._m_CurrentAdapterInformationList;
+                var ff = dd.m_AdapterInformation;
+                result = (ff.m_Dns1);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+                
+                   
 
         }
 

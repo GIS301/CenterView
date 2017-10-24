@@ -10,7 +10,7 @@ namespace CenterView
     public class CkCitrix
     {
         //检测citrix是否存在
-        public  bool CheckCitrix()
+        public static bool CheckCitrix()
         {
             List<string> subkeyNames = new List<string>();
             //当前用户 
@@ -44,7 +44,7 @@ namespace CenterView
         }
 
         //检查cx是否在运行
-        public  bool IsProcessStarted()
+        public static bool IsProcessStarted()
         {
             Process[] temp = Process.GetProcessesByName("wfcrun32");
             if (temp.Length > 0) 

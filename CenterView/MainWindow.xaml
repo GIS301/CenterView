@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
           xmlns:gifLib="clr-namespace:CenterView.GifloadClass"
         x:Name="window" mc:Ignorable="d" 
-        Title="MainWindow" Height="720" Width="900" Style="{DynamicResource NoResize_window}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
+        Title="MainWindow" Height="750" Width="1000" Style="{DynamicResource NoResize_window}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="logoIMG/bg1.png" />
     </Window.Background>
@@ -23,21 +23,21 @@
 
                 <Grid Margin="0,40,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="540"/>
-                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="640"/>
+                        <ColumnDefinition Width="360"/>
 
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,148.301,-20.2">
+                    <Grid Grid.Column="0"  >
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="90" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
                             <RowDefinition Height="80" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
-                            <RowDefinition Height="45" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -49,7 +49,7 @@
                                 <Image Name="logoIMG"  Source="{Binding LogoPath }"  Width="110"></Image>
                             </Grid>
                             <Grid Grid.Column="1">
-                                <TextBlock  Text="{Binding Trademark   }"  FontFamily="宋体"  FontWeight="Bold" FontSize="20"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"    />
+                                <TextBlock  Text="{Binding Trademark   }"  FontFamily="宋体"  FontWeight="Bold" FontSize="20"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"    />
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="1">
@@ -95,7 +95,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
-                                <TextBlock Text="硬盘"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Center"   />
+                                <TextBlock Text="硬盘"  FontFamily="宋体"  FontWeight="ExtraBlack" FontSize="18"  Foreground="Black" HorizontalAlignment="Center"  VerticalAlignment="Top"  Margin="0,16,0,0" />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <TextBlock Text="{Binding HardDisk}" FontFamily="宋体"   FontSize="18"  Foreground="Black" HorizontalAlignment="Left"  VerticalAlignment="Center"/>

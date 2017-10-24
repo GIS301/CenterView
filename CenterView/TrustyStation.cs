@@ -167,7 +167,11 @@ namespace CenterView
            }
            return normal;
        }
-       //本机添加授信站点
+       /// <summary>
+       /// 本机添加授信站点
+       /// </summary>
+       /// <param name="input"></param>
+
        public void AddTrustyStation(string input)
        {
            try
