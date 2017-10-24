@@ -114,17 +114,30 @@ namespace CenterView
         /// </summary>
         private string GetLogoPath()
         {
+           
             try
             {
                 RegistryKey hkml = Registry.LocalMachine;
                 RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
                 RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
-                string path = aimdir.GetValue("Logo").ToString();
-                return path;
+                if (aimdir.GetValue("Logo") != null)
+                {
+                    string path = aimdir.GetValue("Logo").ToString();
+                    return path;
+                }
+                else
+                {
+                    return " ";
+                }
+
+               
             }
-            catch (Exception e)
+            catch (Exception  e)
             {
-                return null;
+
+                MessageBox.Show(e.Message);
+                return " ";
+              
             }
 
         }
@@ -373,7 +386,7 @@ namespace CenterView
                 }
             }
 
-            var theresult = (int)((capacity / 1024 / 1024)) / 1024 + "G;";
+            var theresult = (int)((capacity / 1024 / 1024)) / 1024 + "G";
             result += manufacturer + "  " + theresult.ToString();
             return result;
         }
@@ -390,26 +403,29 @@ namespace CenterView
             double Size = 0;
             var type = " ";
             string caption = " ";
+            string RongLiang = "";
             try
             {
                 ManagementClass mc = new ManagementClass(WMIPath.Win32_DiskDrive.ToString());
                 ManagementObjectCollection theDiskDriveInfo = mc.GetInstances();
                 foreach (var item in theDiskDriveInfo)
                 {
-                    caption += item["caption"].ToString() + "   ";//硬盘名称与类型
+                    caption = item["caption"].ToString() + " ";//硬盘名称与类型
                     type = item["InterfaceType"].ToString();//硬盘串口类型
-                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
-                    
+                    Size = Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
+                    if (Size > 1024)
+                    {
+                        RongLiang = Math.Round((Size / 1024), 2) + "T";
+                    }
+                    else
+                    {
+                        RongLiang = Math.Round(Size, 2) + "G";
+                    }
+                    result = result + " " + caption + " " + "(" + RongLiang + ")" + type + "\n";
+
                 }
-                if (Size > 1024)
-                {
-                    result = Math.Round((Size / 1024), 2) + "T";
-                }
-                else
-                {
-                    result = Math.Round(Size, 2) + "G";
-                }
-                result += " "+caption + "  " + type;
+
+
                 return result;
 
             }
@@ -421,6 +437,7 @@ namespace CenterView
             }
 
         }
+
 
 
 
@@ -443,8 +460,6 @@ namespace CenterView
                     result += (m["Name"].ToString().Replace("Family", "  ") + "(" + ToGB(Convert.ToInt64(m["AdapterRAM"].ToString()), 1024.0).ToString() + ")"+" ");
                      
                    
-
-
                 }
             }
             catch
@@ -487,9 +502,8 @@ namespace CenterView
 
 
 
-
         ///获取有线网卡
-        public  string GetNetworkInterfaceMessage()
+        public string GetNetworkInterfaceMessage()
         {
 
             string result = "";
@@ -519,14 +533,14 @@ namespace CenterView
                     else if (fMediaSubType == 2)
                         fCardType = "无线网卡";
                 }
-                #endregion                
+                #endregion
             }
             return result;
-        }
+        }
 
 
         /// 获取无线网卡
-        public  string GetWIFI()
+        public string GetWIFI()
         {
 
             string result = "";
@@ -565,24 +579,30 @@ namespace CenterView
                         break;
                     }
                 }
-                #endregion                
+                #endregion
             }
             return result;
-        }
-
+        }
 
 
 
         /// 获取默认网关地址
         public string GetGateway()
         {
-            string result = "";
-            CIpInformation aa = new CIpInformation();
+            try
+            {
+                string result = "";
+                CIpInformation aa = new CIpInformation();
 
-            var dd = aa._m_CurrentAdapterInformationList;
-            var ff = dd.m_AdapterInformation;
-            result += (ff.m_Gateway);
-            return result;
+                var dd = aa._m_CurrentAdapterInformationList;
+                var ff = dd.m_AdapterInformation;
+                result += (ff.m_Gateway);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
 
@@ -592,11 +612,18 @@ namespace CenterView
         /// 获取IP地址
         public  string GetIpInfo()
         {
-            string hostName = Dns.GetHostName();   //获取本机名
-            IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
-            //IPHostEntry localhost = Dns.GetHostEntry(hostName);   //获取IPv6地址
-            IPAddress localaddr = localhost.AddressList[0];
-            return localaddr.ToString();
+            try
+            {
+                string hostName = Dns.GetHostName();   //获取本机名
+                IPHostEntry localhost = Dns.GetHostByName(hostName);    //方法已过期，可以获取IPv4的地址
+                //IPHostEntry localhost = Dns.GetHostEntry(hostName);   //获取IPv6地址
+                IPAddress localaddr = localhost.AddressList[0];
+                return localaddr.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
@@ -604,14 +631,22 @@ namespace CenterView
         /// 获取DNS地址（若有多个只取一个）
         public string GetDNSInfo()
         {
-            string result = "";
-            CIpInformation aa = new CIpInformation();
+            try
+            {
+                string result = "";
+                CIpInformation aa = new CIpInformation();
 
-            var dd = aa._m_CurrentAdapterInformationList;
-            var ff = dd.m_AdapterInformation;
-            result = (ff.m_Dns1) ;
-           
-            return result;
+                var dd = aa._m_CurrentAdapterInformationList;
+                var ff = dd.m_AdapterInformation;
+                result = (ff.m_Dns1);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+                
+                   
 
         }
 
