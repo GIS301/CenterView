@@ -69,8 +69,8 @@ namespace CenterView
                    {
                      string value = reader.ReadElementContentAsString();
                     speed1= Convert.ToDouble(value);
-                   }
-                  
+                    break;
+                   }                  
                }
            }
            return speed1;
@@ -92,8 +92,8 @@ namespace CenterView
                    {
                        string value = reader.ReadElementContentAsString();
                        speed2 = Convert.ToDouble(value);
+                       break;
                    }
-
                }
            }
            return speed2;
@@ -113,7 +113,7 @@ namespace CenterView
                    if (reader.Name == "CitrixName")
                    {
                        citrix = reader.ReadElementContentAsString();
-                       
+                       break;
                    }
 
                }
@@ -135,12 +135,37 @@ namespace CenterView
                    if (reader.Name == "CitrixName")
                    {
                        url = reader.ReadElementContentAsString();
-
+                       break;
                    }
 
                }
            }
            return url;
        }
+
+       /// <summary>
+       /// 根据XML文件名和节点名获取值
+       /// </summary>
+       /// <param name="fileName">XML文件名</param>
+       /// <param name="name">节点名</param>
+       /// <returns></returns>
+       public static string getValbyName(string fileName, string name)
+       {
+           XmlTextReader reader = new XmlTextReader(fileName);
+           string ret = "";
+           while (reader.Read())
+           {
+               if (reader.NodeType == XmlNodeType.Element)
+               {
+                   if (reader.Name == name)
+                   {
+                       ret = reader.ReadElementContentAsString();
+                       break;
+                   }
+               }
+           }
+           return ret;
+       }
+
     }
 }

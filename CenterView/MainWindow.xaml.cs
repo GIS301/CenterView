@@ -22,6 +22,8 @@ namespace CenterView
     /// </summary>
     public partial class MainWindow : Window
     {
+        NetworkCheck _netCheck = new NetworkCheck();//网络监测类
+
         DispatcherTimer timer_checkingTrusty ;  
         DispatcherTimer timer_checkingNetwork ;
         DispatcherTimer timer_checkingCitrix;
@@ -160,6 +162,9 @@ namespace CenterView
         /// <param name="e"></param>
         void Tick_checkingNetwork(object sender, EventArgs e)
         {
+            if (this._netCheck.MinInnerSpeed == 0.0) _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps;
+            _netCheck.MaxInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps > _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
+            _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps < _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
             checkSuccessNetwork = true;
         }
         /// <summary>
@@ -408,10 +413,11 @@ namespace CenterView
                 checkboxCount++;
                 timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
                 timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
+
+                _netCheck.MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
                 timer_checkingNetwork.Start();
-
-
             }
+
             if (this.CitrixCheckBox.IsChecked == false)
             {
                 checkSuccessCitrix = true;
