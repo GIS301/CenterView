@@ -114,18 +114,30 @@ namespace CenterView
         /// </summary>
         private string GetLogoPath()
         {
+           
             try
             {
                 RegistryKey hkml = Registry.LocalMachine;
                 RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
                 RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
-                string path = aimdir.GetValue("Logo").ToString();
-                return path;
+                if (aimdir.GetValue("Logo") != null)
+                {
+                    string path = aimdir.GetValue("Logo").ToString();
+                    return path;
+                }
+                else
+                {
+                    return " ";
+                }
+
+               
             }
-            catch (Exception e)
+            catch (Exception  e)
             {
 
+                MessageBox.Show(e.Message);
                 return " ";
+              
             }
 
         }
@@ -374,7 +386,7 @@ namespace CenterView
                 }
             }
 
-            var theresult = (int)((capacity / 1024 / 1024)) / 1024 + "G;";
+            var theresult = (int)((capacity / 1024 / 1024)) / 1024 + "G";
             result += manufacturer + "  " + theresult.ToString();
             return result;
         }
@@ -391,26 +403,29 @@ namespace CenterView
             double Size = 0;
             var type = " ";
             string caption = " ";
+            string RongLiang = "";
             try
             {
                 ManagementClass mc = new ManagementClass(WMIPath.Win32_DiskDrive.ToString());
                 ManagementObjectCollection theDiskDriveInfo = mc.GetInstances();
                 foreach (var item in theDiskDriveInfo)
                 {
-                    caption += item["caption"].ToString() + "   ";//硬盘名称与类型
+                    caption = item["caption"].ToString() + " ";//硬盘名称与类型
                     type = item["InterfaceType"].ToString();//硬盘串口类型
-                    Size += Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
-                    
+                    Size = Convert.ToDouble(item.Properties["Size"].Value) / (1024 * 1024 * 1024);//硬盘大小
+                    if (Size > 1024)
+                    {
+                        RongLiang = Math.Round((Size / 1024), 2) + "T";
+                    }
+                    else
+                    {
+                        RongLiang = Math.Round(Size, 2) + "G";
+                    }
+                    result = result + " " + caption + " " + "(" + RongLiang + ")" + type + "\n";
+
                 }
-                if (Size > 1024)
-                {
-                    result = Math.Round((Size / 1024), 2) + "T";
-                }
-                else
-                {
-                    result = Math.Round(Size, 2) + "G";
-                }
-                result += " "+caption + "  "  + "  " + type;
+
+
                 return result;
 
             }
@@ -422,6 +437,7 @@ namespace CenterView
             }
 
         }
+
 
 
 
