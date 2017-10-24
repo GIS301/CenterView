@@ -109,6 +109,7 @@
     <Compile Include="Repair.cs" />
     <Compile Include="RepairCitrix.cs" />
     <Compile Include="TrustyStation.cs" />
+    <Compile Include="XMLconfigReader.cs" />
     <Page Include="Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

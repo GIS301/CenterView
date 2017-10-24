@@ -18,7 +18,7 @@ namespace CenterView
         public string[] TrustWebsite()
         {
             string[] temp = null;
-            XmlTextReader reader = new XmlTextReader("..\\..\\config.xml");
+            XmlTextReader reader = new XmlTextReader("config.xml");
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element)
