@@ -1,0 +1,124 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+
+namespace NetworkMonitor
+{
+    public class NetworkMonitor
+    {
+        private Timer timer;						// The timer event executes every second to refresh the values in adapters.
+        private ArrayList adapters;					// The list of adapters on the computer.
+        private ArrayList monitoredAdapters;		// The list of currently monitored adapters.
+
+        public NetworkMonitor()
+        {
+            this.adapters = new ArrayList();
+            this.monitoredAdapters = new ArrayList();
+            EnumerateNetworkAdapters();
+
+            timer = new Timer(1000);
+            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+        }
+
+        /// <summary>
+        /// Enumerates network adapters installed on the computer.
+        /// </summary>
+        private void EnumerateNetworkAdapters()
+        {
+            PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
+
+            foreach (string name in category.GetInstanceNames())
+            {
+                // This one exists on every computer.
+                if (name == "MS TCP Loopback interface")
+                    continue;
+                // Create an instance of NetworkAdapter class, and create performance counters for it.
+                NetworkAdapter adapter = new NetworkAdapter(name);
+                adapter.dlCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", name);
+                adapter.ulCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", name);
+                this.adapters.Add(adapter);			// Add it to ArrayList adapter
+            }
+        }
+
+        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            foreach (NetworkAdapter adapter in this.monitoredAdapters)
+                adapter.refresh();
+            //将刷新的事件发布出去
+            NetworkAdapter_Refresh(this.monitoredAdapters, new EventArgs());
+        }
+
+        /// <summary>
+        /// Get instances of NetworkAdapter for installed adapters on this computer.
+        /// </summary>
+        public NetworkAdapter[] Adapters
+        {
+            get
+            {
+                return (NetworkAdapter[])this.adapters.ToArray(typeof(NetworkAdapter));
+            }
+        }
+
+
+        // Enable the timer and add all adapters to the monitoredAdapters list, unless the adapters list is empty.
+        public void StartMonitoring()
+        {
+            if (this.adapters.Count > 0)
+            {
+                foreach (NetworkAdapter adapter in this.adapters)
+                    if (!this.monitoredAdapters.Contains(adapter))
+                    {
+                        this.monitoredAdapters.Add(adapter);
+                        adapter.init();
+                    }
+
+                timer.Enabled = true;
+            }
+        }
+
+        // Enable the timer, and add the specified adapter to the monitoredAdapters list
+        public void StartMonitoring(NetworkAdapter adapter)
+        {
+            if (!this.monitoredAdapters.Contains(adapter))
+            {
+                this.monitoredAdapters.Add(adapter);
+                adapter.init();
+            }
+            timer.Enabled = true;
+        }
+
+        // Disable the timer, and clear the monitoredAdapters list.
+        public void StopMonitoring()
+        {
+            this.monitoredAdapters.Clear();
+            timer.Enabled = false;
+        }
+
+        // Remove the specified adapter from the monitoredAdapters list, and disable the timer if the monitoredAdapters list is empty.
+        public void StopMonitoring(NetworkAdapter adapter)
+        {
+            if (this.monitoredAdapters.Contains(adapter))
+                this.monitoredAdapters.Remove(adapter);
+            if (this.monitoredAdapters.Count == 0)
+                timer.Enabled = false;
+        }
+
+        //定义委托
+        public delegate void NetworkAdapterRefreshHandle(object sender, EventArgs e);
+
+        /// <summary>
+        /// 网卡速度监控刷新事件
+        /// </summary>
+        public event NetworkAdapterRefreshHandle NetworkSpeedChange;
+        private void NetworkAdapter_Refresh(object sender, EventArgs e)
+        {
+            if (NetworkSpeedChange != null)
+                NetworkSpeedChange(sender, e);//把按钮自身作为参数传递
+        }
+    }
+}

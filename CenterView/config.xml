@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<CenterView>
-  <TrustWebsite>www.baidu.com,218.87.136.94,www.taobao.com,www.index.baidu.com,172.16.20.144</TrustWebsite><!--授信站点列表-->
-  <InternetSpeed1>100</InternetSpeed1><!--启动桌面云最低网速要求(单位kb/s)-->
-  <InternetSpeed2>150</InternetSpeed2> <!--启动应用程序最低网络要求(单位kb/s)-->
-  <CitrixName>Citrix Receiver</CitrixName><!--Citrix组件名称-->
-  <CtrixUrl>https://downloadplugins.citrix.com/Windows/CitrixReceiver.exe</CtrixUrl><!--Citrix组件下载地址Url-->
-</CenterView>

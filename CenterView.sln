@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CenterView", "CenterView\CenterView.csproj", "{C1962D02-4C0D-48E4-85CA-4D7283012D51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkMonitor", "NetworkMonitor\NetworkMonitor.csproj", "{02E7F77F-995D-451A-B10D-E26E573F0910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestCenterView", "UnitTestCenterView\UnitTestCenterView.csproj", "{2FCA0F0C-940B-40BA-B1EE-2C1979B7EF90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C1962D02-4C0D-48E4-85CA-4D7283012D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1962D02-4C0D-48E4-85CA-4D7283012D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1962D02-4C0D-48E4-85CA-4D7283012D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02E7F77F-995D-451A-B10D-E26E573F0910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02E7F77F-995D-451A-B10D-E26E573F0910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02E7F77F-995D-451A-B10D-E26E573F0910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02E7F77F-995D-451A-B10D-E26E573F0910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCA0F0C-940B-40BA-B1EE-2C1979B7EF90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCA0F0C-940B-40BA-B1EE-2C1979B7EF90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCA0F0C-940B-40BA-B1EE-2C1979B7EF90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCA0F0C-940B-40BA-B1EE-2C1979B7EF90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

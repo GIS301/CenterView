@@ -332,8 +332,12 @@
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_desk_clear.png" Stretch="Uniform"/>
                 </TabItem.Background>
-                <Grid/>
+                <Grid Margin="0,30,0,2">
+                    <TextBox Height="50" Width="300"  />
+                </Grid>
+              
             </TabItem>
+           
             <TabItem Name="CheckingTab"  GotFocus="CheckingTab_GotFocus" LostFocus="CheckingTab_LostFocus"  Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}" >
                 <Grid Margin="0,30,0,2">
                     <Grid.RowDefinitions>
@@ -646,11 +650,11 @@
 
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*"/>
-                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.8*"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" >
-                            <Image Source="logoIMG/errorIcon.png" Width="70" Height="70" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,36.2,0"   />
+                            <Image Source="logoIMG/errorIcon.png" Width="70" Height="70" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,26,0"   />
                         </Grid>
                         <Grid Grid.Column="2">
                             <Grid.RowDefinitions>
@@ -659,13 +663,13 @@
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0">
                                 <Grid >
-                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,556.2,0.4"/>
-                                    <TextBlock Text="{Binding CheckingErrorCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="60,0,528.2,2.4" Width="20"/>
-                                    <TextBlock Text="项存在问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,405.2,1.4" FontSize="24"  Width="121" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,656.2,0.4"/>
+                                    <TextBlock Text="{Binding CheckingErrorCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="60,0,628.2,2.4" Width="20"/>
+                                    <TextBlock Text="项存在问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,505.2,1.4" FontSize="24"  Width="121" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1">
-                                <ListBox Name="ErrorList" Background="Transparent"  Margin="0,5,0,1" Width="540" Foreground="Red" FontSize="19" FontFamily="华文宋体"  />
+                                <ListBox Name="ErrorList" Background="Transparent"  Margin="0,5,150,1" Width="540" Foreground="Red" FontSize="19" FontFamily="华文宋体"  />
                             </Grid>
 
                         </Grid>
@@ -676,8 +680,8 @@
                     </Grid>
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.3*"/>
-                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.8*"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" >
                             <Image Source="logoIMG/NormalIcon.png" Width="60" Height="60" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,36.2,0"   />
@@ -689,13 +693,13 @@
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0">
                                 <Grid >
-                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,556.2,0.4"/>
-                                    <TextBlock Text="{Binding NoProblemCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="68,0,527.2,0.4" Width="20"/>
-                                    <TextBlock Text="项没有问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,407.2,1.4" FontSize="24"  Width="120" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="以下" FontFamily="华文宋体" Foreground="Black" FontSize="24" Width="50"  VerticalAlignment="Bottom" Margin="9,0,656.2,0.4"/>
+                                    <TextBlock Text="{Binding NoProblemCount}" FontFamily="华文宋体" Foreground="Black" FontSize="24" VerticalAlignment="Bottom" Margin="68,0,627.2,0.4" Width="20"/>
+                                    <TextBlock Text="项没有问题" FontFamily="华文宋体" Foreground="Black"  Margin="88,0,507.2,1.4" FontSize="24"  Width="120" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1">
-                                <ListBox Background="Transparent" Name="NormalList" Margin="0,5,0,1" Width="540"  Foreground="Green" FontSize="19" FontFamily="华文宋体"  />
+                                <ListBox Background="Transparent" Name="NormalList" Margin="0,5,150,1" Width="540"  Foreground="Green" FontSize="19" FontFamily="华文宋体"  />
                             </Grid>
 
                         </Grid>

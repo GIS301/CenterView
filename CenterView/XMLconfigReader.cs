@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 namespace CenterView
 {
@@ -59,7 +60,7 @@ namespace CenterView
        /// </summary>
        private double getInternetSpeed1()
        {
-           XmlTextReader reader = new XmlTextReader("config.xml");
+           XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath + "//config.xml");
            double speed1 = 0;
            while(reader.Read())
            {
@@ -82,7 +83,7 @@ namespace CenterView
        /// <returns></returns>
        private double getInternetSpeed2()
        {
-           XmlTextReader reader = new XmlTextReader("config.xml");
+           XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath + "//config.xml");
            double speed2 = 0;
            while (reader.Read())
            {
@@ -104,7 +105,8 @@ namespace CenterView
        /// <returns></returns>
        private string getCitrixName()
        {
-           XmlTextReader reader = new XmlTextReader("config.xml");
+           XmlTextReader reader = new XmlTextReader(Application.StartupPath+
+"//config.xml");
            string citrix = "";
            while (reader.Read())
            {
@@ -113,7 +115,7 @@ namespace CenterView
                    if (reader.Name == "CitrixName")
                    {
                        citrix = reader.ReadElementContentAsString();
-                       
+                     
                    }
 
                }
@@ -126,7 +128,7 @@ namespace CenterView
        /// <returns></returns>
        private string getCitrixUrl()
        {
-           XmlTextReader reader = new XmlTextReader("config.xml");
+           XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath + "//config.xml");
            string url = "";
            while (reader.Read())
            {
@@ -141,6 +143,29 @@ namespace CenterView
                }
            }
            return url;
+       }
+       /// <summary>
+       /// 根据XML文件名和节点名获取值
+       /// </summary>
+       /// <param name="fileName">XML文件名</param>
+       /// <param name="name">节点名</param>
+       /// <returns></returns>
+       public static string getValbyName(string fileName, string name)
+       {
+           XmlTextReader reader = new XmlTextReader(fileName);
+           string ret = "";
+           while (reader.Read())
+           {
+               if (reader.NodeType == XmlNodeType.Element)
+               {
+                   if (reader.Name == name)
+                   {
+                       ret = reader.ReadElementContentAsString();
+                       break;
+                   }
+               }
+           }
+           return ret;
        }
     }
 }

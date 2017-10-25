@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace CenterView
@@ -18,7 +19,7 @@ namespace CenterView
         public string[] TrustWebsite()
         {
             string[] temp = null;
-            XmlTextReader reader = new XmlTextReader("config.xml");
+            XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath+"//config.xml");
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element)
@@ -213,7 +214,7 @@ namespace CenterView
            }
            catch (Exception e)
            {
-               MessageBox.Show(e.Message);
+               System.Windows.MessageBox.Show(e.Message);
                throw e;
               
            }

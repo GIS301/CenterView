@@ -22,8 +22,10 @@ namespace CenterView
     /// </summary>
     public partial class MainWindow : Window
     {
-        DispatcherTimer timer_checkingTrusty ;  
-        DispatcherTimer timer_checkingNetwork ;
+        NetworkCheck _netCheck = new NetworkCheck();//网络监测类
+
+        DispatcherTimer timer_checkingTrusty;
+        DispatcherTimer timer_checkingNetwork;
         DispatcherTimer timer_checkingCitrix;
         DispatcherTimer timer_identifyTime;
 
@@ -39,21 +41,22 @@ namespace CenterView
         bool checkingStatus;//定义是在检测过程还是在开始检测准备阶段；
         bool checkSuccessTrusty, checkSuccessCitrix, checkSuccessNetwork;//定义三种检测的状态是否完成？
         string checkovertime = "";//检测消耗的时间；
-        bool checkedOver=false;//扫描完成
+        bool checkedOver = false;//扫描完成
+        bool repairReady = false;//准备修复
         public MainWindow()
         {
             InitializeComponent();
-             timer_checkingTrusty = new DispatcherTimer();
-             timer_checkingNetwork = new DispatcherTimer();
-             timer_checkingCitrix = new DispatcherTimer();
-             timer_identifyTime = new DispatcherTimer();
-             timer_checkingOver = new DispatcherTimer();
-            
-            checkSuccessTrusty=checkSuccessCitrix=false;
+            timer_checkingTrusty = new DispatcherTimer();
+            timer_checkingNetwork = new DispatcherTimer();
+            timer_checkingCitrix = new DispatcherTimer();
+            timer_identifyTime = new DispatcherTimer();
+            timer_checkingOver = new DispatcherTimer();
+
+            checkSuccessTrusty = checkSuccessCitrix = false;
             checkSuccessNetwork = false;//等网络检测方法代码完成后记得修改false；
             hardwareInfo = new BaseInfo().GetAllBaseInfos();
             this.DataContext = hardwareInfo;
-           
+
 
             // timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
             timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
@@ -64,11 +67,11 @@ namespace CenterView
 
 
         }
-        void Tick_checkingOver(object sender,EventArgs e)
+        void Tick_checkingOver(object sender, EventArgs e)
         {
-            if(checkSuccessTrusty&&checkSuccessCitrix&&checkSuccessNetwork)
-            {  
-                if(TrustCheckBox.IsChecked==true)
+            if (checkSuccessTrusty && checkSuccessCitrix && checkSuccessNetwork)
+            {
+                if (TrustCheckBox.IsChecked == true)
                 {
                     List<string> trustyError = new Repair().TrustyError;
                     List<string> trustNorml = new Repair().TrustyNormal;
@@ -77,12 +80,12 @@ namespace CenterView
                         this.ErrorList.Items.Add("授信站点：" + "“" + str + "”" + "有问题");
 
                     }
-                    foreach(string mal in trustNorml)
+                    foreach (string mal in trustNorml)
                     {
                         this.NormalList.Items.Add("授信站点：" + "“" + mal + "”" + "正常");
                     }
                 }
-                if(CitrixCheckBox.IsChecked==true)
+                if (CitrixCheckBox.IsChecked == true)
                 {
                     List<string> citrixError = new Repair().CitrixError;
                     List<string> citrixNormal = new Repair().CitrixNormal;
@@ -90,16 +93,16 @@ namespace CenterView
                     {
                         this.ErrorList.Items.Add(s);
                     }
-                    foreach(string mal in citrixNormal)
+                    foreach (string mal in citrixNormal)
                     {
                         this.NormalList.Items.Add(mal);
                     }
                 }
-                if(NetworkCheckBox.IsChecked==true)
+                if (NetworkCheckBox.IsChecked == true)
                 {
 
                 }
-               
+
                 //当扫描完成，获取问题
 
 
@@ -109,8 +112,8 @@ namespace CenterView
                 timer_identifyTime.Stop();
                 timer_checkingOver.Stop();
                 checkedOvertimeTxt.Text = checkovertime;
-                
-               
+
+
 
             }
         }
@@ -160,6 +163,9 @@ namespace CenterView
         /// <param name="e"></param>
         void Tick_checkingNetwork(object sender, EventArgs e)
         {
+             if (this._netCheck.MinInnerSpeed == 0.0) _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps;
+            _netCheck.MaxInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps > _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
+            _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps < _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
             checkSuccessNetwork = true;
         }
         /// <summary>
@@ -222,7 +228,7 @@ namespace CenterView
                 return "OK";
             }
             else
-            { 
+            {
 
                 return "未授信";
 
@@ -255,7 +261,7 @@ namespace CenterView
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-         
+
             if (CkCitrix.CheckCitrix())
             {
                 this.TxtCitrix.Text = "Citrix已安装";
@@ -265,7 +271,7 @@ namespace CenterView
                 this.TxtCitrix.Text = "Citrix未安装";
             }
             string[] trustlist = new TrustyStation().GetTrustyStations();
-            switch(trustlist.Length)
+            switch (trustlist.Length)
             {
                 case 0:
                     this.Txt_trust1.Text = this.Txt_trust2.Text = this.Txt_trust3.Text = "";
@@ -279,14 +285,14 @@ namespace CenterView
                     this.Txt_trust2.Text = trustlist[1];
                     this.Txt_trust3.Text = "";
                     break;
-                 default:
-                     this.Txt_trust1.Text = trustlist[0];
+                default:
+                    this.Txt_trust1.Text = trustlist[0];
                     this.Txt_trust2.Text = trustlist[1];
                     this.Txt_trust3.Text = trustlist[2];
                     break;
             }
 
-            
+
         }
         /// <summary>
         /// 判断选择的检测项目数是否和完成的检测项目数相同
@@ -304,7 +310,7 @@ namespace CenterView
             }
         }
 
-       
+
 
 
         #region 菜单响应
@@ -380,7 +386,6 @@ namespace CenterView
             checkingStatus = true;
             this.CheckingTab.IsSelected = true;
             if (this.TrustCheckBox.IsChecked == false)
-                
             {
                 this.CheckingTrustyGrid.Visibility = Visibility.Collapsed;
                 checkSuccessTrusty = true;
@@ -393,7 +398,7 @@ namespace CenterView
                 timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
                 timer_checkingTrusty.Interval = TimeSpan.FromSeconds(2.0);
                 timer_checkingTrusty.Start();
-               
+
 
             }
             if (this.NetworkCheckBox.IsChecked == false)
@@ -408,10 +413,11 @@ namespace CenterView
                 checkboxCount++;
                 timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
                 timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
+
+                _netCheck.MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
                 timer_checkingNetwork.Start();
-
-
             }
+
             if (this.CitrixCheckBox.IsChecked == false)
             {
                 checkSuccessCitrix = true;
@@ -431,7 +437,7 @@ namespace CenterView
         private void CheckingTab_GotFocus(object sender, RoutedEventArgs e)
         {
             checkingStatus = true;
-            if(checkedOver)
+            if (checkedOver)
             {
                 CheckOverTab.Focus();
             }
@@ -454,7 +460,7 @@ namespace CenterView
             {
                 this.CheckingTab.Focus();
             }
-           
+
 
         }
         /// <summary>
@@ -476,11 +482,11 @@ namespace CenterView
             timer_checkingTrusty.Stop();
             timer_identifyTime.Stop();
             timer_checkingOver.Stop();
-             timer_checkingTrusty = new DispatcherTimer();
-             timer_checkingNetwork = new DispatcherTimer();
-             timer_checkingCitrix = new DispatcherTimer();
-             timer_identifyTime = new DispatcherTimer();
-             timer_checkingOver = new DispatcherTimer();
+            timer_checkingTrusty = new DispatcherTimer();
+            timer_checkingNetwork = new DispatcherTimer();
+            timer_checkingCitrix = new DispatcherTimer();
+            timer_identifyTime = new DispatcherTimer();
+            timer_checkingOver = new DispatcherTimer();
             checkboxCount = 0;//定义选择checkbox的数量；
             SuccessedCount = 0;//定义完成检测模块的数量；
             a = 0;
@@ -488,9 +494,9 @@ namespace CenterView
            = checkingTrustyResult_Txt1.Text = checkingTrusty_Txt2.Text
            = checkingTrustyResult_Txt2.Text = checkingTrusty_Txt3.Text
            = checkingTrustyResult_Txt3.Text = checkingCitrix_Txt1.Text
-           = checkingCitrixResult_Txt1.Text =checkingTimeTxt.Text= "";
-            
-            checkSuccessTrusty=checkSuccessCitrix=checkSuccessNetwork=false;
+           = checkingCitrixResult_Txt1.Text = checkingTimeTxt.Text = "";
+
+            checkSuccessTrusty = checkSuccessCitrix = checkSuccessNetwork = false;
 
 
         }
@@ -498,7 +504,7 @@ namespace CenterView
         private void CheckOverTab_GotFocus(object sender, RoutedEventArgs e)
         {
             InitializedCheckingGrid();
-           
+
         }
 
         private void RescanBtn_Click(object sender, RoutedEventArgs e)
@@ -514,11 +520,13 @@ namespace CenterView
 
         private void RepairBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            this.RepairTab.Focus();
+            repairReady = true;
+            InitializedCheckingGrid();
         }
 
-        
 
-        
+
+
     }
 }

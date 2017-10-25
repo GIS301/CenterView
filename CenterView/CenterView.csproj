@@ -212,9 +212,6 @@
     <Resource Include="logoIMG\CitrixStatus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="logoIMG\repairCitrix.png" />
     <Resource Include="logoIMG\repairNetwork.png" />
     <Resource Include="logoIMG\repairTrusty.png" />
@@ -284,6 +281,12 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetworkMonitor\NetworkMonitor.csproj">
+      <Project>{02e7f77f-995d-451a-b10d-e26e573f0910}</Project>
+      <Name>NetworkMonitor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

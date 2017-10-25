@@ -28,7 +28,7 @@ namespace CenterView
             CitrixNormal = new List<string>();
             CitrixError = new List<string>();
             ErrorList.AddRange(TrustyError);
-            if (CkCitrix.CheckCitrix())
+            if (!CkCitrix.CheckCitrix())
           {
               CitrixError.Add("Citrix组件未安装");
           }
