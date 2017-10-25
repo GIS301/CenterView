@@ -11,10 +11,8 @@ namespace UnitTestCenterView
         public void TestCheckNetStatus()
         {
             NetworkCheck nc = new NetworkCheck();
-            string ret = nc.CheckNetStatus();
-            bool isConn = nc.LocalConnectionStatus();
-            ret = nc.GetPingnetInfo();
-            nc.MonitorNetSpeed();
+            
+            nc.CheckAllNetStatus();
         }
     }
 }

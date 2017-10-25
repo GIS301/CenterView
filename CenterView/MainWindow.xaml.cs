@@ -414,7 +414,8 @@ namespace CenterView
                 timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
                 timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
 
-                _netCheck.MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
+                IList<string> retlist = new List<string>();
+                retlist = _netCheck.CheckAllNetStatus();//网络速度的最大最小值还要在Tick_checkingNetwork事件里面获取一下
                 timer_checkingNetwork.Start();
             }
 

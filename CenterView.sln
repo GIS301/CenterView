@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CenterView", "CenterView\Ce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestCenterView", "UnitTestCenterView\UnitTestCenterView.csproj", "{911D7924-CB16-4D02-A689-B4A14EBE9940}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkMonitor", "..\云岫\Code\NetworkMonitor\NetworkMonitor.csproj", "{094F3735-B09D-4721-8B37-02A155482B1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkMonitor", "NetworkMonitor\NetworkMonitor.csproj", "{094F3735-B09D-4721-8B37-02A155482B1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
