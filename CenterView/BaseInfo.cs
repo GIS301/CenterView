@@ -536,7 +536,8 @@ namespace CenterView
                 #endregion
             }
             return result;
-        }
+        }
+
 
 
         /// 获取无线网卡
@@ -582,7 +583,9 @@ namespace CenterView
                 #endregion
             }
             return result;
-        }
+        }
+
+
 
 
 
