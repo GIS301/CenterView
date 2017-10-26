@@ -59,7 +59,7 @@ namespace CenterView
 
 
             // timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
-            timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
+          //  timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
             //  timer_checkingTrusty.Tick += new EventHandler(Tick_checkingTrusty);
             trustyStations = new TrustyStation().TrustWebsite();
             checkingTrustyCount = trustyStations.Length;
@@ -161,11 +161,19 @@ namespace CenterView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// 
+      
         void Tick_checkingNetwork(object sender, EventArgs e)
         {
-             if (this._netCheck.MinInnerSpeed == 0.0) _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps;
-            _netCheck.MaxInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps > _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
-            _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps < _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
+            IList<string> retlist = new List<string>();
+            retlist = _netCheck.CheckAllNetStatus();
+            
+
+            //if (this._netCheck.MinInnerSpeed == 0.0)
+            //    _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps;
+            //_netCheck.MaxInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps > _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
+            //_netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps < _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
+            _netCheck.MonitorNetSpeed();
             checkSuccessNetwork = true;
         }
         /// <summary>
@@ -414,7 +422,8 @@ namespace CenterView
                 timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
                 timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
 
-                _netCheck.MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
+                IList<string> retlist = new List<string>();
+                retlist = _netCheck.CheckAllNetStatus();//网络速度的最大最小值还要在Tick_checkingNetwork事件里面获取一下
                 timer_checkingNetwork.Start();
             }
 

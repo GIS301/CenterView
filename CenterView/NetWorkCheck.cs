@@ -15,9 +15,9 @@ namespace CenterView
         //BaseInfo baseInfo = new BaseInfo();
 
         /// <summary>
-        /// 外部地址
+        /// 外网地址
         /// </summary>
-        private const string CTrustWebsite = "TrustWebsite";
+        private const string CTrustWebsite = "TrustWebsite3";
         /// <summary>
         /// 目标地址
         /// </summary>
@@ -31,6 +31,7 @@ namespace CenterView
         /// </summary>
         private const string CInternetSpeed2 = "InternetSpeed2";
 
+        private const string CErrConfig = "Config错误，请重新初始化系统，建议联系客服人员";
         /// <summary>
         /// config.xml的绝对路径
         /// </summary>
@@ -38,25 +39,75 @@ namespace CenterView
 
         public NetworkCheck()
         {
-            ////暂时测试用???
+            //暂时测试用???
             //_configPath = @"E:\Project\GitRepos\CenterView\bin\Debug\config.xml";
-            ////获取Config.xml的TrustWebsite，以及TrustWebsite2
+            //获取Config.xml的TrustWebsite，以及TrustWebsite2
             GetTrustWebSite();
+        }
+
+        /// <summary>
+        /// 检测除网速以外的网络状态、检测内网、外网连接状态、检测丢包率
+        /// </summary>
+        /// <returns></returns>
+        public IList<string> CheckAllNetStatus()
+        {
+            IList<string> retlist = new List<string>();//每种检测保存一个string
+            string temp = String.Empty;
+            //检测网络是否断开
+            temp = CheckConnectionStatus();
+            if (temp.Equals(String.Empty))
+            {
+                //检测内网、外网连接状态
+                //-1:Config.xml错误；0：外网无法联通；1：外网、目标地址均正常；2外网通，目标地址不正常
+                short s = CheckNetStatus(ref temp);
+                switch (s)
+                {
+                    case -1:
+                        retlist.Add(CErrConfig);
+                        break;
+                    case 0:
+                    case 2:
+                        retlist.Add(temp);
+                        break;
+                    case 1:
+                        //检测网络速度
+                        MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
+                        //检测丢包率
+                        retlist.Add(GetPingnetInfo());
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                retlist.Add(CTipOkNet);
+            }
+            return retlist;
         }
 
         #region 网络连接检测
 
         private const int INTERNET_CONNECTION_MODEM = 1;
         private const int INTERNET_CONNECTION_LAN = 2;
-
+        private const string CTipBadNet = "网络断开";
+        private const string CTipOkNet = "网络连接状态正常";
         [System.Runtime.InteropServices.DllImport("winInet.dll")]
         private static extern bool InternetGetConnectedState(ref int dwFlag, int dwReserved);
 
+        private string CheckConnectionStatus()
+        {
+            string ret = String.Empty;
+            bool isCon = LocalConnectionStatus();
+            if (!isCon)
+                ret = CTipBadNet;
+            return ret;
+        }
         /// <summary>
         /// 判断本地的连接状态
         /// </summary>
         /// <returns></returns>
-        public bool LocalConnectionStatus()
+        private bool LocalConnectionStatus()
         {
             System.Int32 dwFlag = new Int32();
             if (!InternetGetConnectedState(ref dwFlag, 0))
@@ -85,7 +136,7 @@ namespace CenterView
         #region 网络与目标主机的连通性检测
 
 
-        private const string CNetWeb1 = "外网连接正常";
+        private const string CNetWeb1 = "外网连接正常；";
         private const string CNetWebErr1 = "外网连接失败";
 
         private const string CNetWeb2 = "目标地址连接正常";
@@ -100,43 +151,62 @@ namespace CenterView
         /// </summary>
         private string[] _strWeb2s = null;
 
+
         /// <summary>
         /// 诊断网络状态
         /// </summary>
-        /// <returns>错误提示</returns>
-        public string CheckNetStatus()
+        /// <param name="statusTip">状态提示</param>
+        /// <returns>-1:Config.xml错误；0：外网无法联通；1：外网、目标地址均正常；2外网通，目标地址不正常</returns>
+        private short CheckNetStatus(ref string statusTip)
         {
-            string ret = "";
-            if (_strWeb1s == null || _strWeb2s == null)
-                return ret;
+            short ret = -1;
 
-            List<string> errorUrls = null;
-            if (PingUrls(_strWeb1s, out errorUrls))
-                ret = CNetWeb1;
-            else
+            if (_strWeb1s == null || _strWeb2s == null)
             {
-                ret = CNetWebErr1 + ":";
-                foreach (string err in errorUrls)
-                {
-                    ret += err;
-                }
-                ret += "；";
+                statusTip = "Config.xml缺少外网地址和目标地址";
+                return ret;
             }
 
-            if (PingUrls(_strWeb2s, out errorUrls))
-                ret += CNetWeb2;
+            List<string> errorUrls = null;
+            //检测外网是否联通
+            if (PingUrls(_strWeb1s, out errorUrls))
+            {
+                statusTip = CNetWeb1;
+            }
             else
             {
-                ret += CNetWebErr2 + ":"; ;
+                statusTip = CNetWebErr1 + ":";
                 foreach (string err in errorUrls)
                 {
-                    ret += err;
+                    statusTip += err;
                 }
-                ret += "；";
+                statusTip += "；";
+                ret = 0;
+                return ret;//外网无法联通直接返回
+            }
+
+            //检测目标地址联通性
+            if (PingUrls(_strWeb2s, out errorUrls))
+            {
+                statusTip += CNetWeb2;
+                ret = 1;
+            }
+            else
+            {
+                statusTip += CNetWebErr2 + ":"; ;
+                foreach (string err in errorUrls)
+                {
+                    statusTip += err;
+                }
+                statusTip += "；";
+                ret = 2;
             }
             return ret;
         }
 
+        /// <summary>
+        /// 获取外网地址、目标地址
+        /// </summary>
         private void GetTrustWebSite()
         {
             string strWebsite1 = XMLconfigReader.getValbyName(_configPath, CTrustWebsite);
@@ -229,7 +299,7 @@ namespace CenterView
             Double.TryParse(XMLconfigReader.getValbyName(_configPath, CInternetSpeed1), out _InnerSpeed1);
             Double.TryParse(XMLconfigReader.getValbyName(_configPath, CInternetSpeed2), out _InnerSpeed2);
 
-            _monitor = new NetworkMonitor.NetworkMonitor ();
+            _monitor = new NetworkMonitor.NetworkMonitor();
             //_monitor.NetworkSpeedChange += new NetworkMonitor.NetworkAdapterRefreshHandle(monitor_NetworkSpeedChange);
             string strAdapter = GetActivatedAdapter();
             if (strAdapter != null && strAdapter != String.Empty)
@@ -247,6 +317,7 @@ namespace CenterView
                     _curAdapter = adapter;//得到当前的网络Adapter
                     _monitor.StopMonitoring();
                     _monitor.StartMonitoring(adapter);
+                 
                 }
             }
         }
@@ -292,14 +363,14 @@ namespace CenterView
         /// 检测丢包率
         /// </summary>
         /// <returns></returns>
-        public string GetPingnetInfo()
+        private string GetPingnetInfo()
         {
             string result = "";
             if (_strWeb1s == null || (_strWeb2s == null && _strWeb2s.Length <= 0))
                 return result;
 
             int count = 4;
-            //IPAddress addr = IPAddress.Parse("14.215.177.39");
+
             Ping ping = new Ping();
             long timeSum = 0;
             int succCount = 0;            //发送
@@ -309,7 +380,7 @@ namespace CenterView
                 PingReply pr = ping.Send(_strWeb2s[0]);
                 if (pr.Status == IPStatus.TimedOut)
                 {
-                    result = ("超时");
+                    result = CNetWebErr2;
                 }
                 else if (pr.Status == IPStatus.Success)
                 {

@@ -601,7 +601,8 @@ namespace CenterView
             }
             catch (Exception ex)
             {
-                throw ex;
+                MessageBox.Show(ex.Message);
+                return "";
             }
 
         }
@@ -643,7 +644,8 @@ namespace CenterView
             }
             catch (Exception ex)
             {
-                throw ex;
+                MessageBox.Show(ex.Message);
+                return "";
             }
                 
                    
