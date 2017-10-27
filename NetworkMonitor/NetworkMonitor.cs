@@ -9,6 +9,10 @@ using System.Timers;
 
 namespace NetworkMonitor
 {
+    /// <summary>
+    /// The NetworkMonitor class monitors network speed for each network adapter on the computer,
+    /// using classes for Performance counter in .NET library.
+    /// </summary>
     public class NetworkMonitor
     {
         private Timer timer;						// The timer event executes every second to refresh the values in adapters.
@@ -47,10 +51,8 @@ namespace NetworkMonitor
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (NetworkAdapter adapter in this.monitoredAdapters)
-                adapter.refresh();
-            //将刷新的事件发布出去
-            NetworkAdapter_Refresh(this.monitoredAdapters, new EventArgs());
+                foreach (NetworkAdapter adapter in this.monitoredAdapters)
+                    adapter.refresh();
         }
 
         /// <summary>
@@ -63,7 +65,6 @@ namespace NetworkMonitor
                 return (NetworkAdapter[])this.adapters.ToArray(typeof(NetworkAdapter));
             }
         }
-
 
         // Enable the timer and add all adapters to the monitoredAdapters list, unless the adapters list is empty.
         public void StartMonitoring()
@@ -106,19 +107,6 @@ namespace NetworkMonitor
                 this.monitoredAdapters.Remove(adapter);
             if (this.monitoredAdapters.Count == 0)
                 timer.Enabled = false;
-        }
-
-        //定义委托
-        public delegate void NetworkAdapterRefreshHandle(object sender, EventArgs e);
-
-        /// <summary>
-        /// 网卡速度监控刷新事件
-        /// </summary>
-        public event NetworkAdapterRefreshHandle NetworkSpeedChange;
-        private void NetworkAdapter_Refresh(object sender, EventArgs e)
-        {
-            if (NetworkSpeedChange != null)
-                NetworkSpeedChange(sender, e);//把按钮自身作为参数传递
         }
     }
 }

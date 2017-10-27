@@ -13,7 +13,7 @@ namespace CenterView
         private List<string> _trustynormal;
         private List<string> _trustyerror;
         private List<string> errorlist;
-       
+        //private string _networknormal;
         private List<string> _normallist;
 
 
@@ -36,8 +36,9 @@ namespace CenterView
           {
               CitrixNormal.Add("Citrix组件已安装");
           }
-            
+          
         }
+        
         public List<string> NetworkError
         {
             set
@@ -49,6 +50,7 @@ namespace CenterView
                 return _networkerror;
             }
         }
+       
         public List<string> CitrixError
         {
             set { _citrixerror = value; }

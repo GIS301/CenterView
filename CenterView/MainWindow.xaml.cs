@@ -31,6 +31,7 @@ namespace CenterView
 
         //定义一个计时器监听三个检测是不是都检测完毕了
         DispatcherTimer timer_checkingOver;
+        DispatcherTimer timer_networkSpeed;//定义测试网速的Timer
         DateTime Last;
         int a = 0;//定义正在检测过程序号
         int checkingTrustyCount = 0;//定义正在检测授信站点项目数
@@ -43,6 +44,8 @@ namespace CenterView
         string checkovertime = "";//检测消耗的时间；
         bool checkedOver = false;//扫描完成
         bool repairReady = false;//准备修复
+        List<string> networkError;//记录网络错误列表
+        string networkNormal="";//记录网络正常
         public MainWindow()
         {
             InitializeComponent();
@@ -51,12 +54,14 @@ namespace CenterView
             timer_checkingCitrix = new DispatcherTimer();
             timer_identifyTime = new DispatcherTimer();
             timer_checkingOver = new DispatcherTimer();
-
+            timer_networkSpeed = new DispatcherTimer();
             checkSuccessTrusty = checkSuccessCitrix = false;
             checkSuccessNetwork = false;//等网络检测方法代码完成后记得修改false；
             hardwareInfo = new BaseInfo().GetAllBaseInfos();
             this.DataContext = hardwareInfo;
-
+            monitor = new NetworkMonitor.NetworkMonitor();
+            networkError = new List<string>();
+            currentAdapter = _netCheck.getCurrentAdapter();
 
             // timer_checkingCitrix.Tick += new EventHandler(Tick_checkingCitrix);
           //  timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
@@ -65,7 +70,7 @@ namespace CenterView
             checkingTrustyCount = trustyStations.Length;
             checkingStatus = false;
 
-
+      
         }
         void Tick_checkingOver(object sender, EventArgs e)
         {
@@ -100,6 +105,17 @@ namespace CenterView
                 }
                 if (NetworkCheckBox.IsChecked == true)
                 {
+                    if(networkError.Count==0)
+                    {
+                        this.NormalList.Items.Add(networkNormal);
+                    }
+                    else
+                    {
+                        foreach( string error in networkError)
+                        {
+                            this.ErrorList.Items.Add(error);
+                        }
+                    }
 
                 }
 
@@ -162,19 +178,93 @@ namespace CenterView
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// 
-      
+        private NetworkMonitor.NetworkMonitor monitor;
+        private NetworkMonitor.NetworkAdapter currentAdapter;
+        private string losebagInfo = "";//丢包信息
         void Tick_checkingNetwork(object sender, EventArgs e)
         {
+            this.checkingNetworkTxt.Text = "正在检查您的网络";
+
             IList<string> retlist = new List<string>();
+
             retlist = _netCheck.CheckAllNetStatus();
             
+           if(retlist.Count>1)//网络慢
+           {
+               timer_checkingNetwork.Interval = TimeSpan.FromSeconds(30);
+               checkingNetworkStatusTxt.Text = retlist[0];
+               losebagResultTxt.Text = retlist[1];
+              
+              // networkError.Add(retlist[1]);
+               losebagInfo = retlist[1];
+               monitor.StopMonitoring();
+               monitor.StartMonitoring(currentAdapter);
+
+               timer_networkSpeed.Tick += new EventHandler(Tick_networkSpeed);
+               timer_networkSpeed.Interval = TimeSpan.FromSeconds(1.0);
+               timer_networkSpeed.Start();
+              
+               
+           }
+           else if(retlist.Count==0)//网络正常
+           {
+               checkingNetworkStatusTxt.Text = "网络正常";
+               networkNormal = "网络正常";
+               checkingNetworkStatusTxt.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Green"));
+               hardwareInfo.CheckingCount++;
+               SuccessedCount++;
+               checkSuccessNetwork = true;
+
+           }
+
+           else
+           {
+               this.checkingNetworkStatusTxt.Text = retlist[0];
+               networkError.Add(retlist[0]);
+               checkingNetworkStatusTxt.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("Red"));
+               checkSuccessNetwork = true;
+               hardwareInfo.CheckingCount++;
+               SuccessedCount++;
+               timer_checkingNetwork.Stop();
+           }
 
             //if (this._netCheck.MinInnerSpeed == 0.0)
             //    _netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps;
             //_netCheck.MaxInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps > _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
             //_netCheck.MinInnerSpeed = _netCheck.CurAdapter.DownloadSpeedKbps < _netCheck.MaxInnerSpeed ? _netCheck.CurAdapter.DownloadSpeedKbps : _netCheck.MaxInnerSpeed;
-            _netCheck.MonitorNetSpeed();
-            checkSuccessNetwork = true;
+           //_netCheck.MonitorNetSpeed();
+
+         
+        }
+        private int times = 0;//循环次数 30次
+        private double MindownloadSpeed = 0;
+        private double MaxdowinloadSpeed = 0;
+        void Tick_networkSpeed(object sender,EventArgs e)
+        { 
+            if(times==1)
+            {
+                MindownloadSpeed=MaxdowinloadSpeed=currentAdapter.DownloadSpeedKbps;
+            }
+            else{
+                MaxdowinloadSpeed = currentAdapter.DownloadSpeedKbps > MaxdowinloadSpeed ? currentAdapter.DownloadSpeedKbps : MaxdowinloadSpeed;
+                MindownloadSpeed=currentAdapter.DownloadSpeedKbps<MindownloadSpeed ? currentAdapter.DownloadSpeedKbps :MindownloadSpeed;
+            }
+            
+          
+            //this.NetworkSpeedResultTxt.Text = String.Format("{0:n}kbps", currentAdapter.UploadSpeedKbps);
+            times++;
+            if(times>30)
+            {
+                timer_networkSpeed.Stop();
+                checkSuccessNetwork = true;
+                this.NetworkSpeedResultTxt.Text = "最大网速：" + MaxdowinloadSpeed + ";"+"\n"+"最小网速：" + MindownloadSpeed + ";";
+                hardwareInfo.CheckingErrorCount++;
+                hardwareInfo.CheckingCount++;
+                SuccessedCount++;
+                networkError.Add(losebagInfo);
+                networkError.Add("网速慢，最大网速为：" + MaxdowinloadSpeed+"kb/s");
+            }
+           
         }
         /// <summary>
         /// 正在检测授信站点Timer事件
@@ -269,7 +359,8 @@ namespace CenterView
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            monitor = new NetworkMonitor.NetworkMonitor();
+            currentAdapter = _netCheck.getCurrentAdapter();
             if (CkCitrix.CheckCitrix())
             {
                 this.TxtCitrix.Text = "Citrix已安装";
@@ -398,7 +489,7 @@ namespace CenterView
                 this.CheckingTrustyGrid.Visibility = Visibility.Collapsed;
                 checkSuccessTrusty = true;
             }
-            if (this.TrustCheckBox.IsChecked == true)
+            else
             {
                 this.CheckingTrustyGrid.Visibility = Visibility.Visible;
                 checkboxCount++;
@@ -414,16 +505,14 @@ namespace CenterView
                 this.CheckingNetworkGrid.Visibility = Visibility.Collapsed;
                 checkSuccessNetwork = true;
             }
-            if (this.NetworkCheckBox.IsChecked == true)
+            else 
             {
 
                 this.CheckingNetworkGrid.Visibility = Visibility.Visible;
                 checkboxCount++;
                 timer_checkingNetwork.Tick += new EventHandler(Tick_checkingNetwork);
-                timer_checkingNetwork.Interval = TimeSpan.FromSeconds(2.5);
-
-                IList<string> retlist = new List<string>();
-                retlist = _netCheck.CheckAllNetStatus();//网络速度的最大最小值还要在Tick_checkingNetwork事件里面获取一下
+                timer_checkingNetwork.Interval = TimeSpan.FromSeconds(1.0);
+              
                 timer_checkingNetwork.Start();
             }
 
@@ -432,7 +521,7 @@ namespace CenterView
                 checkSuccessCitrix = true;
                 this.CheckingCitrixGrid.Visibility = Visibility.Collapsed;
             }
-            if (this.CitrixCheckBox.IsChecked == true)
+           else
             {
                 this.CheckingCitrixGrid.Visibility = Visibility.Visible;
                 checkboxCount++;
@@ -491,11 +580,13 @@ namespace CenterView
             timer_checkingTrusty.Stop();
             timer_identifyTime.Stop();
             timer_checkingOver.Stop();
+            timer_networkSpeed.Stop();
             timer_checkingTrusty = new DispatcherTimer();
             timer_checkingNetwork = new DispatcherTimer();
             timer_checkingCitrix = new DispatcherTimer();
             timer_identifyTime = new DispatcherTimer();
             timer_checkingOver = new DispatcherTimer();
+            timer_networkSpeed = new DispatcherTimer();
             checkboxCount = 0;//定义选择checkbox的数量；
             SuccessedCount = 0;//定义完成检测模块的数量；
             a = 0;
@@ -503,7 +594,8 @@ namespace CenterView
            = checkingTrustyResult_Txt1.Text = checkingTrusty_Txt2.Text
            = checkingTrustyResult_Txt2.Text = checkingTrusty_Txt3.Text
            = checkingTrustyResult_Txt3.Text = checkingCitrix_Txt1.Text
-           = checkingCitrixResult_Txt1.Text = checkingTimeTxt.Text = "";
+           = checkingCitrixResult_Txt1.Text = checkingTimeTxt.Text =checkingNetworkTxt.Text
+           = checkingNetworkStatusTxt .Text= checkingNetworkTxt2.Text=checkingNetworkTxt3.Text=losebagResultTxt.Text=NetworkSpeedResultTxt.Text="";
 
             checkSuccessTrusty = checkSuccessCitrix = checkSuccessNetwork = false;
 
@@ -532,7 +624,24 @@ namespace CenterView
             this.RepairTab.Focus();
             repairReady = true;
             InitializedCheckingGrid();
+            repairProgressBar.Maximum = new Repair().CitrixError.Count + new Repair().TrustyError.Count;
+            DispatcherTimer timer_progress = new DispatcherTimer();
+            timer_progress.Interval = TimeSpan.FromSeconds(2.0);
+            timer_progress.Tick += new EventHandler(Tick_repairProgress);
+            timer_progress.Start();
+
         }
+        private int repairKey = 0;
+        private string[] trustyError = new Repair().TrustyError.ToArray();
+        void Tick_repairProgress(object sender, EventArgs e)
+        {
+            repairingErrorTxt.Text = trustyError[repairKey]+"未授信";
+            repairKey++;
+            new TrustyStation().AddTrustyStation(trustyError[repairKey]);
+            repairProgressBar.Value = repairKey;
+            
+        }
+       
 
 
 

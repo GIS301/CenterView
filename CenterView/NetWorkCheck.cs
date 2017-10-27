@@ -70,12 +70,14 @@ namespace CenterView
                         retlist.Add(temp);
                         break;
                     case 1:
+                        retlist.Add("网络慢，正在测试...");//假如出现了情况1，retlist的Count=2
                         //检测网络速度
-                        MonitorNetSpeed();//开始网络检测 added by jeff 2017/10/24
+                       //       ();//开始网络检测 added by jeff 2017/10/24
                         //检测丢包率
                         retlist.Add(GetPingnetInfo());
                         break;
                     default:
+                        
                         break;
                 }
             }
@@ -291,6 +293,32 @@ namespace CenterView
             get { return _MinInnerSpeed; }
             set { _MinInnerSpeed = value; }
         }
+        public NetworkAdapter getCurrentAdapter()
+        {
+            _monitor = new NetworkMonitor.NetworkMonitor();
+            string strAdapter = GetActivatedAdapter();
+            if (strAdapter != null && strAdapter != String.Empty)
+            {
+                strAdapter = strAdapter.Substring(strAdapter.IndexOf(')') + 1, strAdapter.Length - strAdapter.IndexOf(')') - 1);
+                strAdapter.Trim();
+            }
+            foreach (NetworkAdapter adapter in _monitor.Adapters)
+            {
+                string temp = adapter.Name;
+                temp = temp.Substring(temp.IndexOf(']') + 1, temp.Length - temp.IndexOf(']') - 1);
+                temp.Trim();
+                if (temp.Equals(strAdapter))
+                {
+                    _curAdapter = adapter;//得到当前的网络Adapter
+                    //_monitor.StopMonitoring();
+                    //_monitor.StartMonitoring(adapter);
+                    return _curAdapter;
+                }
+               
+            }
+            return null;
+
+        }
         /// <summary>
         /// 网络速度测试
         /// </summary>
@@ -369,7 +397,7 @@ namespace CenterView
             if (_strWeb1s == null || (_strWeb2s == null && _strWeb2s.Length <= 0))
                 return result;
 
-            int count = 4;
+            int count = 200;
 
             Ping ping = new Ping();
             long timeSum = 0;

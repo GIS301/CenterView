@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace NetworkMonitor
 {
+    /// <summary>
+    /// Represents a network adapter installed on the machine.
+    /// Properties of this class can be used to obtain current network speed.
+    /// </summary>
     public class NetworkAdapter
     {
         /// <summary>

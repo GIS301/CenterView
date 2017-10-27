@@ -486,10 +486,11 @@
                         </Grid>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0.45*"/>
+                                <RowDefinition Height="0.3*"/>
 
-                                <RowDefinition Height="0.35*"/>
-                                <RowDefinition Height="0.25*"/>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.3*"/>
 
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" >
@@ -499,27 +500,39 @@
 
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="6*"/>
+                                    <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0">
-                                    <TextBlock Text="" FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom"  />
+                                    <TextBlock Name="checkingNetworkTxt" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"/>
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="网络不通" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"/>
+                                    <TextBlock Name="checkingNetworkStatusTxt" Text="网络不通" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </Grid>
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="6*"/>
+                                    <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0" >
-                                    <TextBlock Text="" Foreground="Black" FontSize="18" FontFamily="宋体" VerticalAlignment="Bottom" />
+                                    <TextBlock Text="" Foreground="Black" FontSize="18" FontFamily="宋体" Name="checkingNetworkTxt2" VerticalAlignment="Bottom" />
                                 </Grid>
                                 <Grid Grid.Column="1">
 
-                                    <TextBlock Text="OK" FontFamily="宋体" FontSize="20" Foreground="Green" VerticalAlignment="Bottom"  />
+                                    <TextBlock Text="" Name="losebagResultTxt" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"  />
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <TextBlock  Name="checkingNetworkTxt3" Text=""  FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <TextBlock Name="NetworkSpeedResultTxt" Text="OK" FontFamily="宋体" FontSize="16" Foreground="Green" VerticalAlignment="Bottom" Margin="0,0,0,0.6"  />
                                 </Grid>
                             </Grid>
 
@@ -721,7 +734,7 @@
                                 <RowDefinition  Height="0.4*"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <ProgressBar Margin="20,0,20,0" Height="30" VerticalAlignment="Bottom" BorderBrush="Gold"/>
+                                <ProgressBar Name="repairProgressBar" Margin="20,0,20,0" Height="30" VerticalAlignment="Bottom" BorderBrush="Gold" />
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
@@ -732,12 +745,12 @@
                                     <TextBlock Text="正在修复项:" VerticalAlignment="Center" FontFamily="华文宋体" Foreground="Black" FontSize="22" Margin="20,0,0,0" Height="30"/>
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Text="问题1" VerticalAlignment="Center" FontFamily="华文宋体" Foreground="Red" FontSize="22" Margin="20,0,0,0" Height="30"/>
+                                    <TextBlock Name="repairingErrorTxt" Text="问题1" VerticalAlignment="Center" FontFamily="华文宋体" Foreground="Red" FontSize="22" Margin="20,0,0,0" Height="30"/>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Border>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.4*"/>
                             <RowDefinition Height="0.6*"/>
