@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace CenterView
 {
     public class RepairCitrix
-    {       
+    {
         /// <summary>
         /// 修复Citrix
         /// </summary>
@@ -17,29 +17,55 @@ namespace CenterView
         /// String.Empty或null:citrix.com默认的下载地址；
         /// 其他值:自己保存的http地址
         /// </param>
-        public void CitrixRep(string url)
+        public void CitrixRep()
         {
-            if(url == null ||　url == String.Empty)
-                url = "https://downloadplugins.citrix.com/Windows/CitrixReceiver.exe";
-            //判断Citrix是否已经安装
-            bool isExisted = CkCitrix.CheckCitrix();
-            if (!isExisted)
+            XMLconfigReader xMLconfigReader = new XMLconfigReader();
+            string url = xMLconfigReader.CitrixUrl;//读取配置文件里的下载链接
+            string path = Application.StartupPath + "//CitrixReciver.exe";
+            string fullPath = Path.GetFullPath(path);
+            bool isExistCitrix = CkCitrix.CheckCitrix();
+            if (!isExistCitrix)
             {
-                //保存到目录
-                string fullPath = Application.StartupPath + "//CitrixReciver.exe";
                 if (File.Exists(fullPath))
                 {
-                    MessageBox.Show("已下载安装包,即将开始安装");
-                    System.Diagnostics.Process.Start(fullPath);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(fullPath);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("安装文件损坏,即将开始重新下载，请耐心等待");
+                    }
+                    try
+                    {
+                        File.Delete(fullPath);
+                        RepairCitrix downloadCitrix = new RepairCitrix();
+                        bool flag = downloadCitrix.Download(url, fullPath);
+                        if (flag)
+                        {
+                            System.Diagnostics.Process.Start(fullPath);
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("自动下载失败，请手动下载插件");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("即将开始下载，请耐心等待");
-                    bool flag = Download(url, fullPath);
-                    if (flag)
+                    try
                     {
-                        MessageBox.Show("下载完成，即将开始安装");
-                        System.Diagnostics.Process.Start(fullPath);
+                        MessageBox.Show("即将开始下载插件安装包，请耐心等待");
+                        RepairCitrix downloadCitrix = new RepairCitrix();
+                        bool flag = downloadCitrix.Download(url, fullPath);
+                        if (flag)
+                        {
+                            System.Diagnostics.Process.Start(fullPath);
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("自动下载失败，请手动下载插件");
                     }
                 }
             }

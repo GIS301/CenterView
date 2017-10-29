@@ -393,9 +393,12 @@ namespace CenterView
         /// <returns></returns>
         private string GetPingnetInfo()
         {
+           
+
             string result = "";
-            if (_strWeb1s == null || (_strWeb2s == null && _strWeb2s.Length <= 0))
+           if (_strWeb1s == null || (_strWeb2s == null && _strWeb2s.Length <= 0))
                 return result;
+           
 
             int count = 200;
 

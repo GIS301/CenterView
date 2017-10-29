@@ -197,7 +197,7 @@ namespace CenterView
                {
                    string address = @"SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\INTERNET SETTINGS\ZONEMAP\Domains";
                    RegistryKey key1 = hkml.OpenSubKey(address, true);
-                   RegistryKey value = key1.CreateSubKey(input);
+                   RegistryKey value = key1.CreateSubKey(input.Substring(4,input.Length-4));
                    RegistryKey www = value.CreateSubKey("www");
                    value.SetValue("https", 0x2, RegistryValueKind.DWord);
 

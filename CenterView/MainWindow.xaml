@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
           xmlns:gifLib="clr-namespace:CenterView.GifloadClass"
         x:Name="window" mc:Ignorable="d" 
-        Title="MainWindow" Height="750" Width="1000" Style="{DynamicResource NoResize_window}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
+        Title="MainWindow" Height="750" Width="1000" Style="{DynamicResource NoResize_window}"  Loaded="window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="logoIMG/bg1.png" />
     </Window.Background>
@@ -332,10 +332,81 @@
                 <TabItem.Background>
                     <ImageBrush ImageSource="logoIMG/fullbox_desk_clear.png" Stretch="Uniform"/>
                 </TabItem.Background>
-                <Grid Margin="0,30,0,2">
-                    <TextBox Height="50" Width="300"  />
-                </Grid>
-              
+                <StackPanel Margin="0,30,0,0" HorizontalAlignment="Left"  
+            VerticalAlignment="Top">
+                    <Expander  VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
+                        <Expander.Header>
+                            <Grid>
+                                <Image Source="logoIMG/Expander.png" Width="36" Height="34" Margin="0,2,106.4,0" VerticalAlignment="Top" />
+                                <TextBlock Text="     接入访问" FontSize="26" FontWeight="Bold" Foreground="Gray" />
+                            </Grid>
+
+                        </Expander.Header>
+                        <Expander.Content>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" MouseLeftButtonDown="Q1_Label_MouseLeftButtonDown"  Name="Q1_Label" Width="680" Content="      通过桌面云系统访问为何无法4A系统？" />
+                                <Label Grid.Row="1" MouseLeftButtonDown="Q2_Label_MouseLeftButtonDown" Name="Q2_Label" Width="680" Content="      如何使用移动设备访问桌面云系统？" />
+
+                            </Grid>
+                        </Expander.Content>
+                    </Expander>
+                    <Expander VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
+                        <Expander.Header>
+                            <Grid>
+                                <Image Source="logoIMG/Expander.png" Width="36" Height="34" Margin="0,2,106.4,0" VerticalAlignment="Top"/>
+                                <TextBlock Text="     输入输出" FontSize="26" FontWeight="Bold" Foreground="Gray" />
+                            </Grid>
+                           
+                        </Expander.Header>
+                        <Expander.Content>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" MouseLeftButtonDown="Q3_Label_MouseLeftButtonDown" Name="Q3_Label"  Width="680" Content="       访问桌面云登录时提示用户名或密码错误，该如何处理？" />
+                                <Label Grid.Row="1" MouseLeftButtonDown="Q4_Label_MouseLeftButtonDown" Name="Q4_Label"  Width="680" Content="       在使用桌面云时无法使用中文输入法该如何处理？" />
+                            </Grid>
+                        </Expander.Content>
+                    </Expander>
+                    <Expander VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
+                        <Expander.Header>
+                            <Grid>
+                                <Image Source="logoIMG/Expander.png" Width="36" Height="34" Margin="0,2,134.4,0" VerticalAlignment="Top"/>
+                                <TextBlock Text="     打印及外设" FontSize="26" FontWeight="Bold" Foreground="Gray" />
+                            </Grid>
+
+                        </Expander.Header>
+                        <Expander.Content>
+                            <Grid>
+                                
+                                <Label  MouseLeftButtonDown="Q5_Label_MouseLeftButtonDown" Name="Q5_Label"  Width="680" Content="       使用桌面云过程中该如何打印？" />
+                            </Grid>
+                        </Expander.Content>
+                    </Expander>
+                    <Expander VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
+                        <Expander.Header>
+                            <Grid>
+                                <Image Source="logoIMG/Expander.png" Width="36" Height="34" Margin="0,2,134.4,0" VerticalAlignment="Top"/>
+                                <TextBlock Text="     提单及维护" FontSize="26" FontWeight="Bold" Foreground="Gray" />
+                            </Grid>
+
+                        </Expander.Header>
+                        <Expander.Content>
+                            <Grid>
+
+                                <Label MouseLeftButtonDown="Q6_Label_MouseLeftButtonDown"  Name="Q6_Label"  Width="680" Content="       遇到桌面云问题如何在7676上进行提单？" />
+                            </Grid>
+                        </Expander.Content>
+                    </Expander>
+
+                </StackPanel>
+
             </TabItem>
            
             <TabItem Name="CheckingTab"  GotFocus="CheckingTab_GotFocus" LostFocus="CheckingTab_LostFocus"  Margin="0,130,0,0" Style="{DynamicResource TabItemStyle}" >

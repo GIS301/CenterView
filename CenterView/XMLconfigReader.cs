@@ -134,7 +134,7 @@ namespace CenterView
            {
                if (reader.NodeType == XmlNodeType.Element)
                {
-                   if (reader.Name == "CitrixName")
+                   if (reader.Name == "CitrixUrl")
                    {
                        url = reader.ReadElementContentAsString();
 

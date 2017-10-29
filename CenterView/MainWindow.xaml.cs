@@ -28,10 +28,11 @@ namespace CenterView
         DispatcherTimer timer_checkingNetwork;
         DispatcherTimer timer_checkingCitrix;
         DispatcherTimer timer_identifyTime;
-
+        DispatcherTimer timer_checkExistCitrix;//定义修复Citrix是否完成的定时器
         //定义一个计时器监听三个检测是不是都检测完毕了
         DispatcherTimer timer_checkingOver;
         DispatcherTimer timer_networkSpeed;//定义测试网速的Timer
+        DispatcherTimer timer_progress ;//定义修复进度条Timer
         DateTime Last;
         int a = 0;//定义正在检测过程序号
         int checkingTrustyCount = 0;//定义正在检测授信站点项目数
@@ -55,8 +56,9 @@ namespace CenterView
             timer_identifyTime = new DispatcherTimer();
             timer_checkingOver = new DispatcherTimer();
             timer_networkSpeed = new DispatcherTimer();
+            timer_checkExistCitrix = new DispatcherTimer();
             checkSuccessTrusty = checkSuccessCitrix = false;
-            checkSuccessNetwork = false;//等网络检测方法代码完成后记得修改false；
+            checkSuccessNetwork = false;
             hardwareInfo = new BaseInfo().GetAllBaseInfos();
             this.DataContext = hardwareInfo;
             monitor = new NetworkMonitor.NetworkMonitor();
@@ -624,22 +626,93 @@ namespace CenterView
             this.RepairTab.Focus();
             repairReady = true;
             InitializedCheckingGrid();
+           
             repairProgressBar.Maximum = new Repair().CitrixError.Count + new Repair().TrustyError.Count;
-            DispatcherTimer timer_progress = new DispatcherTimer();
+            timer_progress = new DispatcherTimer();
             timer_progress.Interval = TimeSpan.FromSeconds(2.0);
             timer_progress.Tick += new EventHandler(Tick_repairProgress);
             timer_progress.Start();
 
-        }
+        } 
         private int repairKey = 0;
         private string[] trustyError = new Repair().TrustyError.ToArray();
         void Tick_repairProgress(object sender, EventArgs e)
         {
             repairingErrorTxt.Text = trustyError[repairKey]+"未授信";
-            repairKey++;
+            
             new TrustyStation().AddTrustyStation(trustyError[repairKey]);
             repairProgressBar.Value = repairKey;
+            repairKey++;
+            if(repairKey>trustyError.Length-1&&new Repair().CitrixError.Count>0)
+            {
+                repairingErrorTxt.Text = "Citrix组件未安装，正在为您安装...";
+                new RepairCitrix().CitrixRep();
+                repairProgressBar.Value = repairKey;
+                this.timer_progress.Stop();  
+                
+            }
+
             
+        }
+
+        private void Q1_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms. Application.StartupPath + "//XPSdocument//Q1.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
+        }
+
+        private void Q2_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms.Application.StartupPath + "//XPSdocument//Q2.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
+        }
+
+        private void Q3_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms.Application.StartupPath + "//XPSdocument//Q3.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
+        }
+
+        private void Q4_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms.Application.StartupPath + "//XPSdocument//Q4.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
+        }
+
+        private void Q5_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms.Application.StartupPath + "//XPSdocument//Q5.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
+        }
+
+        private void Q6_Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = System.Windows.Forms.Application.StartupPath + "//XPSdocument//Q6.xps";
+            XPSWindow win = new XPSWindow();
+            win.documentPath = path;
+
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            win.ShowDialog();
         }
        
 
