@@ -18,20 +18,29 @@ namespace CenterView
         /// <returns></returns>
         public string[] TrustWebsite()
         {
-            string[] temp = null;
-            XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath+"//config.xml");
-            while (reader.Read())
+            try
             {
-                if (reader.NodeType == XmlNodeType.Element)
+                string[] temp = null;
+                XmlTextReader reader = new XmlTextReader(System.Windows.Forms.Application.StartupPath + "//config.xml");
+                while (reader.Read())
                 {
-                    if (reader.Name == "TrustWebsite")
+                    if (reader.NodeType == XmlNodeType.Element)
                     {
-                        string sumValue = reader.ReadElementContentAsString().Trim();
-                        temp = sumValue.Split(',');
+                        if (reader.Name == "TrustWebsite")
+                        {
+                            string sumValue = reader.ReadElementContentAsString().Trim();
+                            temp = sumValue.Split(',');
+                        }
                     }
                 }
+                return temp;
             }
-            return temp;
+            catch (Exception e)
+            {
+                
+                throw e;
+            }
+           
         }
 
         /// <summary>
@@ -40,40 +49,49 @@ namespace CenterView
         /// <returns></returns>
         public string[] GetTrustyStations()
         {
-            List<string> subkeyNames=new List<string>();
-            RegistryKey hkml = Registry.CurrentUser;
-            RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
-            RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
-            string[]domains = aimdir.GetSubKeyNames();
-            //判断有没有域名前缀例如“www”
-            for (int i = 0; i < domains.Length; i++)
+            try
             {
-                RegistryKey temp = aimdir.OpenSubKey(domains[i], false);
-                if (temp.GetSubKeyNames().Length == 1)
+                List<string> subkeyNames = new List<string>();
+                RegistryKey hkml = Registry.CurrentUser;
+                RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
+                RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
+                string[] domains = aimdir.GetSubKeyNames();
+                //判断有没有域名前缀例如“www”
+                for (int i = 0; i < domains.Length; i++)
                 {
-                    domains[i] = temp.GetSubKeyNames()[0] + "." + domains[i];
+                    RegistryKey temp = aimdir.OpenSubKey(domains[i], false);
+                    if (temp.GetSubKeyNames().Length == 1)
+                    {
+                        domains[i] = temp.GetSubKeyNames()[0] + "." + domains[i];
+                    }
+                    else
+                    {
+                        domains[i] = "*." + domains[i];
+                    }
+
+
                 }
-                else
+                subkeyNames.AddRange(domains);
+                //判断可信任站点为ip地址时
+                RegistryKey range = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Ranges", true);
+                //判断是否有IP地址
+
+                string[] ranges = range.GetSubKeyNames();
+                for (int i = 0; i < ranges.Length; i++)
                 {
-                    domains[i] = "*." + domains[i];
+                    RegistryKey rangeTemp = range.OpenSubKey(ranges[i], false);
+                    ranges[i] = rangeTemp.GetValue(":Range").ToString();
                 }
-               
-
-            }
-            subkeyNames.AddRange(domains);
-            //判断可信任站点为ip地址时
-            RegistryKey  range = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Ranges", true);
-            //判断是否有IP地址
-
-            string[] ranges = range.GetSubKeyNames();
-            for (int i = 0; i < ranges.Length; i++)
-            {
-                RegistryKey rangeTemp = range.OpenSubKey(ranges[i], false);
-                ranges[i] = rangeTemp.GetValue(":Range").ToString();
-            }
                 subkeyNames.AddRange(ranges);
                 hkml.Close();
-              return subkeyNames.ToArray();
+                return subkeyNames.ToArray();
+            }
+            catch (Exception e )
+            {
+                
+                throw e;
+            }
+           
          
             
         }
@@ -83,16 +101,25 @@ namespace CenterView
        /// <returns></returns>
        public int IdentifyErrorCount()
         {
-            string[] xmlTrust = TrustWebsite();
-           int count=0;
-           for(int i=0;i<xmlTrust.Length;i++)
-           {
-               if(!IdentifyTrusty(xmlTrust[i]))
-               {
-                   count++;
-               }
-           }
-           return count;
+            try
+            {
+                string[] xmlTrust = TrustWebsite();
+                int count = 0;
+                for (int i = 0; i < xmlTrust.Length; i++)
+                {
+                    if (!IdentifyTrusty(xmlTrust[i]))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+            catch (Exception e)
+            {
+                
+                throw e;
+            }
+          
         }
        /// <summary>
        /// 判定输入值Input是否在本机的授信站点内
@@ -101,35 +128,44 @@ namespace CenterView
        /// <returns></returns>
        public bool IdentifyTrusty(string input)
         {
-            string[] localTrusty = GetTrustyStations();
-            for (int i = 0; i < localTrusty.Length;i++ )
+            try
             {
-                if (localTrusty[i].Substring(0, 2) == "*.")
+                string[] localTrusty = GetTrustyStations();
+                for (int i = 0; i < localTrusty.Length; i++)
                 {
-                    string[] localCut = localTrusty[i].Split('.');
-                    string[] trustyCut = input.Split('.');
-                    if (trustyCut[trustyCut.Length - 1] == localCut[localCut.Length - 1] && trustyCut[trustyCut.Length - 2] == localCut[localCut.Length - 2])
+                    if (localTrusty[i].Substring(0, 2) == "*.")
                     {
-                        return true;
+                        string[] localCut = localTrusty[i].Split('.');
+                        string[] trustyCut = input.Split('.');
+                        if (trustyCut[trustyCut.Length - 1] == localCut[localCut.Length - 1] && trustyCut[trustyCut.Length - 2] == localCut[localCut.Length - 2])
+                        {
+                            return true;
 
-                    }
-                    else
-                    {
-                        continue;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                 }
-            }
-                
-            int a = Array.IndexOf(localTrusty, input);
-           if(a==-1)
-           {
-               return false;
-           }
-           else
-           {
-               return true;
-           }
+
+                int a = Array.IndexOf(localTrusty, input);
+                if (a == -1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
            
+            }
+            catch (Exception e)
+            {
+                
+                throw e;
+            }
+         
         }
        /// <summary>
        /// 判定授信站点的问题项目列表
@@ -138,17 +174,26 @@ namespace CenterView
        /// <param name="normal"></param>
        public List<string> TrustyStationError()
        {
-           string[] trustyXMLlist = TrustWebsite();
-           List<string> error = new List<string>();
-           for(int i=0;i<trustyXMLlist.Length;i++)
+           try
            {
-               if(!IdentifyTrusty(trustyXMLlist[i]))
+               string[] trustyXMLlist = TrustWebsite();
+               List<string> error = new List<string>();
+               for (int i = 0; i < trustyXMLlist.Length; i++)
                {
-                   error.Add(trustyXMLlist[i]);
+                   if (!IdentifyTrusty(trustyXMLlist[i]))
+                   {
+                       error.Add(trustyXMLlist[i]);
+                   }
+
                }
-               
+               return error;
            }
-           return error;
+           catch (Exception e)
+           {
+               
+               throw e;
+           }
+          
        }
        /// <summary>
        /// 判断授信站点正常列表
@@ -156,17 +201,26 @@ namespace CenterView
        /// <returns></returns>
        public List<string> TrustyStationNormal()
        {
-           string[] trustyXMLlist = TrustWebsite();
-           List<string> normal = new List<string>();
-           for (int i = 0; i < trustyXMLlist.Length; i++)
+           try
            {
-               if (IdentifyTrusty(trustyXMLlist[i]))
+               string[] trustyXMLlist = TrustWebsite();
+               List<string> normal = new List<string>();
+               for (int i = 0; i < trustyXMLlist.Length; i++)
                {
-                   normal.Add(trustyXMLlist[i]);
-               }
+                   if (IdentifyTrusty(trustyXMLlist[i]))
+                   {
+                       normal.Add(trustyXMLlist[i]);
+                   }
 
+               }
+               return normal;
            }
-           return normal;
+           catch (Exception e )
+           {
+               
+               throw e;
+           }
+           
        }
        /// <summary>
        /// 本机添加授信站点

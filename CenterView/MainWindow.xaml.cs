@@ -50,6 +50,9 @@ namespace CenterView
         public MainWindow()
         {
             InitializeComponent();
+
+            
+
             timer_checkingTrusty = new DispatcherTimer();
             timer_checkingNetwork = new DispatcherTimer();
             timer_checkingCitrix = new DispatcherTimer();
@@ -417,7 +420,16 @@ namespace CenterView
         #region 菜单响应
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            try
+            {
+                this.DragMove();
+            }
+            catch (Exception)
+            {
+                
+                
+            }
+                
         }
 
         private void menu_Click(object sender, RoutedEventArgs e)

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
           xmlns:gifLib="clr-namespace:CenterView.GifloadClass"
         x:Name="window" mc:Ignorable="d" 
-        Title="MainWindow" Height="750" Width="1000" Style="{DynamicResource NoResize_window}"  Loaded="window_Loaded">
+        Title="CenterView" Height="750" Width="1000" Style="{DynamicResource NoResize_window}"   Loaded="window_Loaded" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="logoIMG/Complete.png" >
     <Window.Background>
         <ImageBrush ImageSource="logoIMG/bg1.png" />
     </Window.Background>
@@ -348,7 +348,7 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <Label Grid.Row="0" MouseLeftButtonDown="Q1_Label_MouseLeftButtonDown"  Name="Q1_Label" Width="680" Content="      通过桌面云系统访问为何无法4A系统？" />
+                                <Label Grid.Row="0" MouseLeftButtonDown="Q1_Label_MouseLeftButtonDown"   Name="Q1_Label" Width="680" Content="      通过桌面云系统访问为何无法4A系统？" />
                                 <Label Grid.Row="1" MouseLeftButtonDown="Q2_Label_MouseLeftButtonDown" Name="Q2_Label" Width="680" Content="      如何使用移动设备访问桌面云系统？" />
 
                             </Grid>
@@ -591,7 +591,7 @@
                                 </Grid>
                                 <Grid Grid.Column="1">
 
-                                    <TextBlock Text="" Name="losebagResultTxt" FontFamily="宋体" FontSize="20" Foreground="Red" VerticalAlignment="Bottom"  />
+                                    <TextBlock Text="" Name="losebagResultTxt" FontFamily="宋体" FontSize="15" Foreground="Red" VerticalAlignment="Bottom"  />
                                 </Grid>
                             </Grid>
                             <Grid Grid.Row="3">
@@ -603,7 +603,7 @@
                                     <TextBlock  Name="checkingNetworkTxt3" Text=""  FontFamily="宋体" FontSize="18" Foreground="Black" VerticalAlignment="Bottom" />
                                 </Grid>
                                 <Grid Grid.Column="1">
-                                    <TextBlock Name="NetworkSpeedResultTxt" Text="OK" FontFamily="宋体" FontSize="16" Foreground="Green" VerticalAlignment="Bottom" Margin="0,0,0,0.6"  />
+                                    <TextBlock Name="NetworkSpeedResultTxt" Text="OK" FontFamily="宋体" FontSize="15" Foreground="Green" VerticalAlignment="Bottom" Margin="0,0,0,0.6"  />
                                 </Grid>
                             </Grid>
 

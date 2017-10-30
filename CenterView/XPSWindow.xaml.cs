@@ -30,8 +30,17 @@ namespace CenterView
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            XpsDocument doc = new XpsDocument(documentPath, System.IO.FileAccess.Read);
-            documentViewer.Document = doc.GetFixedDocumentSequence();
+            try
+            {
+                XpsDocument doc = new XpsDocument(documentPath, System.IO.FileAccess.Read);
+                documentViewer.Document = doc.GetFixedDocumentSequence();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+           
         }
     }
 }

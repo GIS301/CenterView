@@ -35,21 +35,22 @@ namespace CenterView
                     catch
                     {
                         MessageBox.Show("安装文件损坏,即将开始重新下载，请耐心等待");
-                    }
-                    try
-                    {
-                        File.Delete(fullPath);
-                        RepairCitrix downloadCitrix = new RepairCitrix();
-                        bool flag = downloadCitrix.Download(url, fullPath);
-                        if (flag)
+                        try
                         {
-                            System.Diagnostics.Process.Start(fullPath);
+                            File.Delete(fullPath);
+                            RepairCitrix downloadCitrix = new RepairCitrix();
+                            bool flag = downloadCitrix.Download(url, fullPath);
+                            if (flag)
+                            {
+                                System.Diagnostics.Process.Start(fullPath);
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("自动下载失败，请手动下载插件");
                         }
                     }
-                    catch
-                    {
-                        MessageBox.Show("自动下载失败，请手动下载插件");
-                    }
+                   
                 }
                 else
                 {
