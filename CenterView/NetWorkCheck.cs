@@ -7,11 +7,34 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Management;
 using NetworkMonitor;
+using System.Runtime.Remoting.Messaging;
 
 namespace CenterView
 {
     public class NetworkCheck
     {
+        /// <summary>
+        /// 定义网络连通状态检测委托
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <returns></returns>
+        private delegate bool Deleg(string Url);
+        /// <summary>
+        /// 定义网络丢包率检测委托
+        /// </summary>
+        /// <returns></returns>
+        private delegate string LoseBagDeleg();
+        /// <summary>
+        /// 异步调用执行完成同步信号(网络连通状态)
+        /// </summary>
+        private AutoResetEvent ev = new AutoResetEvent(false);
+
+        /// <summary>
+        /// 异步调用执行完成同步信号(网络丢包率)
+        /// </summary>
+        private AutoResetEvent LoseEv = new AutoResetEvent(false);
+        private bool result;//定义回调函数返回值
+        private string LoseBagResult = string.Empty;//定义丢包回掉函数返回值
         //BaseInfo baseInfo = new BaseInfo();
 
         /// <summary>
@@ -70,11 +93,11 @@ namespace CenterView
                         retlist.Add(temp);
                         break;
                     case 1:
-                        retlist.Add("网络慢，正在测试...");//假如出现了情况1，retlist的Count=2
+                        retlist.Add("外网、目标地址正常，正在测试网络性能...");//假如出现了情况1，retlist的Count=2
                         //检测网络速度
                        //       ();//开始网络检测 added by jeff 2017/10/24
                         //检测丢包率
-                        retlist.Add(GetPingnetInfo());
+                        retlist.Add(asyPingnetInfo());
                         break;
                     default:
                         
@@ -83,7 +106,7 @@ namespace CenterView
             }
             else
             {
-                retlist.Add(CTipOkNet);
+                retlist.Add(CTipBadNet);
             }
             return retlist;
         }
@@ -153,7 +176,32 @@ namespace CenterView
         /// </summary>
         private string[] _strWeb2s = null;
 
+        private bool asynGetResponse(string Url)
+        {
+            Deleg proc = new Deleg(GetResponse);
+            //采用异步方式调用委托
+            //指定GetDone为异步操作完成后的回调函数
+            //指定ev为object参数，用于同步回调函数与主线程间操作
+            IAsyncResult async = proc.BeginInvoke(Url, CallBack, ev);
+            ev.WaitOne();
+            return this.result;
 
+
+        }
+        private void CallBack(IAsyncResult async)
+        {
+            //async中包装了异步方法执行的结果
+            //从操作结果async中还原委托
+            Deleg proc = ((AsyncResult)async).AsyncDelegate as Deleg;
+            //获取异步方法的执行结果
+            result = proc.EndInvoke(async);
+           
+            //使用AsnycState属性获取主线程中传入的同步信号
+            //释放同步信号表示异步调用已完成
+            ((AutoResetEvent)async.AsyncState).Set();
+          
+
+        }
         /// <summary>
         /// 诊断网络状态
         /// </summary>
@@ -171,7 +219,7 @@ namespace CenterView
 
             List<string> errorUrls = null;
             //检测外网是否联通
-            if (PingUrls(_strWeb1s, out errorUrls))
+            if (GetUrlsStatus(_strWeb1s, out errorUrls))
             {
                 statusTip = CNetWeb1;
             }
@@ -188,7 +236,7 @@ namespace CenterView
             }
 
             //检测目标地址联通性
-            if (PingUrls(_strWeb2s, out errorUrls))
+            if (GetUrlsStatus(_strWeb2s, out errorUrls))
             {
                 statusTip += CNetWeb2;
                 ret = 1;
@@ -217,6 +265,70 @@ namespace CenterView
             _strWeb1s = strWebsite1.Split(new char[] { ',' });
             _strWeb2s = strWebsite2.Split(new char[] { ',' });
         }
+        /// <summary>
+        /// 判断域名是否可以访问，模拟浏览器的方法
+        /// </summary>
+        /// <param name="Url">域名地址</param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool GetResponse(string Url)
+        {
+            try
+            {
+                System.Net.HttpWebRequest wReq = (HttpWebRequest)System.Net.HttpWebRequest.Create(Url);
+                wReq.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0";     // 模仿浏览器参数
+                wReq.Timeout = 2000;//设置响应时间TimeOut
+                System.Net.HttpWebResponse wResp = (HttpWebResponse)wReq.GetResponse();
+                if(wResp.StatusDescription=="OK")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                //System.IO.Stream respStream = wResp.GetResponseStream();
+                //using (System.IO.StreamReader reader = new System.IO.StreamReader(respStream, Encoding.GetEncoding("UTF-8")))
+                //{
+                //    return true;
+                //}
+            }
+            catch (System.Exception ex)
+            {
+                return false;
+                throw ex;
+            }
+
+        }
+        /// <summary>
+        /// 检测网络是否畅通
+        /// </summary>
+        /// <param name="urls">URL数据</param>
+        /// <param name="errorCount">ping时连接失败个数</param>
+        /// <returns>true:成功；false:失败</returns>
+        private bool GetUrlsStatus(string[]urls,out List<string> errorUrls)
+        {
+            bool isconn = true;
+            errorUrls = new List<string>();
+            try
+            {
+              for(int i=0;i<urls.Length;i++)
+              {
+                  if (!asynGetResponse("http://" + urls[i]))
+                   {
+                       isconn = false;
+                       errorUrls.Add(urls[i]);
+                   }
+              }
+            }
+            catch (Exception ex)
+            {
+                isconn = false;
+                throw ex;
+            }
+            return isconn;
+ 
+        }
 
         /// <summary>
         /// Ping命令检测网络是否畅通
@@ -224,30 +336,30 @@ namespace CenterView
         /// <param name="urls">URL数据</param>
         /// <param name="errorCount">ping时连接失败个数</param>
         /// <returns>true:成功；false:失败</returns>
-        private bool PingUrls(string[] urls, out List<string> errorUrls)
-        {
-            bool isconn = true;
-            Ping ping = new Ping();
-            errorUrls = new List<string>();
-            try
-            {
-                PingReply pr;
-                for (int i = 0; i < urls.Length; i++)
-                {
-                    pr = ping.Send(urls[i]);
-                    if (pr.Status != IPStatus.Success)
-                    {
-                        isconn = false;
-                        errorUrls.Add(urls[i]);
-                    }
-                }
-            }
-            catch
-            {
-                isconn = false;
-            }
-            return isconn;
-        }
+        //private bool PingUrls(string[] urls, out List<string> errorUrls)
+        //{
+        //    bool isconn = true;
+        //    Ping ping = new Ping();
+        //    errorUrls = new List<string>();
+        //    try
+        //    {
+        //        PingReply pr;
+        //        for (int i = 0; i < urls.Length; i++)
+        //        {
+        //            pr = ping.Send(urls[i],1000);//11-1 1000表示等待毫秒数
+        //            if (pr.Status != IPStatus.Success)
+        //            {
+        //                isconn = false;
+        //                errorUrls.Add(urls[i]);
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        isconn = false;
+        //    }
+        //    return isconn;
+        //}
         #endregion
 
         #region 检测网络连接速度
@@ -307,7 +419,7 @@ namespace CenterView
                 string temp = adapter.Name;
                 temp = temp.Substring(temp.IndexOf(']') + 1, temp.Length - temp.IndexOf(']') - 1);
                 temp.Trim();
-                if (temp.Equals(strAdapter))
+                if (temp.Substring(0, temp.Length - 4) == strAdapter.Substring(0, strAdapter.Length - 4))
                 {
                     _curAdapter = adapter;//得到当前的网络Adapter
                     //_monitor.StopMonitoring();
@@ -387,6 +499,33 @@ namespace CenterView
 
         #endregion
         #region 检测丢包率
+        private string  asyPingnetInfo()
+        {
+            LoseBagDeleg proc = new LoseBagDeleg(GetPingnetInfo);
+            //采用异步方式调用委托
+            //指定LoseBagCallBack为异步操作完成后的回调函数
+            //指定LoseEv为object参数，用于同步回调函数与主线程间操作
+            IAsyncResult async = proc.BeginInvoke( LoseBagCallBack, LoseEv);
+            LoseEv.WaitOne();
+            return this.LoseBagResult;
+        }
+        /// <summary>
+        /// 检测丢包率异步回调函数
+        /// </summary>
+        /// <param name="async"></param>
+        private void LoseBagCallBack(IAsyncResult async)
+        {
+            //async中包装了异步方法执行的结果
+            //从操作结果async中还原委托
+            LoseBagDeleg proc = ((AsyncResult)async).AsyncDelegate as LoseBagDeleg;
+            //获取异步方法的执行结果
+            LoseBagResult = proc.EndInvoke(async);
+            //使用AsnycState属性获取主线程中传入的同步信号
+            //释放同步信号表示异步调用已完成
+            ((AutoResetEvent)async.AsyncState).Set();
+
+        }
+
         /// <summary>
         /// 检测丢包率
         /// </summary>
@@ -431,6 +570,9 @@ namespace CenterView
             }
             return result;
         }
+
+
+        
         #endregion
 
 
@@ -444,7 +586,7 @@ namespace CenterView
 
 
 
-
+#region  备用 
 
 //   //检查网络链接
 //   public string GetNetConnectInfo()
@@ -686,4 +828,4 @@ public  string  CheckServeStatus(string[] urls)
 */
 
 
-
+#endregion

@@ -4,12 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CenterView
 {
     public class RepairCitrix
     {
+        private bool _status;//返回状态
+        /// <summary>
+        /// 修复状态属性（只读）
+        /// </summary>
+        public bool Status
+        {
+
+            get { return _status; }
+        }
         /// <summary>
         /// 修复Citrix
         /// </summary>
@@ -19,82 +29,134 @@ namespace CenterView
         /// </param>
         public void CitrixRep()
         {
+
             XMLconfigReader xMLconfigReader = new XMLconfigReader();
             string url = xMLconfigReader.CitrixUrl;//读取配置文件里的下载链接
-            string path = Application.StartupPath + "//CitrixReciver.exe";
+            string path = Application.StartupPath + "\\CitrixReciver.exe";
+            string thePath = Application.StartupPath + "\\CitrixReciverComplete.exe";
             string fullPath = Path.GetFullPath(path);
+            string thefullPath = Path.GetFullPath(thePath);
             bool isExistCitrix = CkCitrix.CheckCitrix();
+
+            //判断路径下是否有Citrix.exe，损坏的
+            //无good.exe和Citrix.exe，未下
             if (!isExistCitrix)
             {
                 if (File.Exists(fullPath))
                 {
-                    try
+                    File.Delete(fullPath);
+                    Thread t = new Thread(Download);
+                    t.Name = "downLoad";
+                    t.Start();
+
+
+                }
+                else if (File.Exists(thefullPath))
+                {
+                    bool isComPlete = InstallCitrix(thefullPath);//尝试安装无损坏文件
+                    if (!isComPlete)
                     {
-                        System.Diagnostics.Process.Start(fullPath);
+                        MessageBox.Show("无法正常安装，请检查系统设置是否正常");
+                        return;
                     }
-                    catch
-                    {
-                        MessageBox.Show("安装文件损坏,即将开始重新下载，请耐心等待");
-                        try
-                        {
-                            File.Delete(fullPath);
-                            RepairCitrix downloadCitrix = new RepairCitrix();
-                            bool flag = downloadCitrix.Download(url, fullPath);
-                            if (flag)
-                            {
-                                System.Diagnostics.Process.Start(fullPath);
-                            }
-                        }
-                        catch
-                        {
-                            MessageBox.Show("自动下载失败，请手动下载插件");
-                        }
-                    }
-                   
                 }
                 else
                 {
-                    try
-                    {
-                        MessageBox.Show("即将开始下载插件安装包，请耐心等待");
-                        RepairCitrix downloadCitrix = new RepairCitrix();
-                        bool flag = downloadCitrix.Download(url, fullPath);
-                        if (flag)
-                        {
-                            System.Diagnostics.Process.Start(fullPath);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("自动下载失败，请手动下载插件");
-                    }
+                    Thread t = new Thread(Download);
+                    t.Name = "downLoad";
+                    t.Start();
                 }
+                //try
+                //{
+                //   System.Diagnostics.Process.Start(fullPath);
+
+
+                //}
+                //catch(Exception ex)
+                //{
+                //    MessageBox.Show("安装文件损坏,即将开始重新下载，请耐心等待");
+
+                //    throw ex;
+
+
+                //}
+
+                //{
+                //        try
+                //        {
+                //            File.Delete(fullPath);
+                //            Thread t = new Thread(Download);
+                //            t.Start();
+                //            //RepairCitrix downloadCitrix = new RepairCitrix();
+                //            //bool flag = downloadCitrix.Download(url, fullPath);
+                //            //if (flag)
+                //            //{
+                //            //    System.Diagnostics.Process.Start(fullPath);
+                //            //}
+                //        }
+                //        catch
+                //        {
+                //            MessageBox.Show("自动下载失败，请手动下载插件");
+                //        }
+                //    }
+
+                //}
+
+                //    {
+                //        try
+                //        {
+                //            MessageBox.Show("即将开始下载插件安装包，请耐心等待");
+                //            Thread t = new Thread(Download);
+                //            t.Start();
+                //            //bool flag = Download(url, fullPath);
+                //            //if (flag)
+                //            //{
+                //            //   System.Diagnostics.Process.Start(fullPath);
+                //            //}
+                //        }
+                //        catch
+                //        {
+                //            MessageBox.Show("自动下载失败，请手动下载插件");
+                //        }
+                //    }
+                //}
             }
         }
-
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="localfile"></param>
-        /// <returns></returns>
-        private bool Download(string url, string localfile)
+        private bool InstallCitrix(string path)
         {
-            bool flag = false;
+            try
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+            return true;
+          
+        }
+        private void Download()
+        {
+            XMLconfigReader xMLconfigReader = new XMLconfigReader();
+            string url = xMLconfigReader.CitrixUrl;//读取配置文件里的下载链接
+            string path = Application.StartupPath + "\\CitrixReciver.exe";
+            string fullPath = Path.GetFullPath(path);
+           
             long startPosition = 0; // 上次下载的文件起始位置
             FileStream writeStream; // 写入本地文件流对象
 
             // 判断要下载的文件夹是否存在
-            if (File.Exists(localfile))
+            if (File.Exists(fullPath))
             {
 
-                writeStream = File.OpenWrite(localfile);             // 存在则打开要下载的文件
+                writeStream = File.OpenWrite(fullPath);             // 存在则打开要下载的文件
                 startPosition = writeStream.Length;                  // 获取已经下载的长度
                 writeStream.Seek(startPosition, SeekOrigin.Current); // 本地文件写入位置定位
             }
             else
             {
-                writeStream = new FileStream(localfile, FileMode.Create);// 文件不保存创建一个文件
+                writeStream = new FileStream(fullPath, FileMode.Create);// 文件不保存创建一个文件
                 startPosition = 0;
             }
 
@@ -120,20 +182,34 @@ namespace CenterView
                     writeStream.Write(btArray, 0, contentSize);// 写入本地文件
                     contentSize = readStream.Read(btArray, 0, btArray.Length);// 继续向远程文件读取
                 }
-
+                //更改文件名为good
                 //关闭流
                 writeStream.Close();
                 readStream.Close();
+                string newPath;
+                 int index   =fullPath.LastIndexOf('\\');
+                string theFrontPath=fullPath.Substring(0,index);
+                newPath = theFrontPath + "\\CitrixReciverComplete.exe";
+                File.Move(fullPath, newPath);
+                _status = true;        //返回true下载成功
 
-                flag = true;        //返回true下载成功
+                bool isComPlete = InstallCitrix(newPath);//尝试安装无损坏文件
+                if (!isComPlete)
+                {
+                    MessageBox.Show("无法正常安装，请检查系统设置是否正常");
+                    return;
+                }
             }
             catch (Exception)
             {
                 writeStream.Close();
-                flag = false;       //返回false下载失败
+                _status = false;       //返回false下载失败
+                MessageBox.Show("下载失败，请检查网络");
+           
             }
-
-            return flag;
+          
+           
+         
         }
     }
     //private void button1_Click(object sender, EventArgs e)//修复流程

@@ -38,7 +38,7 @@ namespace CenterView
             catch (Exception ex)
             {
 
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("历史案例文档丢失");
             }
            
         }

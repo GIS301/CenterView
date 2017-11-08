@@ -195,22 +195,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid x:Name="rectangle">
-                        <Rectangle   RadiusY="15" RadiusX="15" Stroke="#FF3AD822" >
+                    <Grid >
+                        <Rectangle  x:Name="rectangle"  RadiusY="15" RadiusX="15" Stroke="#FF3AD822" >
                             
                         </Rectangle>
-                        <TextBlock Foreground="#FF3AD822" Text="开始扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock  x:Name="arc_Txt"  Foreground="#FF3AD822" Text="开始扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True"/>
                         <Trigger Property="IsDefaulted" Value="True"/>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="RenderTransform" TargetName="rectangle">
+                            <Setter Property="Stroke"  TargetName="rectangle">
                                 <Setter.Value>
-                                    <TransformGroup>
-                                        <TranslateTransform X="5" Y="1"/>
-                                    </TransformGroup>
+                          
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" TargetName="arc_Txt">
+                                <Setter.Value>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -237,22 +248,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid x:Name="rectangle">
-                        <Rectangle   RadiusY="15" RadiusX="15" Stroke="#FF3AD822" >
+                    <Grid >
+                        <Rectangle x:Name="rectangle"   RadiusY="15" RadiusX="15" Stroke="#FF3AD822" >
 
                         </Rectangle>
-                        <TextBlock Foreground="#FF3AD822" Text="取消扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="esc_Txt" Foreground="#FF3AD822" Text="取消扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True"/>
                         <Trigger Property="IsDefaulted" Value="True"/>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="RenderTransform" TargetName="rectangle">
+                            <Setter Property="Stroke"  TargetName="rectangle">
                                 <Setter.Value>
-                                    <TransformGroup>
-                                        <TranslateTransform X="5" Y="1"/>
-                                    </TransformGroup>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" TargetName="esc_Txt">
+                                <Setter.Value>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -279,22 +301,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid x:Name="rectangle">
-                        <Rectangle   RadiusY="15" RadiusX="15" Stroke="Green" >
+                    <Grid >
+                        <Rectangle x:Name="rectangle"   RadiusY="15" RadiusX="15" Stroke="Green" >
 
                         </Rectangle>
-                        <TextBlock Foreground="Blue" FontSize="22" Text="重新扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="rescan_Txt" Foreground="Blue" FontSize="22" Text="重新扫描" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True"/>
                         <Trigger Property="IsDefaulted" Value="True"/>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="RenderTransform" TargetName="rectangle">
+                            <Setter Property="Stroke"  TargetName="rectangle">
                                 <Setter.Value>
-                                    <TransformGroup>
-                                        <TranslateTransform X="5" Y="1"/>
-                                    </TransformGroup>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" TargetName="rescan_Txt">
+                                <Setter.Value>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -320,22 +353,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid x:Name="rectangle">
-                        <Rectangle   RadiusY="15" RadiusX="15" Stroke="red" >
+                    <Grid >
+                        <Rectangle x:Name="rectangle"  RadiusY="15" RadiusX="15" Stroke="LimeGreen" >
 
                         </Rectangle>
-                        <TextBlock Foreground="Red" FontSize="22" Text="立刻修复" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="repair_txt" Foreground="LimeGreen" FontSize="22" Text="立刻修复" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True"/>
                         <Trigger Property="IsDefaulted" Value="True"/>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="RenderTransform" TargetName="rectangle">
+                            <Setter Property="Stroke"  TargetName="rectangle">
                                 <Setter.Value>
-                                    <TransformGroup>
-                                        <TranslateTransform X="5" Y="1"/>
-                                    </TransformGroup>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" TargetName="repair_txt">
+                                <Setter.Value>
+
+                                    <LinearGradientBrush >
+                                        <GradientStop Color="Red" Offset="0"/>
+                                        <GradientStop Color="Orange" Offset="1"/>
+                                    </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>

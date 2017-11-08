@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace NetworkMonitor
 {
@@ -15,7 +16,7 @@ namespace NetworkMonitor
     /// </summary>
     public class NetworkMonitor
     {
-        private Timer timer;						// The timer event executes every second to refresh the values in adapters.
+        private System.Timers.Timer timer;						// The timer event executes every second to refresh the values in adapters.
         private ArrayList adapters;					// The list of adapters on the computer.
         private ArrayList monitoredAdapters;		// The list of currently monitored adapters.
 
@@ -25,7 +26,7 @@ namespace NetworkMonitor
             this.monitoredAdapters = new ArrayList();
             EnumerateNetworkAdapters();
 
-            timer = new Timer(1000);
+            timer = new System.Timers.Timer(1000);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
         }
 
@@ -34,19 +35,28 @@ namespace NetworkMonitor
         /// </summary>
         private void EnumerateNetworkAdapters()
         {
-            PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
-
-            foreach (string name in category.GetInstanceNames())
+            try
             {
-                // This one exists on every computer.
-                if (name == "MS TCP Loopback interface")
-                    continue;
-                // Create an instance of NetworkAdapter class, and create performance counters for it.
-                NetworkAdapter adapter = new NetworkAdapter(name);
-                adapter.dlCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", name);
-                adapter.ulCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", name);
-                this.adapters.Add(adapter);			// Add it to ArrayList adapter
+                PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
+
+                foreach (string name in category.GetInstanceNames())
+                {
+                    // This one exists on every computer.
+                    if (name == "MS TCP Loopback interface")
+                        continue;
+                    // Create an instance of NetworkAdapter class, and create performance counters for it.
+                    NetworkAdapter adapter = new NetworkAdapter(name);
+                    adapter.dlCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", name);
+                    adapter.ulCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", name);
+                    this.adapters.Add(adapter);			// Add it to ArrayList adapter
+                }
             }
+            catch (Exception ex)
+            {
+               
+                throw ex;
+            }
+            
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
