@@ -117,7 +117,8 @@ namespace CenterView
            
             try
             {
-                RegistryKey hkml = Registry.LocalMachine;
+                RegistryKey hkml = GetCurrenteReg(RegistryHive.LocalMachine);
+                
                 RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
                 RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\OEMInformation", true);
                 if (aimdir.GetValue("Logo") != null)
@@ -135,7 +136,7 @@ namespace CenterView
             catch (Exception  e)
             {
 
-                MessageBox.Show(e.Message);
+               
                 return " ";
               
             }
@@ -352,11 +353,6 @@ namespace CenterView
         }
 
 
-
-
-
-
-
         ///检测物理内存信息
         public string GetMemoryInfo()
         {
@@ -513,7 +509,8 @@ namespace CenterView
                 #region " 网卡类型 "
                 string fCardType = "未知网卡";
                 string fRegistryKey = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" + adapter.Id + "\\Connection";
-                RegistryKey rk = Registry.LocalMachine.OpenSubKey(fRegistryKey, false);
+                RegistryKey hkml = GetCurrenteReg(RegistryHive.LocalMachine);
+                RegistryKey rk = hkml.OpenSubKey(fRegistryKey, false);
                 if (rk != null)
                 {
                     // 区分 PnpInstanceID    
@@ -533,6 +530,7 @@ namespace CenterView
                     else if (fMediaSubType == 2)
                         fCardType = "无线网卡";
                 }
+                hkml.Close();
                 #endregion
             }
             return result;
@@ -551,7 +549,8 @@ namespace CenterView
                 #region " 网卡类型 "
                 string fCardType = "未知网卡";
                 string fRegistryKey = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" + adapter.Id + "\\Connection";
-                RegistryKey rk = Registry.LocalMachine.OpenSubKey(fRegistryKey, false);
+                RegistryKey hkml = GetCurrenteReg(RegistryHive.LocalMachine);
+                RegistryKey rk = hkml.OpenSubKey(fRegistryKey, false);
                 if (rk != null)
                 {
                     // 区分 PnpInstanceID    
@@ -580,6 +579,7 @@ namespace CenterView
                         break;
                     }
                 }
+                hkml.Close();
                 #endregion
             }
             return result;
@@ -604,8 +604,8 @@ namespace CenterView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
                 return "";
+              
             }
 
         }
@@ -647,7 +647,7 @@ namespace CenterView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                
                 return "";
             }
                 
@@ -859,8 +859,9 @@ namespace CenterView
         /// 获取授信站点列表
         public string[] GetTrustyStations()
         {
+
             string[] subkeyNames;
-            RegistryKey hkml = Registry.CurrentUser;
+            RegistryKey hkml = GetCurrenteReg(RegistryHive.CurrentUser);
             RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
             RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
             subkeyNames = aimdir.GetSubKeyNames();

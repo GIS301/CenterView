@@ -3,54 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CenterView
 {
     class AutoStart
     {
 
-        ////选择是否开机启动
-        //private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        string AppName = "Center View";
-        //        string AppFile = Application.ExecutablePath;
-        //        if (checkBox1.Checked)
-        //        {
-        //            // string commonStartup = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup);
-        //            //if (AutoStart.Create(commonStartup, AppName, AppFile))
-        //            //    MessageBox.Show("添加 全局用户开始菜单启动 成功");
-        //            //else
-        //            //    MessageBox.Show("添加 全局用户开始菜单启动 失败");
-        //            string startup = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-        //            if (AutoStart.Create(startup, AppName, AppFile))
-        //                MessageBox.Show("添加 当前用户开始菜单启动 成功");
-        //            else
-        //                MessageBox.Show("添加 当前用户开始菜单启动 失败");
-        //        }
-        //        else
-        //        {
-        //            //string commonStartup = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup);
-        //            //if (AutoStart.Delete(commonStartup, AppName))
-        //            //    MessageBox.Show("删除 全局用户开始菜单启动 成功");
-        //            //else
-        //            //    MessageBox.Show("删除 全局用户开始菜单启动 失败");
-        //            string startup = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-        //            if (AutoStart.Delete(startup, AppName))
-        //                MessageBox.Show("删除 当前用户开始菜单启动 成功");
-        //            else
-        //                MessageBox.Show("删除 当前用户开始菜单启动 失败");
-        //        }
-        //    }
-        //    catch 
-        //    {
+        
 
-        //    }
-        //}
-
-        //开机启动本软件
-        public static bool Create(string directory, string shortcutName, string targetPath, string description = null, string iconLocation = null)
+        
+        /// <summary>
+        /// 开机启动本软件
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="shortcutName"></param>
+        /// <param name="targetPath"></param>
+        /// <param name="description"></param>
+        /// <param name="iconLocation"></param>
+        /// <returns></returns>
+        public  static bool Create(string directory, string shortcutName, string targetPath, string description = null, string iconLocation = null)
         {
             try
             {
@@ -76,7 +48,12 @@ namespace CenterView
             { }
             return false;
         }
-
+        /// <summary>
+        /// 去除开机启动
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="shortcutName"></param>
+        /// <returns></returns>
         public  static bool Delete(string directory, string shortcutName)
         {
             try

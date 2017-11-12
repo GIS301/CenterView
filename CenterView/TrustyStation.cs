@@ -52,7 +52,7 @@ namespace CenterView
             try
             {
                 List<string> subkeyNames = new List<string>();
-                RegistryKey hkml = Registry.CurrentUser;
+                RegistryKey hkml = new BaseInfo().GetCurrenteReg(RegistryHive.CurrentUser);
                 RegistryKey software = hkml.OpenSubKey("SOFTWARE", true);
                 RegistryKey aimdir = software.OpenSubKey(@"Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains", true);
                 string[] domains = aimdir.GetSubKeyNames();
@@ -223,17 +223,17 @@ namespace CenterView
            
        }
        /// <summary>
-       /// 本机添加授信站点
+       /// keyname
        /// </summary>
-       /// <param name="input"></param>
-
-       public void AddTrustyStation(string input)
+       /// <param name="input">输入值</param>
+       /// <param name="keyname">注册表文件名</param>
+       public void AddTrustyStation(string input,string keyname)
        {
            try
            {
                string[] temp = input.Split('.');
                string sum = "";
-               RegistryKey hkml = Registry.CurrentUser;
+               RegistryKey hkml = new BaseInfo().GetCurrenteReg(RegistryHive.CurrentUser);
                foreach (string str in temp)
                {
                    sum += str;
@@ -243,7 +243,7 @@ namespace CenterView
                    //是数字，即为IP地址
                    string address = @"SOFTWARE\MICROSOFT\WINDOWS\CURRENTVERSION\INTERNET SETTINGS\ZONEMAP\RANGES";
                    RegistryKey key1 = hkml.OpenSubKey(address, true);
-                   RegistryKey name1 = key1.CreateSubKey("CitrixTrusty");
+                   RegistryKey name1 = key1.CreateSubKey(keyname);
                    name1.SetValue(":Range", input, RegistryValueKind.String);
                    name1.SetValue("http", 0x2, RegistryValueKind.DWord);
                }
@@ -268,7 +268,7 @@ namespace CenterView
            }
            catch (Exception e)
            {
-               System.Windows.MessageBox.Show(e.Message);
+               
                throw e;
               
            }

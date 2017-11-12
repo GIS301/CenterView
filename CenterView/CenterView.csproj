@@ -109,6 +109,7 @@
     <Compile Include="NetWorkCheck.cs" />
     <Compile Include="Repair.cs" />
     <Compile Include="RepairCitrix.cs" />
+    <Compile Include="ThereferenceConst.cs" />
     <Compile Include="TrustyStation.cs" />
     <Compile Include="XMLconfigReader.cs" />
     <Compile Include="XPSWindow.xaml.cs">
@@ -200,10 +201,6 @@
     <Resource Include="logoIMG\20120513055821795_easyicon_cn_48.ico" />
     <Resource Include="logoIMG\20120513062941907_easyicon_cn_64.png" />
     <Resource Include="logoIMG\a.png" />
-    <Resource Include="logoIMG\bg1.png" />
-    <Resource Include="logoIMG\fullbox_desk_clear.png" />
-    <Resource Include="logoIMG\fullbox_function_exam.png" />
-    <Resource Include="logoIMG\fullbox_netspeed.png" />
     <Resource Include="logoIMG\fullbox_real_protect.png" />
     <Resource Include="logoIMG\fullbox_reg_clean.png" />
     <Resource Include="logoIMG\fullbox_strap_accelerate.png" />
@@ -298,6 +295,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logoIMG\Expander.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\bg1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\fullbox_netspeed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\fullbox_function_exam.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logoIMG\fullbox_desk_clear.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

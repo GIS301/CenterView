@@ -28,6 +28,7 @@ namespace CenterView.Model
         private int _checkingcount;
         private int _checkingerrorcount;
         private int _noproblemcount;
+        private string _citrixStatus;
 		/// <summary>
 		/// 品牌logo路径
 		/// </summary>
@@ -179,6 +180,23 @@ namespace CenterView.Model
                     prochanged("NoProblemCount");
                 }
               
+            }
+        }
+        /// <summary>
+        /// Citrix组件状态
+        /// </summary>
+        public string CitrixStatus
+        {
+            get { return _citrixStatus; }
+            set
+            {
+                if (value != _citrixStatus)
+                {
+                    _citrixStatus = value;
+                    //改变时通知
+                    prochanged("CitrixStatus");
+
+                }
             }
         }
 
