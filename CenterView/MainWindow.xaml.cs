@@ -1303,7 +1303,7 @@ namespace CenterView
         /// <param name="e"></param>
         private void moreTrustBtn_Click(object sender, RoutedEventArgs e)
         {
-            string[] trustlist = new TrustyStation().GetTrustyStations();
+            string[] trustlist = new TrustyStation().GetTrustyStations() ;
             StringBuilder Sb = new StringBuilder();
             Sb.Append("受信站点： "+"/n");
             foreach (string s in trustlist) 
